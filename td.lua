@@ -26,9 +26,20 @@ function make_enemy(x, y)
         y = y,
         dx = 0,
         dy = 0,
+        can_remove = false,
     }
     add(enemies, e)
     return e
+end
+
+function tbl_filter(t, fn)
+    local res = {}
+    foreach(t, function(v)
+        if fn(v) then
+            add(res, v)
+        end
+    end)
+    return res
 end
 
 -- _INIT (called once on startup)
@@ -68,56 +79,40 @@ function move_enemy(e)
     end
     assert(l1)
 
-    if e.dx > 0 then -- moving right
-        local max_x = max(l1.x, l2.x)
-        if e.x + e.dx > max_x then -- overflow
-            local overflow = e.x + e.dx - max_x
-            e.x = max_x
-            local going_down = map[p+1] and map[p+1].y > map[p].y
-            e.y = e.y + (going_down and overflow or -overflow)
-            -- update direction
-            e.dy = going_down and abs(e.dx) or -abs(e.dx)
-            e.dx = 0
-        else -- no overflow
+    if e.dx ~= 0 then -- moving horizontally
+        local right = e.dx > 0
+        local lim_x = right and max(l1.x, l2.x) or min(l1.x, l2.x)
+        local overflow = right and ((e.x + e.dx) - lim_x) or (lim_x - (e.x + e.dx))
+        if overflow > 0 then
+            e.x = lim_x
+            if map[p+1] then
+                local going_down = map[p+1].y > map[p].y
+                e.y = e.y + (going_down and overflow or -overflow)
+                -- update direction
+                e.dy = going_down and abs(e.dx) or -abs(e.dx)
+                e.dx = 0
+            else
+                e.can_remove = true
+            end
+        else
             e.x += e.dx
         end
-    elseif e.dx < 0 then -- moving left
-        local min_x = min(l1.x, l2.x)
-        if e.x + e.dx < min_x then -- overflow
-            local overflow = min_x - e.x + e.dx
-            e.x = min_x
-            local going_down = map[p+1] and (map[p+1].y > map[p].y)
-            e.y = e.y + (going_down and overflow or -overflow)
-            -- update direction
-            e.dy = going_down and abs(e.dx) or -abs(e.dx)
-            e.dx = 0
-        else -- no overflow
-            e.x += e.dx
-        end
-    elseif e.dy > 0 then -- moving down
-        local max_y = max(l1.y, l2.y)
-        if e.y + e.dy > max_y then -- overflow
-            local overflow = e.y + e.dy - max_y
-            e.y = max_y
-            local going_right = map[p+1] and map[p+1].x > map[p].x
-            e.x = e.x + (going_right and overflow or -overflow)
-            -- update direction
-            e.dx = going_right and abs(e.dy) or -abs(e.dy)
-            e.dy = 0
-        else -- no overflow
-            e.y += e.dy
-        end
-    elseif e.dy < 0 then -- moving up
-        local min_y = min(l1.y, l2.y)
-        if e.y + e.dy < min_y then -- overflow
-            local overflow = min_y - e.y + e.dy
-            e.y = min_y
-            local going_right = map[p+1] and map[p+1].x > map[p].x
-            e.x = e.x + (going_right and overflow or -overflow)
-            -- update direction
-            e.dx = going_right and abs(e.dy) or -abs(e.dy)
-            e.dy = 0
-        else -- no overflow
+    elseif e.dy ~= 0 then -- moving vertically
+        local down = e.dy > 0
+        local lim_y = down and max(l1.y, l2.y) or min(l1.y, l2.y)
+        local overflow = down and ((e.y + e.dy) - lim_y) or (lim_y - (e.y + e.dy))
+        if overflow > 0 then
+            e.y = lim_y
+            if map[p+1] then
+                local going_right = map[p+1].x > map[p].x
+                e.x = e.x + (going_right and overflow or -overflow)
+                -- update direction
+                e.dx = going_right and abs(e.dy) or -abs(e.dy)
+                e.dy = 0
+            else
+                e.can_remove = true
+            end
+        else
             e.y += e.dy
         end
     end
@@ -126,6 +121,7 @@ end
 -- _UPDATE (called once per update at 30fps)
 function _update()
     foreach(enemies, move_enemy)
+    enemies = tbl_filter(enemies, function(e) return not e.can_remove end)
 end
 
 -- _DRAW (called once per visible frame)
@@ -149,4 +145,10 @@ function _draw()
     foreach(enemies, function(e)
         circ(e.x, e.y, 2, COLOR.yellow)
     end)
+
+    -- Debug
+    -- print('dx:' .. enemies[1].dx)
+    -- print('dy:' .. enemies[1].dy)
+    -- print('x:' .. enemies[1].x)
+    -- print('y:' .. enemies[1].y)
 end
