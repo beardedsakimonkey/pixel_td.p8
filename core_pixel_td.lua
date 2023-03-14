@@ -13,16 +13,16 @@ Notes:
 
 ]]
 
-BUTTON = {
+B = {
     left  = 0,
     right = 1,
-    up    = 2,
-    down  = 3,
-    z     = 4,
-    x     = 5,
+    up = 2,
+    down = 3,
+    z = 4,
+    x = 5,
 }
 
-COLOR = {
+C = {
     black = 0,
     dark_blue = 1,
     dark_purple = 2,
@@ -218,36 +218,26 @@ sel = {
 -- _UPDATE (called once per update at 30fps)
 function _update()
     -- Update selection
-    if btnp(BUTTON.left)  then sel.dest_x -= 10; sel.dx = -4 end
-    if btnp(BUTTON.right) then sel.dest_x += 10; sel.dx =  4 end
-    if btnp(BUTTON.up)    then sel.dest_y -= 10; sel.dy = -4 end
-    if btnp(BUTTON.down)  then sel.dest_y += 10; sel.dy =  4 end
+    if btnp(B.left)  then sel.dest_x -= 10; sel.dx = -4 end
+    if btnp(B.right) then sel.dest_x += 10; sel.dx =  4 end
+    if btnp(B.up)    then sel.dest_y -= 10; sel.dy = -4 end
+    if btnp(B.down)  then sel.dest_y += 10; sel.dy =  4 end
 
-    if sel.dx > 0 then -- right
-        sel.cur_x = sel.cur_x + sel.dx
-        if sel.cur_x > sel.dest_x then
-            sel.cur_x = sel.dest_x -- clamp
-            sel.dx = 0 -- stop
-        end
-    elseif sel.dx < 0 then
-        sel.cur_x = sel.cur_x + sel.dx
-        if sel.cur_x < sel.dest_x then
-            sel.cur_x = sel.dest_x -- clamp
-            sel.dx = 0 -- stop
+    if sel.dx ~= 0 then
+        sel.cur_x += sel.dx
+        if sel.dx > 0 and sel.cur_x > sel.dest_x
+            or sel.dx < 0 and sel.cur_x < sel.dest_x then
+            sel.cur_x = sel.dest_x
+            sel.dx = 0
         end
     end
 
-    if sel.dy > 0 then -- down
-        sel.cur_y = sel.cur_y + sel.dy
-        if sel.cur_y > sel.dest_y then
-            sel.cur_y = sel.dest_y -- clamp
-            sel.dy = 0 -- stop
-        end
-    elseif sel.dy < 0 then -- up
-        sel.cur_y = sel.cur_y + sel.dy
-        if sel.cur_y < sel.dest_y then
-            sel.cur_y = sel.dest_y -- clamp
-            sel.dy = 0 -- stop
+    if sel.dy ~= 0 then
+        sel.cur_y += sel.dy
+        if sel.dy > 0 and sel.cur_y > sel.dest_y
+            or sel.dy < 0 and sel.cur_y < sel.dest_y then
+            sel.cur_y = sel.dest_y
+            sel.dy = 0
         end
     end
 
@@ -262,10 +252,6 @@ function _update()
 --             delete_bullets(twr)
 --         end
 --     end)
-end
-
-local function round(v, up)
-    return (flr((v+1)/10) + (up and 1 or 0)) * 10 - 1
 end
 
 corner = {TL = 1, TR = 2, BL = 3, BR = 4, TOP = 5, LEFT = 6, RIGHT = 7, BOT = 8}
@@ -295,62 +281,44 @@ local function get_cell_corner(cell)
     local left  = (cell.x * 10) - 1
     local bot   = top + 10
     local right = left + 10
-    if cell.c == corner.TOP then
-        return {x = left, y = top}
-    end
-    if cell.c == corner.RIGHT then
-        return {x = right, y = top}
-    end
-    if cell.c == corner.TL then -- top left corner
-        return {x = left, y = bot}
-    end
-    if cell.c == corner.BL then -- bottom left corner
-        return {x = right, y = bot}
-    end
-    if cell.c == corner.BR then -- bottom right corner
-        return {x = right, y = top}
-    end
-    if cell.c == corner.TR then -- top right corner
-        return {x = left, y = top}
-    end
-end
-
-local function draw_rect(cell_a, cell_b)
-    local ca = get_cell_corner(cell_a)
-    local cb = get_cell_corner(cell_b)
-    rectfill(ca.x, ca.y, cb.x, cb.y, COLOR.black)
-    rect(ca.x, ca.y, cb.x, cb.y, COLOR.indigo)
-
-    local top   = (cell_a.y * 10) - 1
-    local left  = (cell_a.x * 10) - 1
-    local bot   = top + 10
-    local right = left + 10
-    if cell_a.c == corner.BL then
-        line(right, bot-1, right, top+1, COLOR.black)
-    elseif cell_a.c == corner.BR then
-        line(left+1, top, right-1, top, COLOR.black)
-    elseif cell_a.c == corner.TL then
-        line(left+1, bot, right-1, bot, COLOR.black)
-    elseif cell_a.c == corner.TR then
-        line(left, bot-1, left, top+1, COLOR.black)
-    end
+    if cell.c == corner.TOP   then return {x = left, y = top} end
+    if cell.c == corner.RIGHT then return {x = right, y = top} end
+    if cell.c == corner.TL    then return {x = left, y = bot} end
+    if cell.c == corner.BL    then return {x = right, y = bot} end
+    if cell.c == corner.BR    then return {x = right, y = top} end
+    if cell.c == corner.TR    then return {x = left, y = top} end
 end
 
 -- _DRAW (called once per visible frame)
 function _draw()
-    cls(COLOR.black)
+    cls(C.black)
 
     -- Draw grid lines
-    for y = 9, 127, 10 do
-        line(0, y, 127, y, COLOR.dark_blue)
-    end
-    for x = 9, 127, 10 do
-        line(x, 0, x, 127, COLOR.dark_blue)
-    end
+    for y = 9, 127, 10 do line(0, y, 127, y, C.dark_blue) end
+    for x = 9, 127, 10 do line(x, 0, x, 127, C.dark_blue) end
 
     -- Draw path
     for i = 2, #map do
-        draw_rect(map[i-1], map[i])
+        local cell_a, cell_b = map[i-1], map[i]
+        local ca = get_cell_corner(cell_a)
+        local cb = get_cell_corner(cell_b)
+        rectfill(ca.x, ca.y, cb.x, cb.y, C.black)
+        rect(ca.x, ca.y, cb.x, cb.y, C.indigo)
+
+        -- cover up unwanted borders
+        local top   = (cell_a.y * 10) - 1
+        local left  = (cell_a.x * 10) - 1
+        local bot   = top + 10
+        local right = left + 10
+        if cell_a.c == corner.BL then
+            line(right, bot-1, right, top+1, C.black)
+        elseif cell_a.c == corner.BR then
+            line(left+1, top, right-1, top, C.black)
+        elseif cell_a.c == corner.TL then
+            line(left+1, bot, right-1, bot, C.black)
+        elseif cell_a.c == corner.TR then
+            line(left, bot-1, left, top+1, C.black)
+        end
     end
 
     -- Draw selection
@@ -360,55 +328,45 @@ function _draw()
         local bot   = top + 8
         local right = left + 8
         -- top left corner
-        line(left, top, left+2, top, COLOR.light_gray)
-        line(left, top, left, top+2, COLOR.light_gray)
+        line(left, top, left+2, top, C.light_gray)
+        line(left, top, left, top+2, C.light_gray)
         -- top right corner
-        line(right, top, right-2, top, COLOR.light_gray)
-        line(right, top, right, top+2, COLOR.light_gray)
+        line(right, top, right-2, top, C.light_gray)
+        line(right, top, right, top+2, C.light_gray)
         -- bottom left corner
-        line(left, bot, left+2, bot, COLOR.light_gray)
-        line(left, bot, left, bot-2, COLOR.light_gray)
+        line(left, bot, left+2, bot, C.light_gray)
+        line(left, bot, left, bot-2, C.light_gray)
         -- bottom right corner
-        line(right, bot, right-2, bot, COLOR.light_gray)
-        line(right, bot, right, bot-2, COLOR.light_gray)
+        line(right, bot, right-2, bot, C.light_gray)
+        line(right, bot, right, bot-2, C.light_gray)
     end
-
-    -- -- Draw path
-    -- for p = 2, #map do
-    --     rectfill(round(map[p-1].x), round(map[p-1].y),
-    --         round(map[p].x, true), round(map[p].y, true), COLOR.black)
-    --     rect(round(map[p-1].x), round(map[p-1].y),
-    --         round(map[p].x, true), round(map[p].y, true), COLOR.indigo)
-    -- end
 
     -- foreach(enemies, function(e)
     --     -- Draw enemy
-    --     circ(e.x, e.y, 2, COLOR.yellow)
+    --     circ(e.x, e.y, 2, C.yellow)
     --     -- Draw hp
     --     local hp_y = e.y - 4
-    --     rect(e.x-1, hp_y, e.x+1, hp_y, COLOR.dark_green)
+    --     rect(e.x-1, hp_y, e.x+1, hp_y, C.dark_green)
     --     if e.hp > 0 then
-    --         rect(e.x-1, hp_y, (e.x-1)+e.hp-1, hp_y, COLOR.green)
+    --         rect(e.x-1, hp_y, (e.x-1)+e.hp-1, hp_y, C.green)
     --     end
     -- end)
 
     -- foreach(towers, function(twr)
     --     -- Draw tower
     --     spr(twr.type, twr.x-3, twr.y-3, 1, 1)
-    --     -- circ(twr.x, twr.y, twr.range, COLOR.light_gray) -- range
+    --     -- circ(twr.x, twr.y, twr.range, C.light_gray) -- range
 
     --     -- Draw bullets
     --     for b in all(twr.bullets) do
-    --         line(twr.x, twr.y, b.enemy.x, b.enemy.y, COLOR.green)
+    --         line(twr.x, twr.y, b.enemy.x, b.enemy.y, C.green)
     --     end
     -- end)
 
     -- Debug
-    -- color(COLOR.red)
+    -- color(C.red)
     -- print('dx:' .. enemies[1].dx)
     -- print('dy:' .. enemies[1].dy)
     -- print('x:' .. enemies[1].x)
     -- print('y:' .. enemies[1].y)
-    -- print('dest_x:' .. sel.dest_x)
-    -- print('dest_y:' .. sel.dest_y)
 end
