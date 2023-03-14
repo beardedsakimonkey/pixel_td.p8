@@ -2,7 +2,8 @@
 
 Juice:
 - enemies bob up and down
-- animate sel movement
+- animate selection movement
+- animation when trying to move selection fails
 - bottom hud animates up/down
 - screen shake on enemy reaching end
 - spinning coin
@@ -35,9 +36,32 @@ map = {
     {x = 12, y = 10, c = corner.RIGHT},
 }
 
+-- 2d array containing 1s for grid cells that are on the path and 0s otherwise
+grid_bitmap = {}
+
+local function init_grid_bitmap()
+    for i = 1, 13 do
+        add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+    end
+    for i = 2, #map do
+        local ca, cb = map[i-1], map[i]
+        if ca.x == cb.x then
+            local step = ca.y < cb.y and 1 or -1
+            for j = ca.y, cb.y, step do
+                grid_bitmap[j+1][ca.x+1] = 1
+            end
+        elseif ca.y == cb.y then
+            local step = ca.x < cb.x and 1 or -1
+            for j = ca.x, cb.x, step do
+                grid_bitmap[ca.y+1][j+1] = 1
+            end
+        end
+    end
+end
+
 -- Selection (not using grid coordinates because of animation)
 sel = {
-    -- coordinates of top left corner of cell
+    -- Note: coordinates are of the top left corner of the cell
     dest_x = 50, dest_y = 50,
     -- for animation
     cur_x = 50, cur_y = 50,
@@ -82,7 +106,8 @@ sel = {
 -- end
 
 -- _INIT (called once on startup)
--- function _init()
+function _init()
+    init_grid_bitmap()
     -- local e = make_enemy(map[1].x, map[1].y)
     -- make_tower(0, 44, 44)
     -- if map[1].y == map[2].y then
@@ -90,7 +115,7 @@ sel = {
     -- else
     --     e.dy = 1
     -- end
--- end
+end
 
 -- function line_contains_point(l1, l2, p)
 --     local is_vert = l1.x == l2.x
@@ -190,13 +215,51 @@ sel = {
 --     end
 -- end
 
+local function try_move_selection(dir)
+    -- convert selection to grid coordinates
+    local cur_cell_x = sel.dest_x / 10
+    local cur_cell_y = sel.dest_y / 10
+
+    -- find destination cell
+    local dst_cell_x = cur_cell_x
+    local dst_cell_y = cur_cell_y
+    local dx = dir == B.right and 1 or dir == B.left and -1 or 0
+    local dy = dir == B.down and  1 or dir == B.up   and -1 or 0
+    while true do
+        dst_cell_x += dx
+        dst_cell_y += dy
+
+        -- don't move past boundaries
+        if dst_cell_x <= 0 or dst_cell_y <= 0 or
+            dst_cell_x >= 12 or dst_cell_y >= 12 then
+            return
+        end
+        if grid_bitmap[dst_cell_y+1][dst_cell_x+1] == 0 then
+            break
+        end
+    end
+
+    -- move selection
+    sel.dest_x = dst_cell_x * 10
+    sel.dest_y = dst_cell_y * 10
+    if dir == B.left then
+        sel.dx = -4
+    elseif dir == B.right then
+        sel.dx = 4
+    elseif dir == B.up then
+        sel.dy = -4
+    elseif dir == B.down then
+        sel.dy = 4
+    end
+end
+
 -- _UPDATE (called once per update at 30fps)
 function _update()
     -- Update selection
-    if btnp(B.left)  then sel.dest_x -= 10; sel.dx = -4 end
-    if btnp(B.right) then sel.dest_x += 10; sel.dx =  4 end
-    if btnp(B.up)    then sel.dest_y -= 10; sel.dy = -4 end
-    if btnp(B.down)  then sel.dest_y += 10; sel.dy =  4 end
+    if btnp(B.left)  then try_move_selection(B.left) end
+    if btnp(B.right) then try_move_selection(B.right) end
+    if btnp(B.up)    then try_move_selection(B.up) end
+    if btnp(B.down)  then try_move_selection(B.down) end
 
     if sel.dx ~= 0 then
         sel.cur_x += sel.dx
@@ -317,7 +380,7 @@ function _draw()
     -- end)
 
     -- Debug
-    -- color(C.red)
+    color(C.red)
     -- print('dx:' .. enemies[1].dx)
     -- print('dy:' .. enemies[1].dy)
     -- print('x:' .. enemies[1].x)
