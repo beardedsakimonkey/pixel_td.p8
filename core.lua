@@ -14,7 +14,7 @@ Notes:
 
 ]]
 
-corner = {TL = 1, TR = 2, BL = 3, BR = 4, TOP = 5, LEFT = 6, RIGHT = 7, BOT = 8}
+corner = {TL=1, TR=2, BL=3, BR=4, TOP=5, LEFT=6, RIGHT=7, BOT=8}
 
 map = {
     {x = 1,  y = 0,  c = corner.TOP},
@@ -59,6 +59,18 @@ local function init_grid_bitmap()
     end
 end
 
+-- Array of points of the path. Helps impl of enemy movement.
+path_points = {}
+
+local function init_path_points()
+    for i = 1, #map do
+        add(path_points, {
+            x = map[i].x * 10 + 4,
+            y = map[i].y * 10 + 4,
+        })
+    end
+end
+
 -- Selection (not using grid coordinates because of animation)
 sel = {
     -- Note: coordinates are of the top left corner of the cell
@@ -68,19 +80,19 @@ sel = {
     dx = 0, dy = 0,
 }
 
--- enemies = {}
+enemies = {}
 -- towers = {}
 
--- function make_enemy(x, y)
---     local e = {
---         x = x, y = y,
---         dx = 0, dy = 0,
---         hp = 3, max_hp = 3,
---         can_remove = false,
---     }
---     add(enemies, e)
---     return e
--- end
+function make_enemy(x, y, dx, dy)
+    local e = {
+        x = x, y = y,
+        dx = dx, dy = dy,
+        hp = 3, max_hp = 3,
+        can_remove = false,
+    }
+    add(enemies, e)
+    return e
+end
 
 -- function make_tower(type, x, y)
 --     local twr = {
@@ -107,83 +119,81 @@ sel = {
 
 -- _INIT (called once on startup)
 function _init()
+    -- Set up auxiliary data structures
     init_grid_bitmap()
-    -- local e = make_enemy(map[1].x, map[1].y)
+    init_path_points()
+
+    make_enemy(path_points[1].x, path_points[1].y, 0, 1)
     -- make_tower(0, 44, 44)
-    -- if map[1].y == map[2].y then
-    --     e.dx = 1
-    -- else
-    --     e.dy = 1
-    -- end
 end
 
--- function line_contains_point(l1, l2, p)
---     local is_vert = l1.x == l2.x
---     if is_vert then
---         return p.x == l1.x
---             and p.y >= min(l1.y, l2.y)
---             and p.y <= max(l1.y, l2.y)
---     else
---         return p.y == l1.y
---             and p.x >= min(l1.x, l2.x)
---             and p.x <= max(l1.x, l2.x)
---     end
--- end
+function line_contains_point(l1, l2, p)
+    local is_vert = l1.x == l2.x
+    if is_vert then
+        return p.x == l1.x
+            and p.y >= min(l1.y, l2.y)
+            and p.y <= max(l1.y, l2.y)
+    else
+        return p.y == l1.y
+            and p.x >= min(l1.x, l2.x)
+            and p.x <= max(l1.x, l2.x)
+    end
+end
 
--- function move_enemy(e)
---     -- Find the first line in the map that contains our position
---     local l1, l2
---     local p = 2
---     while p <= #map do
---         if line_contains_point(map[p-1], map[p], e) then
---             l1 = map[p-1]
---             l2 = map[p]
---             break
---         end
---         p += 1
---     end
---     assert(l1)
+function move_enemy(e)
+    -- Find the first line in the map that contains our position
+    local l1, l2
+    local p = 2
+    while p <= #path_points do
+        if line_contains_point(path_points[p-1], path_points[p], e) then
+            l1 = path_points[p-1]
+            l2 = path_points[p]
+            break
+        end
+        p += 1
+    end
+    assert(l1)
 
---     if e.dx ~= 0 then -- moving horizontally
---         local right = e.dx > 0
---         local edge_x = right and max(l1.x, l2.x) or min(l1.x, l2.x)
---         local overflow = right and ((e.x + e.dx) - edge_x) or (edge_x - (e.x + e.dx))
---         -- If the new position would go out of bounds on the path, split the
---         -- travel distance into horizontal and vertical movement.
---         if overflow > 0 then
---             e.x = edge_x
---             if map[p+1] then
---                 local going_down = map[p+1].y > map[p].y
---                 e.y = e.y + (going_down and overflow or -overflow)
---                 -- update direction
---                 e.dy = going_down and abs(e.dx) or -abs(e.dx)
---                 e.dx = 0
---             else
---                 e.can_remove = true
---             end
---         else
---             e.x += e.dx
---         end
---     elseif e.dy ~= 0 then -- moving vertically
---         local down = e.dy > 0
---         local edge_y = down and max(l1.y, l2.y) or min(l1.y, l2.y)
---         local overflow = down and ((e.y + e.dy) - edge_y) or (edge_y - (e.y + e.dy))
---         if overflow > 0 then
---             e.y = edge_y
---             if map[p+1] then
---                 local going_right = map[p+1].x > map[p].x
---                 e.x = e.x + (going_right and overflow or -overflow)
---                 -- update direction
---                 e.dx = going_right and abs(e.dy) or -abs(e.dy)
---                 e.dy = 0
---             else
---                 e.can_remove = true
---             end
---         else
---             e.y += e.dy
---         end
---     end
--- end
+    if e.dx ~= 0 then -- moving horizontally
+        local right = e.dx > 0
+        local edge_x = right and max(l1.x, l2.x) or min(l1.x, l2.x)
+        local overflow = right and ((e.x + e.dx) - edge_x) or (edge_x - (e.x + e.dx))
+        -- If the new position would go out of bounds on the path, split the
+        -- travel distance into horizontal and vertical movement.
+        if overflow > 0 then
+            e.x = edge_x
+            if path_points[p+1] then
+                local going_down = path_points[p+1].y > path_points[p].y
+                e.y = e.y + (going_down and overflow or -overflow)
+                -- update direction
+                e.dy = going_down and abs(e.dx) or -abs(e.dx)
+                e.dx = 0
+            else
+                e.can_remove = true
+            end
+        else
+            e.x += e.dx
+        end
+    elseif e.dy ~= 0 then -- moving vertically
+        local down = e.dy > 0
+        local edge_y = down and max(l1.y, l2.y) or min(l1.y, l2.y)
+        local overflow = down and ((e.y + e.dy) - edge_y) or (edge_y - (e.y + e.dy))
+        if overflow > 0 then
+            e.y = edge_y
+            if path_points[p+1] then
+                local going_right = path_points[p+1].x > path_points[p].x
+                e.x = e.x + (going_right and overflow or -overflow)
+                -- update direction
+                e.dx = going_right and abs(e.dy) or -abs(e.dy)
+                e.dy = 0
+            else
+                e.can_remove = true
+            end
+        else
+            e.y += e.dy
+        end
+    end
+end
 
 -- -- Todo: perf
 -- function is_in_range(e, twr)
@@ -279,17 +289,19 @@ function _update()
         end
     end
 
---     foreach(enemies, move_enemy)
---     -- Remove enemies that have gone off screen
---     enemies = tbl_filter(enemies, function(e) return not e.can_remove end)
---     foreach(bullet, move_bullet)
---     foreach(towers, function(twr)
---         twr.cd = max(0, twr.cd-1)
---         create_bullets(twr)
---         if #twr.bullets > 0 then
---             delete_bullets(twr)
---         end
---     end)
+    -- Move enemies
+    foreach(enemies, move_enemy)
+    -- Remove enemies that have gone off screen
+    enemies = tbl_filter(enemies, function(e) return not e.can_remove end)
+
+    -- foreach(bullet, move_bullet)
+    -- foreach(towers, function(twr)
+    --     twr.cd = max(0, twr.cd-1)
+    --     create_bullets(twr)
+    --     if #twr.bullets > 0 then
+    --         delete_bullets(twr)
+    --     end
+    -- end)
 end
 
 local function get_cell_corner(cell)
@@ -357,16 +369,16 @@ function _draw()
         line(right, bot, right, bot-2, C.light_gray)
     end
 
-    -- foreach(enemies, function(e)
-    --     -- Draw enemy
-    --     circ(e.x, e.y, 2, C.yellow)
-    --     -- Draw hp
-    --     local hp_y = e.y - 4
-    --     rect(e.x-1, hp_y, e.x+1, hp_y, C.dark_green)
-    --     if e.hp > 0 then
-    --         rect(e.x-1, hp_y, (e.x-1)+e.hp-1, hp_y, C.green)
-    --     end
-    -- end)
+    foreach(enemies, function(e)
+        -- Draw enemy
+        circ(e.x, e.y, 2, C.yellow)
+        -- Draw hp
+        local hp_y = e.y - 4
+        rect(e.x-1, hp_y, e.x+1, hp_y, C.dark_green)
+        if e.hp > 0 then
+            rect(e.x-1, hp_y, (e.x-1)+e.hp-1, hp_y, C.green)
+        end
+    end)
 
     -- foreach(towers, function(twr)
     --     -- Draw tower
@@ -383,6 +395,4 @@ function _draw()
     color(C.red)
     -- print('dx:' .. enemies[1].dx)
     -- print('dy:' .. enemies[1].dy)
-    -- print('x:' .. enemies[1].x)
-    -- print('y:' .. enemies[1].y)
 end
