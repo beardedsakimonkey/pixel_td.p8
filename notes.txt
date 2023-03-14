@@ -5,7 +5,9 @@ Juice:
 - bottom hud animates up/down
 - screen shake on enemy reaching end
 - spinning coin
+- hitting right in the purchase menu nudges the arrow right and slides the next tower in
 
 Notes:
 - x to send wave (if you're selecting a tower, it'll sell the tower, but you can
     just rebuy it without losing money)
+- can have "X - send wave" message at bottom of screen

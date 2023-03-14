@@ -323,6 +323,24 @@ function _draw()
         elseif cell_a.c == corner.TR then
             line(left, bot-1, left, top+1, C.black)
         end
+
+        -- draw path enter/exit decoration
+        for j = 1, #map, #map-1 do
+            local c = map[j].c
+            local sp, w, h
+            if c == corner.TOP or c == corner.BOT then
+                sp = 9
+                w = 2
+                h = 1
+            else
+                sp = 11
+                w = 1
+                h = 2
+            end
+            local flip_x = c == corner.LEFT
+            local flip_y = c == corner.BOT
+            spr(sp, map[j].x*10, map[j].y*10, w, h, flip_x, flip_y)
+        end
     end
 
     -- Draw selection
@@ -346,17 +364,6 @@ function _draw()
         line(right, bot, right, bot-2, color)
     end
 
-    foreach(enemies, function(e)
-        -- Draw enemy
-        circ(e.x, e.y, 2, C.yellow)
-        -- Draw hp
-        local hp_y = e.y - 4
-        rect(e.x-1, hp_y, e.x+1, hp_y, C.dark_green)
-        if e.hp > 0 then
-            rect(e.x-1, hp_y, (e.x-1)+e.hp-1, hp_y, C.green)
-        end
-    end)
-
     foreach(towers, function(t)
         -- Draw tower
         local tx = t.x*10
@@ -368,6 +375,17 @@ function _draw()
         -- for b in all(twr.bullets) do
         --     line(twr.x, twr.y, b.enemy.x, b.enemy.y, C.green)
         -- end
+    end)
+
+    foreach(enemies, function(e)
+        -- Draw enemy
+        circ(e.x, e.y, 2, C.yellow)
+        -- Draw hp
+        local hp_y = e.y - 4
+        rect(e.x-1, hp_y, e.x+1, hp_y, C.dark_green)
+        if e.hp > 0 then
+            rect(e.x-1, hp_y, (e.x-1)+e.hp-1, hp_y, C.green)
+        end
     end)
 
     -- Debug
