@@ -81,33 +81,28 @@ sel = {
 }
 
 enemies = {}
--- towers = {}
+towers = {}
 
 function make_enemy(x, y, dx, dy)
-    local e = {
+    add(enemies, {
         x=x, y=y,
         dx=dx, dy=dy,
         hp=3, max_hp=3,
         can_remove=false,
-    }
-    add(enemies, e)
-    return e
+    })
 end
 
--- function make_tower(type, x, y)
---     local twr = {
---         type = type,
---         -- x and y denote the center of the tower
---         x = x, y = y,
---         range = 28,
---         bullets = {},
---         -- controls when the turret can deal damage
---         cd = 0,
---         is_attacking = false,
---     }
---     add(towers, twr)
---     return twr
--- end
+function make_tower(type, x, y)
+    add(towers, {
+        type=type,
+        x=x, y=y, -- grid coordinates
+        range=28,
+        -- bullets={},
+        -- controls when the turret can deal damage
+        -- cd=0,
+        -- is_attacking=false,
+    })
+end
 
 -- function make_bullet(x, y, enemy)
 --     local b = {
@@ -124,7 +119,7 @@ function _init()
     init_path_points()
 
     make_enemy(path_points[1].x, path_points[1].y, 0, 1)
-    -- make_tower(0, 44, 44)
+    make_tower(1, 4, 4)
 end
 
 function line_contains_point(l1, l2, p)
@@ -380,16 +375,18 @@ function _draw()
         end
     end)
 
-    -- foreach(towers, function(twr)
-    --     -- Draw tower
-    --     spr(twr.type, twr.x-3, twr.y-3, 1, 1)
-    --     -- circ(twr.x, twr.y, twr.range, C.light_gray) -- range
+    foreach(towers, function(t)
+        -- Draw tower
+        local tx = t.x*10
+        local ty = t.y*10
+        spr(t.type, tx, ty)
+        circ(tx+4, ty+4, t.range, C.light_gray) -- range
 
-    --     -- Draw bullets
-    --     for b in all(twr.bullets) do
-    --         line(twr.x, twr.y, b.enemy.x, b.enemy.y, C.green)
-    --     end
-    -- end)
+        -- Draw bullets
+        -- for b in all(twr.bullets) do
+        --     line(twr.x, twr.y, b.enemy.x, b.enemy.y, C.green)
+        -- end
+    end)
 
     -- Debug
     color(C.red)
