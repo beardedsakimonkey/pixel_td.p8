@@ -13,32 +13,35 @@ Notes:
 
 ]]
 
-B = {
-    left  = 0,
-    right = 1,
-    up = 2,
-    down = 3,
-    z = 4,
-    x = 5,
+corner = {TL = 1, TR = 2, BL = 3, BR = 4, TOP = 5, LEFT = 6, RIGHT = 7, BOT = 8}
+
+map = {
+    {x = 1,  y = 0,  c = corner.TOP},
+    {x = 1,  y = 3,  c = corner.BL},
+    {x = 3,  y = 3,  c = corner.BR},
+    {x = 3,  y = 1,  c = corner.TL},
+    {x = 6,  y = 1,  c = corner.TR},
+    {x = 6,  y = 3,  c = corner.BL},
+    {x = 8,  y = 3,  c = corner.BR},
+    {x = 8,  y = 1,  c = corner.TL},
+    {x = 11, y = 1,  c = corner.TR},
+    {x = 11, y = 6,  c = corner.BR},
+    {x = 1,  y = 6,  c = corner.TL},
+    {x = 1,  y = 10, c = corner.BL},
+    {x = 4,  y = 10, c = corner.BR},
+    {x = 4,  y = 8,  c = corner.TL},
+    {x = 8,  y = 8,  c = corner.TR},
+    {x = 8,  y = 10, c = corner.BL},
+    {x = 12, y = 10, c = corner.RIGHT},
 }
 
-C = {
-    black = 0,
-    dark_blue = 1,
-    dark_purple = 2,
-    dark_green = 3,
-    brown = 4,
-    dark_gray = 5,
-    light_gray = 6,
-    white = 7,
-    red = 8,
-    orange = 9,
-    yellow = 10,
-    green = 11,
-    blue = 12,
-    indigo = 13,
-    pink = 14,
-    peach = 15,
+-- Selection (not using grid coordinates because of animation)
+sel = {
+    -- coordinates of top left corner of cell
+    dest_x = 50, dest_y = 50,
+    -- for animation
+    cur_x = 50, cur_y = 50,
+    dx = 0, dy = 0,
 }
 
 -- enemies = {}
@@ -78,27 +81,8 @@ C = {
 --     return b
 -- end
 
--- function tbl_filter(t, fn)
---     local res = {}
---     foreach(t, function(v)
---         if fn(v) then
---             add(res, v)
---         end
---     end)
---     return res
--- end
-
 -- _INIT (called once on startup)
-function _init()
-    -- map = {
-    --     {x = 0,  y = 24},
-    --     {x = 104, y = 24},
-    --     {x = 104, y = 54},
-    --     {x = 24, y = 54},
-    --     {x = 24, y = 94},
-    --     {x = 104, y = 94},
-    --     {x = 104, y = 127},
-    -- }
+-- function _init()
     -- local e = make_enemy(map[1].x, map[1].y)
     -- make_tower(0, 44, 44)
     -- if map[1].y == map[2].y then
@@ -106,7 +90,7 @@ function _init()
     -- else
     --     e.dy = 1
     -- end
-end
+-- end
 
 -- function line_contains_point(l1, l2, p)
 --     local is_vert = l1.x == l2.x
@@ -206,15 +190,6 @@ end
 --     end
 -- end
 
--- Selection (not using grid coordinates because of animation)
-sel = {
-    -- coordinates of top left corner of cell
-    dest_x = 0, dest_y = 0,
-    -- for animation
-    cur_x = 0, cur_y = 0,
-    dx = 0, dy = 0,
-}
-
 -- _UPDATE (called once per update at 30fps)
 function _update()
     -- Update selection
@@ -253,28 +228,6 @@ function _update()
 --         end
 --     end)
 end
-
-corner = {TL = 1, TR = 2, BL = 3, BR = 4, TOP = 5, LEFT = 6, RIGHT = 7, BOT = 8}
-
-map = {
-    {x = 1,  y = 0,  c = corner.TOP},
-    {x = 1,  y = 3,  c = corner.BL},
-    {x = 3,  y = 3,  c = corner.BR},
-    {x = 3,  y = 1,  c = corner.TL},
-    {x = 6,  y = 1,  c = corner.TR},
-    {x = 6,  y = 3,  c = corner.BL},
-    {x = 8,  y = 3,  c = corner.BR},
-    {x = 8,  y = 1,  c = corner.TL},
-    {x = 11, y = 1,  c = corner.TR},
-    {x = 11, y = 6,  c = corner.BR},
-    {x = 1,  y = 6,  c = corner.TL},
-    {x = 1,  y = 10, c = corner.BL},
-    {x = 4,  y = 10, c = corner.BR},
-    {x = 4,  y = 8,  c = corner.TL},
-    {x = 8,  y = 8,  c = corner.TR},
-    {x = 8,  y = 10, c = corner.BL},
-    {x = 12, y = 10, c = corner.RIGHT},
-}
 
 local function get_cell_corner(cell)
     local top   = (cell.y * 10) - 1
