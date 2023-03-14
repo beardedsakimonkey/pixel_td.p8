@@ -17,23 +17,23 @@ Notes:
 corner = {TL=1, TR=2, BL=3, BR=4, TOP=5, LEFT=6, RIGHT=7, BOT=8}
 
 map = {
-    {x = 1,  y = 0,  c = corner.TOP},
-    {x = 1,  y = 3,  c = corner.BL},
-    {x = 3,  y = 3,  c = corner.BR},
-    {x = 3,  y = 1,  c = corner.TL},
-    {x = 6,  y = 1,  c = corner.TR},
-    {x = 6,  y = 3,  c = corner.BL},
-    {x = 8,  y = 3,  c = corner.BR},
-    {x = 8,  y = 1,  c = corner.TL},
-    {x = 11, y = 1,  c = corner.TR},
-    {x = 11, y = 6,  c = corner.BR},
-    {x = 1,  y = 6,  c = corner.TL},
-    {x = 1,  y = 10, c = corner.BL},
-    {x = 4,  y = 10, c = corner.BR},
-    {x = 4,  y = 8,  c = corner.TL},
-    {x = 8,  y = 8,  c = corner.TR},
-    {x = 8,  y = 10, c = corner.BL},
-    {x = 12, y = 10, c = corner.RIGHT},
+    {x=1,  y=0,  c=corner.TOP},
+    {x=1,  y=3,  c=corner.BL},
+    {x=3,  y=3,  c=corner.BR},
+    {x=3,  y=1,  c=corner.TL},
+    {x=6,  y=1,  c=corner.TR},
+    {x=6,  y=3,  c=corner.BL},
+    {x=8,  y=3,  c=corner.BR},
+    {x=8,  y=1,  c=corner.TL},
+    {x=11, y=1,  c=corner.TR},
+    {x=11, y=6,  c=corner.BR},
+    {x=1,  y=6,  c=corner.TL},
+    {x=1,  y=10, c=corner.BL},
+    {x=4,  y=10, c=corner.BR},
+    {x=4,  y=8,  c=corner.TL},
+    {x=8,  y=8,  c=corner.TR},
+    {x=8,  y=10, c=corner.BL},
+    {x=12, y=10, c=corner.RIGHT},
 }
 
 -- 2d array containing 1s for grid cells that are on the path and 0s otherwise
@@ -74,10 +74,10 @@ end
 -- Selection (not using grid coordinates because of animation)
 sel = {
     -- Note: coordinates are of the top left corner of the cell
-    dest_x = 50, dest_y = 50,
+    dest_x=50, dest_y=50,
     -- for animation
-    cur_x = 50, cur_y = 50,
-    dx = 0, dy = 0,
+    cur_x=50, cur_y=50,
+    dx=0, dy=0,
 }
 
 enemies = {}
@@ -85,10 +85,10 @@ enemies = {}
 
 function make_enemy(x, y, dx, dy)
     local e = {
-        x = x, y = y,
-        dx = dx, dy = dy,
-        hp = 3, max_hp = 3,
-        can_remove = false,
+        x=x, y=y,
+        dx=dx, dy=dy,
+        hp=3, max_hp=3,
+        can_remove=false,
     }
     add(enemies, e)
     return e
