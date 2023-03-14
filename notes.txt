@@ -10,4 +10,3 @@ Juice:
 Notes:
 - x to send wave (if you're selecting a tower, it'll sell the tower, but you can
     just rebuy it without losing money)
-- can have "X - send wave" message at bottom of screen

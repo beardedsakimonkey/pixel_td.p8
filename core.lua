@@ -1,3 +1,4 @@
+t = 0
 corner = {TL=1, TR=2, BL=3, BR=4, TOP=5, LEFT=6, RIGHT=7, BOT=8}
 map = {
     {x=1,  y=0,  c=corner.TOP},
@@ -239,6 +240,7 @@ end
 -- UPDATE
 --------------------------------------------------------------------------------
 function _update()
+    t += 1
     -- Update selection
     if btnp(B.left)  then try_move_selection(B.left) end
     if btnp(B.right) then try_move_selection(B.right) end
@@ -388,7 +390,6 @@ function _draw()
         end
     end)
 
-    -- Debug
-    color(C.red)
-    -- print('time:' .. time())
+    -- local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
+    -- print('❎ send wave', 22, 1, c)
 end
