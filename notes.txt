@@ -1,0 +1,11 @@
+Juice:
+- enemies bob up and down
+- animate selection movement
+- animation when trying to move selection fails
+- bottom hud animates up/down
+- screen shake on enemy reaching end
+- spinning coin
+
+Notes:
+- x to send wave (if you're selecting a tower, it'll sell the tower, but you can
+    just rebuy it without losing money)

@@ -1,21 +1,4 @@
---[[
-
-Juice:
-- enemies bob up and down
-- animate selection movement
-- animation when trying to move selection fails
-- bottom hud animates up/down
-- screen shake on enemy reaching end
-- spinning coin
-
-Notes:
-- x to send wave (if you're selecting a tower, it'll sell the tower, but you can
-    just rebuy it without losing money)
-
-]]
-
 corner = {TL=1, TR=2, BL=3, BR=4, TOP=5, LEFT=6, RIGHT=7, BOT=8}
-
 map = {
     {x=1,  y=0,  c=corner.TOP},
     {x=1,  y=3,  c=corner.BL},
@@ -35,11 +18,32 @@ map = {
     {x=8,  y=10, c=corner.BL},
     {x=12, y=10, c=corner.RIGHT},
 }
-
--- 2d array containing 1s for grid cells that are on the path and 0s otherwise
 grid_bitmap = {}
+path_points = {}
+sel = {
+    dest_x=50, dest_y=50,
+    -- for animation
+    cur_x=50, cur_y=50,
+    dx=0, dy=0,
+}
+enemies = {}
+towers = {}
 
-local function init_grid_bitmap()
+--------------------------------------------------------------------------------
+-- INIT
+--------------------------------------------------------------------------------
+function _init()
+    -- Set up auxiliary data structures
+    init_grid_bitmap()
+    init_path_points()
+    -- Make enemy
+    make_enemy(path_points[1].x, path_points[1].y, 0, 1)
+    -- Make tower
+    make_tower(1, 4, 4)
+end
+
+-- Helps impl of selection movement
+function init_grid_bitmap()
     for i = 1, 13 do
         add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
     end
@@ -59,10 +63,8 @@ local function init_grid_bitmap()
     end
 end
 
--- Array of points of the path. Helps impl of enemy movement.
-path_points = {}
-
-local function init_path_points()
+-- Helps impl of enemy movement
+function init_path_points()
     for i = 1, #map do
         add(path_points, {
             x = map[i].x * 10 + 4,
@@ -70,18 +72,6 @@ local function init_path_points()
         })
     end
 end
-
--- Selection (not using grid coordinates because of animation)
-sel = {
-    -- Note: coordinates are of the top left corner of the cell
-    dest_x=50, dest_y=50,
-    -- for animation
-    cur_x=50, cur_y=50,
-    dx=0, dy=0,
-}
-
-enemies = {}
-towers = {}
 
 function make_enemy(x, y, dx, dy)
     add(enemies, {
@@ -112,16 +102,6 @@ end
 --     return b
 -- end
 
--- _INIT (called once on startup)
-function _init()
-    -- Set up auxiliary data structures
-    init_grid_bitmap()
-    init_path_points()
-
-    make_enemy(path_points[1].x, path_points[1].y, 0, 1)
-    make_tower(1, 4, 4)
-end
-
 function line_contains_point(l1, l2, p)
     local is_vert = l1.x == l2.x
     if is_vert then
@@ -147,12 +127,13 @@ function move_enemy(e)
         end
         p += 1
     end
-    assert(l1)
+    assert(l1) -- enemy should always be on the path
 
     if e.dx ~= 0 then -- moving horizontally
         local right = e.dx > 0
         local edge_x = right and max(l1.x, l2.x) or min(l1.x, l2.x)
-        local overflow = right and ((e.x + e.dx) - edge_x) or (edge_x - (e.x + e.dx))
+        local overflow = right and ((e.x + e.dx) - edge_x)
+                                or (edge_x - (e.x + e.dx))
         -- If the new position would go out of bounds on the path, split the
         -- travel distance into horizontal and vertical movement.
         if overflow > 0 then
@@ -172,7 +153,8 @@ function move_enemy(e)
     elseif e.dy ~= 0 then -- moving vertically
         local down = e.dy > 0
         local edge_y = down and max(l1.y, l2.y) or min(l1.y, l2.y)
-        local overflow = down and ((e.y + e.dy) - edge_y) or (edge_y - (e.y + e.dy))
+        local overflow = down and ((e.y + e.dy) - edge_y)
+                               or (edge_y - (e.y + e.dy))
         if overflow > 0 then
             e.y = edge_y
             if path_points[p+1] then
@@ -220,12 +202,12 @@ end
 --     end
 -- end
 
-local function try_move_selection(dir)
-    -- convert selection to grid coordinates
+function try_move_selection(dir)
+    -- Convert selection to grid coordinates
     local cur_cell_x = sel.dest_x / 10
     local cur_cell_y = sel.dest_y / 10
 
-    -- find destination cell
+    -- Find destination cell
     local dst_cell_x = cur_cell_x
     local dst_cell_y = cur_cell_y
     local dx = dir == B.right and 1 or dir == B.left and -1 or 0
@@ -234,7 +216,7 @@ local function try_move_selection(dir)
         dst_cell_x += dx
         dst_cell_y += dy
 
-        -- don't move past boundaries
+        -- Don't move past boundaries
         if dst_cell_x <= 0 or dst_cell_y <= 0 or
             dst_cell_x >= 12 or dst_cell_y >= 12 then
             return
@@ -244,21 +226,18 @@ local function try_move_selection(dir)
         end
     end
 
-    -- move selection
+    -- Move selection
     sel.dest_x = dst_cell_x * 10
     sel.dest_y = dst_cell_y * 10
-    if dir == B.left then
-        sel.dx = -4
-    elseif dir == B.right then
-        sel.dx = 4
-    elseif dir == B.up then
-        sel.dy = -4
-    elseif dir == B.down then
-        sel.dy = 4
-    end
+    if     dir == B.left  then sel.dx = -4
+    elseif dir == B.right then sel.dx = 4
+    elseif dir == B.up    then sel.dy = -4
+    elseif dir == B.down  then sel.dy = 4 end
 end
 
--- _UPDATE (called once per update at 30fps)
+--------------------------------------------------------------------------------
+-- UPDATE
+--------------------------------------------------------------------------------
 function _update()
     -- Update selection
     if btnp(B.left)  then try_move_selection(B.left) end
@@ -286,7 +265,7 @@ function _update()
 
     -- Move enemies
     foreach(enemies, move_enemy)
-    -- Remove enemies that have gone off screen
+    -- Remove enemies that have gone offscreen
     enemies = tbl_filter(enemies, function(e) return not e.can_remove end)
 
     -- foreach(bullet, move_bullet)
@@ -299,7 +278,7 @@ function _update()
     -- end)
 end
 
-local function get_cell_corner(cell)
+function get_cell_corner(cell)
     local top   = (cell.y * 10) - 1
     local left  = (cell.x * 10) - 1
     local bot   = top + 10
@@ -312,7 +291,9 @@ local function get_cell_corner(cell)
     if cell.c == corner.TR    then return {x = left, y = top} end
 end
 
--- _DRAW (called once per visible frame)
+--------------------------------------------------------------------------------
+-- DRAW
+--------------------------------------------------------------------------------
 function _draw()
     cls(C.black)
 
@@ -350,18 +331,19 @@ function _draw()
         local left  = sel.cur_x
         local bot   = top + 8
         local right = left + 8
+        local color = C.light_gray
         -- top left corner
-        line(left, top, left+2, top, C.light_gray)
-        line(left, top, left, top+2, C.light_gray)
+        line(left, top, left+2, top, color)
+        line(left, top, left, top+2, color)
         -- top right corner
-        line(right, top, right-2, top, C.light_gray)
-        line(right, top, right, top+2, C.light_gray)
+        line(right, top, right-2, top, color)
+        line(right, top, right, top+2, color)
         -- bottom left corner
-        line(left, bot, left+2, bot, C.light_gray)
-        line(left, bot, left, bot-2, C.light_gray)
+        line(left, bot, left+2, bot, color)
+        line(left, bot, left, bot-2, color)
         -- bottom right corner
-        line(right, bot, right-2, bot, C.light_gray)
-        line(right, bot, right, bot-2, C.light_gray)
+        line(right, bot, right-2, bot, color)
+        line(right, bot, right, bot-2, color)
     end
 
     foreach(enemies, function(e)
@@ -390,6 +372,5 @@ function _draw()
 
     -- Debug
     color(C.red)
-    -- print('dx:' .. enemies[1].dx)
-    -- print('dy:' .. enemies[1].dy)
+    -- print('time:' .. time())
 end
