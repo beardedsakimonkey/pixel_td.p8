@@ -40,7 +40,7 @@ function _init()
     -- Make enemy
     make_enemy(path_points[1].x, path_points[1].y, 0, 1)
     -- Make tower
-    make_tower(1, 4, 4)
+    make_tower(3, 4, 4)
 end
 
 -- Helps impl of selection movement
@@ -86,22 +86,12 @@ end
 function make_tower(type, x, y)
     add(towers, {
         type=type,
-        x=x, y=y, -- grid coordinates
+        x=x, y=y, -- in grid coordinates
         range=28,
-        -- bullets={},
-        -- controls when the turret can deal damage
-        -- cd=0,
-        -- is_attacking=false,
+        bullets={},
+        cd=0, -- in frames
     })
 end
-
--- function make_bullet(x, y, enemy)
---     local b = {
---         x = x, y = y,
---         enemy = enemy,
---     }
---     return b
--- end
 
 function line_contains_point(l1, l2, p)
     local is_vert = l1.x == l2.x
@@ -173,35 +163,10 @@ function move_enemy(e)
     end
 end
 
--- -- Todo: perf
--- function is_in_range(e, twr)
---     return (((e.x - twr.x)^2) + ((e.y - twr.y)^2)) < (twr.range^2)
--- end
-
--- function move_bullet(b)
--- end
-
--- function create_bullets(twr)
---     if twr.cd > 0 then return end
---     -- Find enemy in range of tower
---     for e in all(enemies) do
---         if is_in_range(e, twr) then
---             add(twr.bullets, make_bullet(x, y, e))
---             twr.cd = 1
---             e.hp = max(0, e.hp-1) -- instant damage from laser
---             break
---         end
---     end
--- end
-
--- function delete_bullets(twr)
---     for b in all(twr.bullets) do
---         if not is_in_range(b.enemy, twr) then
---             twr.bullets = {}
---             twr.cd = 0
---         end
---     end
--- end
+-- Todo: perf
+function is_in_range(enmy, twr)
+    return (((enmy.x - twr.x)^2) + ((enmy.y - twr.y)^2)) < (twr.range^2)
+end
 
 function try_move_selection(dir)
     -- Convert selection to grid coordinates
@@ -216,7 +181,6 @@ function try_move_selection(dir)
     while true do
         dst_cell_x += dx
         dst_cell_y += dy
-
         -- Don't move past boundaries
         if dst_cell_x <= 0 or dst_cell_y <= 0 or
             dst_cell_x >= 12 or dst_cell_y >= 12 then
@@ -246,7 +210,6 @@ function _update()
     if btnp(B.right) then try_move_selection(B.right) end
     if btnp(B.up)    then try_move_selection(B.up) end
     if btnp(B.down)  then try_move_selection(B.down) end
-
     if sel.dx ~= 0 then
         sel.cur_x += sel.dx
         if sel.dx > 0 and sel.cur_x > sel.dest_x
@@ -255,7 +218,6 @@ function _update()
             sel.dx = 0
         end
     end
-
     if sel.dy ~= 0 then
         sel.cur_y += sel.dy
         if sel.dy > 0 and sel.cur_y > sel.dest_y
@@ -268,14 +230,36 @@ function _update()
     -- Move enemies
     foreach(enemies, move_enemy)
     -- Remove enemies that have gone offscreen
-    enemies = tbl_filter(enemies, function(e) return not e.can_remove end)
+    enemies = tbl_filter(enemies, function(enmy) return not enmy.can_remove end)
 
-    -- foreach(bullet, move_bullet)
+    -- Move bullets
+    foreach(tower, function(twr)
+        foreach(twr.bullets, function(blt)
+            local enmy = blt.enemy
+            -- handle collision
+            if blt.x == enmy.x and blt.y == enmy.y then
+                enmy.hp = max(0, enmy.hp-1)
+                blt.can_remove = true
+            end
+        end)
+        -- remove bullets
+        twr.bullets = tbl_filter(twr.bullets, function(blt)
+            return not blt.can_remove
+        end)
+    end)
+    -- Fire bullets
     -- foreach(towers, function(twr)
     --     twr.cd = max(0, twr.cd-1)
-    --     create_bullets(twr)
-    --     if #twr.bullets > 0 then
-    --         delete_bullets(twr)
+    --     if twr.cd > 0 then return end
+    --     for enmy in all(enemies) do
+    --         if is_in_range(enmy, twr) then
+    --             -- Todo: what happens when enemy dies from another bullet?
+    --             -- perhaps we keep enemy objects around with a 'dead' flag until
+    --             -- all of them are dead?
+    --             add(twr.bullets, {x=x, y=y, enemy=enmy, ts=time()})
+    --             twr.cd = 20
+    --             break
+    --         end
     --     end
     -- end)
 end
@@ -366,27 +350,27 @@ function _draw()
         line(right, bot, right, bot-2, color)
     end
 
-    foreach(towers, function(t)
+    foreach(towers, function(twr)
         -- Draw tower
-        local tx = t.x*10
-        local ty = t.y*10
-        spr(t.type, tx, ty)
-        circ(tx+4, ty+4, t.range, C.light_gray) -- range
+        local x = twr.x*10
+        local y = twr.y*10
+        spr(twr.type, x, y)
+        circ(x+4, y+4, twr.range, C.light_gray) -- range
 
         -- Draw bullets
-        -- for b in all(twr.bullets) do
-        --     line(twr.x, twr.y, b.enemy.x, b.enemy.y, C.green)
-        -- end
+        for blt in all(twr.bullets) do
+            pset(blt.x, blt.y, C.red)
+        end
     end)
 
-    foreach(enemies, function(e)
+    foreach(enemies, function(enmy)
         -- Draw enemy
-        circ(e.x, e.y, 2, C.yellow)
+        circ(enmy.x, enmy.y, 2, C.yellow)
         -- Draw hp
-        local hp_y = e.y - 4
-        rect(e.x-1, hp_y, e.x+1, hp_y, C.dark_green)
-        if e.hp > 0 then
-            rect(e.x-1, hp_y, (e.x-1)+e.hp-1, hp_y, C.green)
+        local hp_y = enmy.y - 4
+        rect(enmy.x-1, hp_y, enmy.x+1, hp_y, C.dark_green)
+        if enmy.hp > 0 then
+            rect(enmy.x-1, hp_y, (enmy.x-1)+enmy.hp-1, hp_y, C.green)
         end
     end)
 
