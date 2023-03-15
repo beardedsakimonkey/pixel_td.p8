@@ -14,3 +14,11 @@ function tbl_filter(t, fn)
     end)
     return res
 end
+
+function lerp(a, b, t)
+    return a + (b-a)*t
+end
+
+function easeout(t)
+    return 1 - (1-t)*(1-t)
+end

@@ -22,10 +22,10 @@ map = {
 grid_bitmap = {}
 path_points = {}
 sel = {
-    dest_x=50, dest_y=50,
-    -- for animation
-    cur_x=50, cur_y=50,
-    dx=0, dy=0,
+    dst_x=50, dst_y=50,
+    x=50, y=50,
+    src_x=50, src_y=50,
+    ts_x=0, ts_y=0,-- animation start time
 }
 enemies = {}
 towers = {}
@@ -168,36 +168,50 @@ function is_in_range(enmy, twr)
     return (((enmy.x - twr.x)^2) + ((enmy.y - twr.y)^2)) < (twr.range^2)
 end
 
-function try_move_selection(dir)
-    -- Convert selection to grid coordinates
-    local cur_cell_x = sel.dest_x / 10
-    local cur_cell_y = sel.dest_y / 10
-
+-- Todo: this doesn't actually do the moving
+function move_selection(dir)
     -- Find destination cell
-    local dst_cell_x = cur_cell_x
-    local dst_cell_y = cur_cell_y
-    local dx = dir == B.right and 1 or dir == B.left and -1 or 0
-    local dy = dir == B.down and  1 or dir == B.up   and -1 or 0
+    local dst_x = sel.dst_x / 10
+    local dst_y = sel.dst_y / 10
+    local cell_dx = dir == B.right and 1 or dir == B.left and -1 or 0
+    local cell_dy = dir == B.down and  1 or dir == B.up   and -1 or 0
     while true do
-        dst_cell_x += dx
-        dst_cell_y += dy
-        -- Don't move past boundaries
-        if dst_cell_x <= 0 or dst_cell_y <= 0 or
-            dst_cell_x >= 12 or dst_cell_y >= 12 then
+        -- move 0 or 1 cells in both directions
+        dst_x += cell_dx
+        dst_y += cell_dy
+        -- bail if we reached a boundary
+        if dst_x <= 0 or dst_y <= 0 or
+            dst_x >= 12 or dst_y >= 12 then
             return
         end
-        if grid_bitmap[dst_cell_y+1][dst_cell_x+1] == 0 then
+        -- break if it's a valid cell
+        if grid_bitmap[dst_y+1][dst_x+1] == 0 then
             break
         end
     end
 
-    -- Move selection
-    sel.dest_x = dst_cell_x * 10
-    sel.dest_y = dst_cell_y * 10
-    if     dir == B.left  then sel.dx = -4
-    elseif dir == B.right then sel.dx = 4
-    elseif dir == B.up    then sel.dy = -4
-    elseif dir == B.down  then sel.dy = 4 end
+    if cell_dx ~= 0 then
+        if sel.x ~= sel.dst_x then
+            sel.src_x = sel.x
+            sel.ts_x = time()
+        end
+        if sel.ts_x == 0 then
+            sel.ts_x = time()
+        end
+    end
+    if cell_dy ~= 0 then
+        if sel.y ~= sel.dst_y then
+            sel.src_y = sel.y
+            sel.ts_y = time()
+        end
+        if sel.ts_y == 0 then
+            sel.ts_y = time()
+        end
+    end
+
+    -- Update destination
+    sel.dst_x = dst_x * 10
+    sel.dst_y = dst_y * 10
 end
 
 --------------------------------------------------------------------------------
@@ -206,24 +220,28 @@ end
 function _update()
     t += 1
     -- Update selection
-    if btnp(B.left)  then try_move_selection(B.left) end
-    if btnp(B.right) then try_move_selection(B.right) end
-    if btnp(B.up)    then try_move_selection(B.up) end
-    if btnp(B.down)  then try_move_selection(B.down) end
-    if sel.dx ~= 0 then
-        sel.cur_x += sel.dx
-        if sel.dx > 0 and sel.cur_x > sel.dest_x
-            or sel.dx < 0 and sel.cur_x < sel.dest_x then
-            sel.cur_x = sel.dest_x
-            sel.dx = 0
+    if btnp(B.left)  then move_selection(B.left) end
+    if btnp(B.right) then move_selection(B.right) end
+    if btnp(B.up)    then move_selection(B.up) end
+    if btnp(B.down)  then move_selection(B.down) end
+    if sel.ts_x ~= 0 then -- is animating
+        local dt = min(1, (time() - sel.ts_x)*4)
+        if dt == 1 then -- done animating
+            sel.x = sel.dst_x
+            sel.src_x = sel.dst_x
+            sel.ts_x = 0
+        else
+            sel.x = lerp(sel.src_x, sel.dst_x, easeout(dt))
         end
     end
-    if sel.dy ~= 0 then
-        sel.cur_y += sel.dy
-        if sel.dy > 0 and sel.cur_y > sel.dest_y
-            or sel.dy < 0 and sel.cur_y < sel.dest_y then
-            sel.cur_y = sel.dest_y
-            sel.dy = 0
+    if sel.ts_y ~= 0 then -- is animating
+        local dt = min(1, (time() - sel.ts_y)*4)
+        if dt == 1 then -- done animating
+            sel.y = sel.dst_y
+            sel.src_y = sel.dst_y
+            sel.ts_y = 0
+        else
+            sel.y = lerp(sel.src_y, sel.dst_y, easeout(dt))
         end
     end
 
@@ -331,8 +349,8 @@ function _draw()
 
     -- Draw selection
     do
-        local top   = sel.cur_y
-        local left  = sel.cur_x
+        local top   = sel.y
+        local left  = sel.x
         local bot   = top + 8
         local right = left + 8
         local color = C.light_gray
@@ -355,7 +373,7 @@ function _draw()
         local x = twr.x*10
         local y = twr.y*10
         spr(twr.type, x, y)
-        circ(x+4, y+4, twr.range, C.light_gray) -- range
+        -- circ(x+4, y+4, twr.range, C.light_gray) -- range
 
         -- Draw bullets
         for blt in all(twr.bullets) do
@@ -376,4 +394,9 @@ function _draw()
 
     -- local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
     -- print('❎ send wave', 22, 1, c)
+    color(C.red)
+    -- print('dst:' .. sel.dst_x .. ' ' .. sel.dst_y)
+    -- print('x/y:' .. sel.x .. ' ' .. sel.y)
+    -- print('src:' .. sel.src_x .. ' ' .. sel.src_y)
+    -- print('dt:' .. (time() - sel.ts) * 2)
 end
