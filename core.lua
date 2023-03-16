@@ -25,7 +25,7 @@ sel = {
     dst_x=50, dst_y=50,
     x=50, y=50,
     src_x=50, src_y=50,
-    ts_x=0, ts_y=0,-- animation start time
+    ts_x=0, ts_y=0, -- animation start time
 }
 enemies = {}
 towers = {}
@@ -92,6 +92,75 @@ function make_tower(type, x, y)
         cd=0, -- in frames
     })
 end
+
+--------------------------------------------------------------------------------
+-- UPDATE
+--------------------------------------------------------------------------------
+function _update()
+    t += 1
+    -- Update selection
+    if btnp(B.left)  then move_selection(B.left) end
+    if btnp(B.right) then move_selection(B.right) end
+    if btnp(B.up)    then move_selection(B.up) end
+    if btnp(B.down)  then move_selection(B.down) end
+    if sel.ts_x ~= 0 then -- is animating
+        local dt = min(1, (time() - sel.ts_x)*4)
+        if dt == 1 then -- done animating
+            sel.x = sel.dst_x
+            sel.src_x = sel.dst_x
+            sel.ts_x = 0
+        else
+            sel.x = lerp(sel.src_x, sel.dst_x, easeout(dt))
+        end
+    end
+    if sel.ts_y ~= 0 then -- is animating
+        local dt = min(1, (time() - sel.ts_y)*4)
+        if dt == 1 then -- done animating
+            sel.y = sel.dst_y
+            sel.src_y = sel.dst_y
+            sel.ts_y = 0
+        else
+            sel.y = lerp(sel.src_y, sel.dst_y, easeout(dt))
+        end
+    end
+
+    -- Move enemies
+    foreach(enemies, move_enemy)
+    -- Remove enemies that have gone offscreen
+    enemies = tbl_filter(enemies, function(enmy) return not enmy.can_remove end)
+
+    -- Move bullets
+    foreach(tower, function(twr)
+        foreach(twr.bullets, function(blt)
+            local enmy = blt.enemy
+            -- handle collision
+            if blt.x == enmy.x and blt.y == enmy.y then
+                enmy.hp = max(0, enmy.hp-1)
+                blt.can_remove = true
+            end
+        end)
+        -- remove bullets
+        twr.bullets = tbl_filter(twr.bullets, function(blt)
+            return not blt.can_remove
+        end)
+    end)
+    -- Fire bullets
+    -- foreach(towers, function(twr)
+    --     twr.cd = max(0, twr.cd-1)
+    --     if twr.cd > 0 then return end
+    --     for enmy in all(enemies) do
+    --         if is_in_range(enmy, twr) then
+    --             -- Todo: what happens when enemy dies from another bullet?
+    --             -- perhaps we keep enemy objects around with a 'dead' flag until
+    --             -- all of them are dead?
+    --             add(twr.bullets, {x=x, y=y, enemy=enmy, ts=time()})
+    --             twr.cd = 20
+    --             break
+    --         end
+    --     end
+    -- end)
+end
+
 
 function line_contains_point(l1, l2, p)
     local is_vert = l1.x == l2.x
@@ -215,87 +284,6 @@ function move_selection(dir)
 end
 
 --------------------------------------------------------------------------------
--- UPDATE
---------------------------------------------------------------------------------
-function _update()
-    t += 1
-    -- Update selection
-    if btnp(B.left)  then move_selection(B.left) end
-    if btnp(B.right) then move_selection(B.right) end
-    if btnp(B.up)    then move_selection(B.up) end
-    if btnp(B.down)  then move_selection(B.down) end
-    if sel.ts_x ~= 0 then -- is animating
-        local dt = min(1, (time() - sel.ts_x)*4)
-        if dt == 1 then -- done animating
-            sel.x = sel.dst_x
-            sel.src_x = sel.dst_x
-            sel.ts_x = 0
-        else
-            sel.x = lerp(sel.src_x, sel.dst_x, easeout(dt))
-        end
-    end
-    if sel.ts_y ~= 0 then -- is animating
-        local dt = min(1, (time() - sel.ts_y)*4)
-        if dt == 1 then -- done animating
-            sel.y = sel.dst_y
-            sel.src_y = sel.dst_y
-            sel.ts_y = 0
-        else
-            sel.y = lerp(sel.src_y, sel.dst_y, easeout(dt))
-        end
-    end
-
-    -- Move enemies
-    foreach(enemies, move_enemy)
-    -- Remove enemies that have gone offscreen
-    enemies = tbl_filter(enemies, function(enmy) return not enmy.can_remove end)
-
-    -- Move bullets
-    foreach(tower, function(twr)
-        foreach(twr.bullets, function(blt)
-            local enmy = blt.enemy
-            -- handle collision
-            if blt.x == enmy.x and blt.y == enmy.y then
-                enmy.hp = max(0, enmy.hp-1)
-                blt.can_remove = true
-            end
-        end)
-        -- remove bullets
-        twr.bullets = tbl_filter(twr.bullets, function(blt)
-            return not blt.can_remove
-        end)
-    end)
-    -- Fire bullets
-    -- foreach(towers, function(twr)
-    --     twr.cd = max(0, twr.cd-1)
-    --     if twr.cd > 0 then return end
-    --     for enmy in all(enemies) do
-    --         if is_in_range(enmy, twr) then
-    --             -- Todo: what happens when enemy dies from another bullet?
-    --             -- perhaps we keep enemy objects around with a 'dead' flag until
-    --             -- all of them are dead?
-    --             add(twr.bullets, {x=x, y=y, enemy=enmy, ts=time()})
-    --             twr.cd = 20
-    --             break
-    --         end
-    --     end
-    -- end)
-end
-
-function get_cell_corner(cell)
-    local top   = (cell.y * 10) - 1
-    local left  = (cell.x * 10) - 1
-    local bot   = top + 10
-    local right = left + 10
-    if cell.c == corner.TOP   then return {x = left, y = top} end
-    if cell.c == corner.RIGHT then return {x = right, y = top} end
-    if cell.c == corner.TL    then return {x = left, y = bot} end
-    if cell.c == corner.BL    then return {x = right, y = bot} end
-    if cell.c == corner.BR    then return {x = right, y = top} end
-    if cell.c == corner.TR    then return {x = left, y = top} end
-end
-
---------------------------------------------------------------------------------
 -- DRAW
 --------------------------------------------------------------------------------
 function _draw()
@@ -395,8 +383,17 @@ function _draw()
     -- local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
     -- print('❎ send wave', 22, 1, c)
     color(C.red)
-    -- print('dst:' .. sel.dst_x .. ' ' .. sel.dst_y)
-    -- print('x/y:' .. sel.x .. ' ' .. sel.y)
-    -- print('src:' .. sel.src_x .. ' ' .. sel.src_y)
-    -- print('dt:' .. (time() - sel.ts) * 2)
+end
+
+function get_cell_corner(cell)
+    local top   = (cell.y * 10) - 1
+    local left  = (cell.x * 10) - 1
+    local bot   = top + 10
+    local right = left + 10
+    if cell.c == corner.TOP   then return {x = left, y = top} end
+    if cell.c == corner.RIGHT then return {x = right, y = top} end
+    if cell.c == corner.TL    then return {x = left, y = bot} end
+    if cell.c == corner.BL    then return {x = right, y = bot} end
+    if cell.c == corner.BR    then return {x = right, y = top} end
+    if cell.c == corner.TR    then return {x = left, y = top} end
 end
