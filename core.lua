@@ -37,10 +37,10 @@ function _init()
     -- Set up auxiliary data structures
     init_grid_bitmap()
     init_path_points()
-    -- Make enemy
-    make_enemy(path_points[1].x, path_points[1].y, 0, 1)
-    -- Make tower
+    -- Make towers
     make_tower(3, 4, 4)
+    make_tower(3, 3, 4)
+    make_tower(3, 2, 4)
 end
 
 -- Helps impl of selection movement
@@ -98,6 +98,10 @@ end
 --------------------------------------------------------------------------------
 function _update()
     t += 1
+    -- Make enemy
+    if t%20 == 0 then
+        make_enemy(path_points[1].x, path_points[1].y, 0, 0.5)
+    end
     -- Update selection
     if btnp(B.left)  then move_selection(B.left) end
     if btnp(B.right) then move_selection(B.right) end
@@ -126,17 +130,36 @@ function _update()
 
     -- Move enemies
     foreach(enemies, move_enemy)
-    -- Remove enemies that have gone offscreen
-    enemies = tbl_filter(enemies, function(enmy) return not enmy.can_remove end)
 
     -- Move bullets
-    foreach(tower, function(twr)
+    foreach(towers, function(twr)
         foreach(twr.bullets, function(blt)
+            -- update particles
+            for p in all(blt.particles) do
+                p.age += 1
+                if p.age > 3 then
+                    del(blt.particles, p)
+                end
+            end
+
             local enmy = blt.enemy
+            local oldx, oldy = blt.x, blt.y
+            local dx = enmy.x - blt.x
+            local dy = enmy.y - blt.y
+            blt.rotation = atan2(dx, dy)
+            -- update bullet position
+            blt.x = blt.x + cos(blt.rotation)*1
+            blt.y = blt.y + sin(blt.rotation)*1
+
             -- handle collision
-            if blt.x == enmy.x and blt.y == enmy.y then
-                enmy.hp = max(0, enmy.hp-1)
+            if collide(blt, enmy) then
+                enmy.hp = max(0, enmy.hp-3)
                 blt.can_remove = true
+            else
+                -- add particle
+                if t%2 == 0 then
+                    add(blt.particles, {x=oldx, y=oldy, age=1})
+                end
             end
         end)
         -- remove bullets
@@ -145,22 +168,35 @@ function _update()
         end)
     end)
     -- Fire bullets
-    -- foreach(towers, function(twr)
-    --     twr.cd = max(0, twr.cd-1)
-    --     if twr.cd > 0 then return end
-    --     for enmy in all(enemies) do
-    --         if is_in_range(enmy, twr) then
-    --             -- Todo: what happens when enemy dies from another bullet?
-    --             -- perhaps we keep enemy objects around with a 'dead' flag until
-    --             -- all of them are dead?
-    --             add(twr.bullets, {x=x, y=y, enemy=enmy, ts=time()})
-    --             twr.cd = 20
-    --             break
-    --         end
-    --     end
-    -- end)
+    foreach(towers, function(twr)
+        twr.cd = max(0, twr.cd-1)
+        if twr.cd > 0 then return end
+        for enmy in all(enemies) do
+            if is_in_range(enmy, twr) then
+                -- Todo: what happens when enemy dies from another bullet?
+                -- perhaps we keep enemy objects around with a 'dead' flag until
+                -- all of them are dead?
+                add(twr.bullets, {
+                    x=twr.x*10+4, y=twr.y*10+4,
+                    rotation=0,
+                    enemy=enmy,
+                    particles={},
+                })
+                twr.cd = 40
+                break
+            end
+        end
+    end)
+    -- Remove enemies
+    enemies = tbl_filter(enemies, function(enmy)
+        return not enmy.can_remove and enmy.hp > 0
+    end)
 end
 
+function collide(blt, enmy)
+    return blt.x > enmy.x-1 and blt.x < enmy.x+1
+       and blt.y > enmy.y-1 and blt.y < enmy.y+1
+end
 
 function line_contains_point(l1, l2, p)
     local is_vert = l1.x == l2.x
@@ -234,7 +270,7 @@ end
 
 -- Todo: perf
 function is_in_range(enmy, twr)
-    return (((enmy.x - twr.x)^2) + ((enmy.y - twr.y)^2)) < (twr.range^2)
+    return (((enmy.x - twr.x*10)^2) + ((enmy.y - twr.y*10)^2)) < (twr.range^2)
 end
 
 -- Todo: this doesn't actually do the moving
@@ -366,12 +402,16 @@ function _draw()
         -- Draw bullets
         for blt in all(twr.bullets) do
             pset(blt.x, blt.y, C.red)
+            -- Draw particles
+            for part in all(blt.particles) do
+                pset(part.x, part.y, C.dark_purple)
+            end
         end
     end)
 
     foreach(enemies, function(enmy)
         -- Draw enemy
-        circ(enmy.x, enmy.y, 2, C.yellow)
+        circ(enmy.x, enmy.y, 1, C.light_gray)
         -- Draw hp
         local hp_y = enmy.y - 4
         rect(enmy.x-1, hp_y, enmy.x+1, hp_y, C.dark_green)
