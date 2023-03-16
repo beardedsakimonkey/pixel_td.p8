@@ -15,6 +15,14 @@ function tbl_filter(t, fn)
     return res
 end
 
+function tbl_find(t, fn)
+    for v in all(t) do
+        if fn(v) then
+            return v
+        end
+    end
+end
+
 function lerp(a, b, t)
     return a + (b-a)*t
 end

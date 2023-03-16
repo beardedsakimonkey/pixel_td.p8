@@ -29,6 +29,8 @@ sel = {
 }
 enemies = {}
 towers = {}
+wave = 1
+sending = 10 -- number of enemies to send this wave
 
 --------------------------------------------------------------------------------
 -- INIT
@@ -38,9 +40,9 @@ function _init()
     init_grid_bitmap()
     init_path_points()
     -- Make towers
-    make_tower(3, 4, 4)
-    make_tower(3, 3, 4)
-    make_tower(3, 2, 4)
+    make_tower(2, 4, 4)
+    make_tower(2, 3, 4)
+    make_tower(2, 2, 4)
 end
 
 -- Helps impl of selection movement
@@ -74,11 +76,11 @@ function init_path_points()
     end
 end
 
-function make_enemy(x, y, dx, dy)
+function make_enemy(x, y, dx, dy, hp)
     add(enemies, {
         x=x, y=y,
         dx=dx, dy=dy,
-        hp=3, max_hp=3,
+        hp=hp, max_hp=hp,
         can_remove=false,
     })
 end
@@ -90,6 +92,7 @@ function make_tower(type, x, y)
         range=28,
         bullets={},
         cd=0, -- in frames
+        dmg=2,
     })
 end
 
@@ -99,8 +102,10 @@ end
 function _update()
     t += 1
     -- Make enemy
-    if t%20 == 0 then
-        make_enemy(path_points[1].x, path_points[1].y, 0, 0.5)
+    if sending > 0 and t%20 == 0 then
+        local hp = 3*wave
+        make_enemy(path_points[1].x, path_points[1].y, 0, 0.5, hp)
+        sending -= 1
     end
     -- Update selection
     if btnp(B.left)  then move_selection(B.left) end
@@ -125,6 +130,36 @@ function _update()
             sel.ts_y = 0
         else
             sel.y = lerp(sel.src_y, sel.dst_y, easeout(dt))
+        end
+    end
+
+    if btnp(B.z) then
+        local twr = tbl_find(towers, twr_is_selected)
+        if twr then
+            -- Upgrade tower
+            if twr.type < 7 then
+                twr.type += 3
+                twr.dmg += 3
+                twr.range += 3
+            end
+        else
+            -- Purchase tower
+            local x, y = sel.dst_x/10, sel.dst_y/10
+            make_tower(2, x, y)
+        end
+    end
+
+    if btnp(B.x) then
+        if sending == 0 then
+            -- Send next wave
+            wave += 1
+            sending = 10
+        else
+            local twr = tbl_find(towers, twr_is_selected)
+            if twr then
+                -- Sell tower
+                del(towers, twr)
+            end
         end
     end
 
@@ -153,7 +188,7 @@ function _update()
 
             -- handle collision
             if collide(blt, enmy) then
-                enmy.hp = max(0, enmy.hp-3)
+                enmy.hp = max(0, enmy.hp-twr.dmg)
                 blt.can_remove = true
             else
                 -- add particle
@@ -273,6 +308,11 @@ function is_in_range(enmy, twr)
     return (((enmy.x - twr.x*10)^2) + ((enmy.y - twr.y*10)^2)) < (twr.range^2)
 end
 
+function twr_is_selected(twr)
+    local x, y = sel.dst_x/10, sel.dst_y/10
+    return twr.x == x and twr.y == y
+end
+
 -- Todo: this doesn't actually do the moving
 function move_selection(dir)
     -- Find destination cell
@@ -357,11 +397,11 @@ function _draw()
             local c = map[j].c
             local sp, w, h
             if c == corner.TOP or c == corner.BOT then
-                sp = 9
+                sp = 10
                 w = 2
                 h = 1
             else
-                sp = 11
+                sp = 12
                 w = 1
                 h = 2
             end
@@ -397,7 +437,9 @@ function _draw()
         local x = twr.x*10
         local y = twr.y*10
         spr(twr.type, x, y)
-        -- circ(x+4, y+4, twr.range, C.light_gray) -- range
+        if twr_is_selected(twr) then -- draw range
+            circ(x+4, y+4, twr.range, C.light_gray)
+        end
 
         -- Draw bullets
         for blt in all(twr.bullets) do
@@ -416,12 +458,15 @@ function _draw()
         local hp_y = enmy.y - 4
         rect(enmy.x-1, hp_y, enmy.x+1, hp_y, C.dark_green)
         if enmy.hp > 0 then
-            rect(enmy.x-1, hp_y, (enmy.x-1)+enmy.hp-1, hp_y, C.green)
+            local hp_rem = ceil(enmy.hp / enmy.max_hp*3)
+            rect(enmy.x-1, hp_y, (enmy.x-1)+hp_rem-1, hp_y, C.green)
         end
     end)
 
-    -- local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
-    -- print('❎ send wave', 22, 1, c)
+    -- if sending == 0 then
+    --     local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
+    --     print('❎ send wave', 22, 1, c)
+    -- end
     color(C.red)
 end
 
