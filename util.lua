@@ -5,6 +5,8 @@ C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
      yellow=10,   green=11,     blue=12,       indigo=13,    pink=14,
      peach=15}
 
+TWR = {green=1, red=2, blue=3}
+
 function tbl_filter(t, fn)
     local res = {}
     foreach(t, function(v)

@@ -40,9 +40,9 @@ function _init()
     init_grid_bitmap()
     init_path_points()
     -- Make towers
-    make_tower(2, 4, 4)
-    make_tower(2, 3, 4)
-    make_tower(2, 2, 4)
+    make_tower(TWR.red, 4, 4)
+    make_tower(TWR.red, 3, 4)
+    make_tower(TWR.red, 2, 4)
 end
 
 -- Helps impl of selection movement
@@ -145,7 +145,7 @@ function _update()
         else
             -- Purchase tower
             local x, y = sel.dst_x/10, sel.dst_y/10
-            make_tower(2, x, y)
+            make_tower(TWR.red, x, y)
         end
     end
 

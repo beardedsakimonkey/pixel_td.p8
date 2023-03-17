@@ -1,11 +1,26 @@
 Juice:
-- enemies bob up and down
-- animate selection movement
-- rubber banding when trying to move selection fails
-- bottom hud animates up/down
+- enemies bob up and down?
+- rubber banding when can't move selection
+- bottom menu animates up/down
 - screen shake on enemy reaching end
-- spinning coin
 - hitting right in the purchase menu nudges the arrow right and slides the next tower in
+- cloud of puff/sparkles when buying/upgrading tower
+- tracer on green laser
+- enemy death?
 
-Todo:
+Ideas:
 - custom key repeat
+- shoot 2/3 at a time for upgraded red tower
+- hitting X to send next wave while selecting a tower: do you send wave or sell tower?
+    - solution: you can't upgrade/sell a tower until you select it with Z.
+- Buy menu
+    - left/right: choose tower
+    - up/down: choose menu items (buy, cancel)
+    - z: select menu item
+    - x: cancel
+- Upgrade menu
+    - [optional] left/right: choose upgrade
+    - up/down: choose menu items (upgrade, cancel)
+    - z: select menu item
+    - x: cancel
+- when hovering over the buy button, show the tower in the map with its range visible
