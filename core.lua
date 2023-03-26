@@ -30,7 +30,14 @@ sel = {
 enemies = {}
 towers = {}
 wave = 1
-sending = 10 -- number of enemies to send this wave
+sending = 0 -- number of enemies to send this wave
+
+ST = {buy = 1, upgrade = 2}
+open_shop = ST.buy
+shop_sel_opt = 1
+shop_sel_twr = 1
+shop_pressing_right = false
+shop_pressing_left = false
 
 --------------------------------------------------------------------------------
 -- INIT
@@ -76,10 +83,11 @@ function init_path_points()
     end
 end
 
-function make_enemy(x, y, dx, dy, hp)
+function make_enemy(hp)
     add(enemies, {
-        x=x, y=y,
-        dx=dx, dy=dy,
+        x=path_points[1].x,
+        y=path_points[1].y,
+        dx=0, dy=0.5,
         hp=hp, max_hp=hp,
         can_remove=false,
     })
@@ -104,14 +112,16 @@ function _update()
     -- Make enemy
     if sending > 0 and t%20 == 0 then
         local hp = 3*wave
-        make_enemy(path_points[1].x, path_points[1].y, 0, 0.5, hp)
+        make_enemy(hp)
         sending -= 1
     end
     -- Update selection
-    if btnp(B.left)  then move_selection(B.left) end
-    if btnp(B.right) then move_selection(B.right) end
-    if btnp(B.up)    then move_selection(B.up) end
-    if btnp(B.down)  then move_selection(B.down) end
+    if not open_shop then
+        if btnp(B.left)  then move_selection(B.left) end
+        if btnp(B.right) then move_selection(B.right) end
+        if btnp(B.up)    then move_selection(B.up) end
+        if btnp(B.down)  then move_selection(B.down) end
+    end
     if sel.ts_x ~= 0 then -- is animating
         local dt = min(1, (time() - sel.ts_x)*4)
         if dt == 1 then -- done animating
@@ -133,32 +143,58 @@ function _update()
         end
     end
 
-    if btnp(B.z) then
-        local twr = tbl_find(towers, twr_is_selected)
-        if twr then
-            -- Upgrade tower
-            if twr.type < 7 then
-                twr.type += 3
-                twr.dmg += 3
-                twr.range += 3
-            end
-        else
-            -- Purchase tower
-            local x, y = sel.dst_x/10, sel.dst_y/10
-            make_tower(TWR.red, x, y)
+    if open_shop then
+        shop_pressing_right = btn(B.right)
+        shop_pressing_left = btn(B.left)
+        if btnp(B.down) and shop_sel_opt == 1 then
+            shop_sel_opt = 2
         end
-    end
-
-    if btnp(B.x) then
-        if sending == 0 then
-            -- Send next wave
-            wave += 1
-            sending = 10
-        else
+        if btnp(B.up) and shop_sel_opt == 2 then
+            shop_sel_opt = 1
+        end
+        if btnp(B.left) then
+            if shop_sel_twr > 1 then
+                shop_sel_twr -= 1
+            end
+        end
+        if btnp(B.right) then
+            if shop_sel_twr < 3 then
+                shop_sel_twr += 1
+            end
+        end
+        if btnp(B.x) then
+            open_shop = nil
+        end
+        if btnp(B.z) then
+            open_shop = nil
+        end
+    else
+        if btnp(B.z) then
             local twr = tbl_find(towers, twr_is_selected)
             if twr then
-                -- Sell tower
-                del(towers, twr)
+                -- Upgrade tower
+                if twr.type < 7 then
+                    twr.type += 3
+                    twr.dmg += 3
+                    twr.range += 3
+                end
+            else
+                -- Open buy menu
+                open_shop = ST.buy
+                -- local x, y = sel.dst_x/10, sel.dst_y/10
+            end
+        end
+        if btnp(B.x) then
+            if sending == 0 then
+                -- Send next wave
+                wave += 1
+                sending = 10
+            else
+                local twr = tbl_find(towers, twr_is_selected)
+                if twr then
+                    -- Sell tower
+                    del(towers, twr)
+                end
             end
         end
     end
@@ -462,6 +498,52 @@ function _draw()
             rect(enmy.x-1, hp_y, (enmy.x-1)+hp_rem-1, hp_y, C.green)
         end
     end)
+
+    -- Draw buy/upgrade shop menu
+    if open_shop then
+        rect(33, 94, 95, 125, C.black)
+        rect(34, 95, 94, 124, C.light_gray)
+        rectfill(35, 96, 93, 123, C.dark_blue)
+        local show_left = open_shop == ST.buy
+            and shop_sel_twr ~= 1
+            or shop_sel_twr + 3 < 6
+        local show_right = open_shop == ST.buy
+            and shop_sel_twr ~= 3
+            -- or
+        if show_left then
+            print('⬅️', 49, 100, C.indigo)
+            rectfill(51, 100, 53, 103, C.dark_gray)
+            local offy = shop_pressing_left and 1 or 0
+            print('⬅️', 49, 99+offy, C.light_gray)
+        else
+            -- print('⬅️', 49, 99, C.dark_gray)
+        end
+        if show_right then
+            print('➡️', 73, 100, C.indigo)
+            rectfill(75, 100, 77, 103, C.dark_gray)
+            local offy = shop_pressing_right and 1 or 0
+            print('➡️', 73, 99+offy, C.light_gray)
+        else
+            -- print('➡️', 73, 99, C.dark_gray)
+        end
+        if open_shop == ST.buy then
+            pal(C.dark_blue, C.black)
+            spr(shop_sel_twr, 62-2, 99-2)
+            pal()
+            local offx = shop_sel_opt==1 and 1 or 0
+            print('buy', 44+offx, 108, C.white)
+            print('20', 60, 108, C.indigo)
+        elseif open_shop == ST.upgrade then
+            spr(shop_sel_twr, 62-2, 99-2)
+            local offx = shop_sel_opt==1 and 1 or 0
+            print('upgrade', 44+offx, 108, C.white)
+            print('20', 60, 108, C.indigo)
+        end
+        -- arrow
+        spr(13, 38, shop_sel_opt==1 and 108 or 116)
+        local offx = shop_sel_opt==2 and 1 or 0
+        print('cancel', 44+offx, 116, C.white)
+    end
 
     -- if sending == 0 then
     --     local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange

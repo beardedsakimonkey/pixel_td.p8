@@ -7,9 +7,11 @@ Juice:
 - cloud of puff/sparkles when buying/upgrading tower
 - tracer on green laser
 - enemy death?
+- gold amount winds down after buying something
 
 Ideas:
 - custom key repeat
+    - https://pico-8.fandom.com/wiki/Memory#Hardware_state
 - shoot 2/3 at a time for upgraded red tower
 - hitting X to send next wave while selecting a tower: do you send wave or sell tower?
     - solution: you can't upgrade/sell a tower until you select it with Z.
@@ -24,3 +26,6 @@ Ideas:
     - z: select menu item
     - x: cancel
 - when hovering over the buy button, show the tower in the map with its range visible
+
+Todo:
+- _update60?
