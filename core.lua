@@ -5,27 +5,28 @@ map = {
     {x=1,  y=3,  c=corner.BL},
     {x=3,  y=3,  c=corner.BR},
     {x=3,  y=1,  c=corner.TL},
-    {x=6,  y=1,  c=corner.TR},
-    {x=6,  y=3,  c=corner.BL},
-    {x=8,  y=3,  c=corner.BR},
-    {x=8,  y=1,  c=corner.TL},
-    {x=11, y=1,  c=corner.TR},
-    {x=11, y=6,  c=corner.BR},
-    {x=1,  y=6,  c=corner.TL},
-    {x=1,  y=10, c=corner.BL},
-    {x=4,  y=10, c=corner.BR},
-    {x=4,  y=8,  c=corner.TL},
-    {x=8,  y=8,  c=corner.TR},
-    {x=8,  y=10, c=corner.BL},
-    {x=12, y=10, c=corner.RIGHT},
+    {x=7,  y=1,  c=corner.TR},
+    {x=7,  y=3,  c=corner.BL},
+    {x=9,  y=3,  c=corner.TR},
+    {x=9,  y=5,  c=corner.BR},
+    {x=8,  y=5,  c=corner.TL},
+    {x=8,  y=7,  c=corner.BR},
+    {x=5,  y=7,  c=corner.BL},
+    {x=5,  y=5,  c=corner.TR},
+    {x=2,  y=5,  c=corner.TL},
+    {x=2,  y=7,  c=corner.BR},
+    {x=1,  y=7,  c=corner.TL},
+    {x=1,  y=9,  c=corner.BL},
+    {x=9,  y=9,  c=corner.TR},
+    {x=9,  y=10, c=corner.BOT},
 }
 grid_bitmap = {}
 path_points = {}
 sel = {
-    dst_x=50, dst_y=50,
-    x=50, y=50,
-    src_x=50, src_y=50,
-    ts_x=0, ts_y=0, -- animation start time
+    dst_x=58, dst_y=46,
+        x=58,     y=46,
+    src_x=58, src_y=46,
+    tx=0, ty=0, -- animation start time
 }
 enemies = {}
 towers = {}
@@ -39,13 +40,32 @@ shop_sel_twr = 1
 shop_pressing_right = false
 shop_pressing_left = false
 
+-- Convert grid coordinates to pixel coordinates
+local function g2p(cell)
+    local top  = (cell.y * 12) - 2
+    local left = (cell.x * 12) - 2
+    return {top=top, left=left, bot=top+12, right=left+12}
+end
+
+-- Convert pixel coordinates to grid coordinates
+local function p2g(x, y)
+    return {
+        x=flr((x+2)/12),
+        y=flr((y+2)/12),
+    }
+end
+
 --------------------------------------------------------------------------------
 -- INIT
 --------------------------------------------------------------------------------
 function _init()
+    poke(0x5f5c, 9) -- key repeat delay
+    poke(0x5f5d, 3) -- key repeat interval
+
     -- Set up auxiliary data structures
     init_grid_bitmap()
     init_path_points()
+
     -- Make towers
     make_tower(TWR.red, 4, 4)
     make_tower(TWR.red, 3, 4)
@@ -54,10 +74,10 @@ end
 
 -- Helps impl of selection movement
 function init_grid_bitmap()
-    for i = 1, 13 do
+    for _=0, 10 do
         add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
     end
-    for i = 2, #map do
+    for i=2, #map do
         local ca, cb = map[i-1], map[i]
         if ca.x == cb.x then
             local step = ca.y < cb.y and 1 or -1
@@ -76,9 +96,10 @@ end
 -- Helps impl of enemy movement
 function init_path_points()
     for i = 1, #map do
+        local p = g2p(map[i])
         add(path_points, {
-            x = map[i].x * 10 + 4,
-            y = map[i].y * 10 + 4,
+            x = p.left + 6,
+            y = p.top + 6,
         })
     end
 end
@@ -122,22 +143,22 @@ function _update()
         if btnp(B.up)    then move_selection(B.up) end
         if btnp(B.down)  then move_selection(B.down) end
     end
-    if sel.ts_x ~= 0 then -- is animating
-        local dt = min(1, (time() - sel.ts_x)*4)
+    if sel.tx ~= 0 then -- is animating
+        local dt = min(1, (time() - sel.tx)*6)
         if dt == 1 then -- done animating
             sel.x = sel.dst_x
             sel.src_x = sel.dst_x
-            sel.ts_x = 0
+            sel.tx = 0
         else
             sel.x = lerp(sel.src_x, sel.dst_x, easeout(dt))
         end
     end
-    if sel.ts_y ~= 0 then -- is animating
-        local dt = min(1, (time() - sel.ts_y)*4)
+    if sel.ty ~= 0 then -- is animating
+        local dt = min(1, (time() - sel.ty)*6)
         if dt == 1 then -- done animating
             sel.y = sel.dst_y
             sel.src_y = sel.dst_y
-            sel.ts_y = 0
+            sel.ty = 0
         else
             sel.y = lerp(sel.src_y, sel.dst_y, easeout(dt))
         end
@@ -247,8 +268,9 @@ function _update()
                 -- Todo: what happens when enemy dies from another bullet?
                 -- perhaps we keep enemy objects around with a 'dead' flag until
                 -- all of them are dead?
+                local p = g2p(twr)
                 add(twr.bullets, {
-                    x=twr.x*10+4, y=twr.y*10+4,
+                    x=p.left+6, y=p.top+6,
                     rotation=0,
                     enemy=enmy,
                     particles={},
@@ -345,15 +367,16 @@ function is_in_range(enmy, twr)
 end
 
 function twr_is_selected(twr)
-    local x, y = sel.dst_x/10, sel.dst_y/10
-    return twr.x == x and twr.y == y
+    local g = p2g(sel.dst_x, sel.dst_y)
+    return twr.x == g.x and twr.y == g.y
 end
 
 -- Todo: this doesn't actually do the moving
 function move_selection(dir)
     -- Find destination cell
-    local dst_x = sel.dst_x / 10
-    local dst_y = sel.dst_y / 10
+    local g = p2g(sel.dst_x, sel.dst_y)
+    local dst_x = g.x
+    local dst_y = g.y
     local cell_dx = dir == B.right and 1 or dir == B.left and -1 or 0
     local cell_dy = dir == B.down and  1 or dir == B.up   and -1 or 0
     while true do
@@ -362,7 +385,7 @@ function move_selection(dir)
         dst_y += cell_dy
         -- bail if we reached a boundary
         if dst_x <= 0 or dst_y <= 0 or
-            dst_x >= 12 or dst_y >= 12 then
+            dst_x >= 10 or dst_y >= 10 then
             return
         end
         -- break if it's a valid cell
@@ -374,25 +397,26 @@ function move_selection(dir)
     if cell_dx ~= 0 then
         if sel.x ~= sel.dst_x then
             sel.src_x = sel.x
-            sel.ts_x = time()
+            sel.tx = time()
         end
-        if sel.ts_x == 0 then
-            sel.ts_x = time()
+        if sel.tx == 0 then
+            sel.tx = time()
         end
     end
     if cell_dy ~= 0 then
         if sel.y ~= sel.dst_y then
             sel.src_y = sel.y
-            sel.ts_y = time()
+            sel.ty = time()
         end
-        if sel.ts_y == 0 then
-            sel.ts_y = time()
+        if sel.ty == 0 then
+            sel.ty = time()
         end
     end
 
     -- Update destination
-    sel.dst_x = dst_x * 10
-    sel.dst_y = dst_y * 10
+    local p = g2p({x=dst_x, y=dst_y})
+    sel.dst_x = p.left
+    sel.dst_y = p.top
 end
 
 --------------------------------------------------------------------------------
@@ -402,8 +426,8 @@ function _draw()
     cls(C.black)
 
     -- Draw grid lines
-    for y = 9, 127, 10 do line(0, y, 127, y, C.dark_blue) end
-    for x = 9, 127, 10 do line(x, 0, x, 127, C.dark_blue) end
+    for y = 10, 127, 12 do line(0, y, 127, y, C.dark_blue) end
+    for x = 10, 127, 12 do line(x, 0, x, 127, C.dark_blue) end
 
     -- Draw path
     for i = 2, #map do
@@ -414,45 +438,36 @@ function _draw()
         rect(ca.x, ca.y, cb.x, cb.y, C.indigo)
 
         -- cover up unwanted borders
-        local top   = (cell_a.y * 10) - 1
-        local left  = (cell_a.x * 10) - 1
-        local bot   = top + 10
-        local right = left + 10
+        local a = g2p(cell_a)
         if cell_a.c == corner.BL then
-            line(right, bot-1, right, top+1, C.black)
+            line(a.right, a.bot-1, a.right, a.top+1, C.black)
         elseif cell_a.c == corner.BR then
-            line(left+1, top, right-1, top, C.black)
+            line(a.left+1, a.top, a.right-1, a.top, C.black)
         elseif cell_a.c == corner.TL then
-            line(left+1, bot, right-1, bot, C.black)
+            line(a.left+1, a.bot, a.right-1, a.bot, C.black)
         elseif cell_a.c == corner.TR then
-            line(left, bot-1, left, top+1, C.black)
+            line(a.left, a.bot-1, a.left, a.top+1, C.black)
         end
 
         -- draw path enter/exit decoration
         for j = 1, #map, #map-1 do
             local c = map[j].c
-            local sp, w, h
-            if c == corner.TOP or c == corner.BOT then
-                sp = 10
-                w = 2
-                h = 1
-            else
-                sp = 12
-                w = 1
-                h = 2
-            end
-            local flip_x = c == corner.LEFT
+            local spr_x = (c == corner.TOP or c == corner.BOT) and 80 or 96
+            local flip_x = c == corner.RIGHT
             local flip_y = c == corner.BOT
-            spr(sp, map[j].x*10, map[j].y*10, w, h, flip_x, flip_y)
+            local p = g2p(map[j])
+            local top = mid(0, p.top, 116)
+            local left = mid(0, p.left, 117)
+            sspr(spr_x, 0, 12, 12, left, top, 12, 12, flip_x, flip_y)
         end
     end
 
     -- Draw selection
     do
-        local top   = sel.y
-        local left  = sel.x
-        local bot   = top + 8
-        local right = left + 8
+        local top   = sel.y + 1
+        local left  = sel.x + 1
+        local bot   = top + 10
+        local right = left + 10
         local color = C.light_gray
         -- top left corner
         line(left, top, left+2, top, color)
@@ -470,11 +485,10 @@ function _draw()
 
     foreach(towers, function(twr)
         -- Draw tower
-        local x = twr.x*10
-        local y = twr.y*10
-        spr(twr.type, x, y)
+        local p = g2p(twr)
+        spr(twr.type, p.left+3, p.top+3)
         if twr_is_selected(twr) then -- draw range
-            circ(x+4, y+4, twr.range, C.light_gray)
+            circ(p.left+4, p.top+4, twr.range, C.light_gray)
         end
 
         -- Draw bullets
@@ -516,7 +530,7 @@ function _draw()
             local offy = shop_pressing_left and 1 or 0
             print('⬅️', 49, 99+offy, C.light_gray)
         else
-            -- print('⬅️', 49, 99, C.dark_gray)
+            print('⬅️', 49, 100, C.dark_gray)
         end
         if show_right then
             print('➡️', 73, 100, C.indigo)
@@ -524,11 +538,11 @@ function _draw()
             local offy = shop_pressing_right and 1 or 0
             print('➡️', 73, 99+offy, C.light_gray)
         else
-            -- print('➡️', 73, 99, C.dark_gray)
+            print('➡️', 73, 100, C.dark_gray)
         end
         if open_shop == ST.buy then
             pal(C.dark_blue, C.black)
-            spr(shop_sel_twr, 62-2, 99-2)
+            spr(shop_sel_twr, 61, 99)
             pal()
             local offx = shop_sel_opt==1 and 1 or 0
             print('buy', 44+offx, 108, C.white)
@@ -540,7 +554,7 @@ function _draw()
             print('20', 60, 108, C.indigo)
         end
         -- arrow
-        spr(13, 38, shop_sel_opt==1 and 108 or 116)
+        spr(14, 38, shop_sel_opt==1 and 108 or 116)
         local offx = shop_sel_opt==2 and 1 or 0
         print('cancel', 44+offx, 116, C.white)
     end
@@ -552,15 +566,14 @@ function _draw()
     color(C.red)
 end
 
-function get_cell_corner(cell)
-    local top   = (cell.y * 10) - 1
-    local left  = (cell.x * 10) - 1
-    local bot   = top + 10
-    local right = left + 10
-    if cell.c == corner.TOP   then return {x = left, y = top} end
-    if cell.c == corner.RIGHT then return {x = right, y = top} end
-    if cell.c == corner.TL    then return {x = left, y = bot} end
-    if cell.c == corner.BL    then return {x = right, y = bot} end
-    if cell.c == corner.BR    then return {x = right, y = top} end
-    if cell.c == corner.TR    then return {x = left, y = top} end
+function get_cell_corner(grid_cell)
+    local cell = g2p(grid_cell)
+    local c = grid_cell.c
+    if c == corner.TOP   then return {x = cell.left,  y = cell.top} end
+    if c == corner.RIGHT then return {x = cell.right, y = cell.top} end
+    if c == corner.BOT   then return {x = cell.right, y = cell.bot} end
+    if c == corner.TL    then return {x = cell.left,  y = cell.bot} end
+    if c == corner.BL    then return {x = cell.right, y = cell.bot} end
+    if c == corner.BR    then return {x = cell.right, y = cell.top} end
+    if c == corner.TR    then return {x = cell.left,  y = cell.top} end
 end
