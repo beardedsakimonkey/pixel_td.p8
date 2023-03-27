@@ -59,8 +59,8 @@ end
 -- INIT
 --------------------------------------------------------------------------------
 function _init()
-    poke(0x5f5c, 9) -- key repeat delay
-    poke(0x5f5d, 3) -- key repeat interval
+    poke(0x5f5c, 9) -- button repeat delay
+    poke(0x5f5d, 3) -- button repeat interval
 
     -- Set up auxiliary data structures
     init_grid_bitmap()
@@ -128,7 +128,7 @@ end
 --------------------------------------------------------------------------------
 -- UPDATE
 --------------------------------------------------------------------------------
-function _update()
+function _update60()
     t += 1
     -- Make enemy
     if sending > 0 and t%20 == 0 then
@@ -164,6 +164,7 @@ function _update()
         end
     end
 
+    -- Handle button press
     if open_shop then
         shop_pressing_right = btn(B.right)
         shop_pressing_left = btn(B.left)
@@ -174,14 +175,10 @@ function _update()
             shop_sel_opt = 1
         end
         if btnp(B.left) then
-            if shop_sel_twr > 1 then
-                shop_sel_twr -= 1
-            end
+            shop_sel_twr = max(1, shop_sel_twr-1)
         end
         if btnp(B.right) then
-            if shop_sel_twr < 3 then
-                shop_sel_twr += 1
-            end
+            shop_sel_twr = min(3, shop_sel_twr+1)
         end
         if btnp(B.x) then
             open_shop = nil
@@ -515,48 +512,48 @@ function _draw()
 
     -- Draw buy/upgrade shop menu
     if open_shop then
-        rect(33, 94, 95, 125, C.black)
-        rect(34, 95, 94, 124, C.light_gray)
-        rectfill(35, 96, 93, 123, C.dark_blue)
+        local menu_x = 35; local menu_y = 94
+        rect(menu_x-2, menu_y-2, menu_x+60, menu_y+29, C.black)
+        rect(menu_x-1, menu_y-1, menu_x+59, menu_y+28, C.light_gray)
+        rectfill(menu_x, menu_y, menu_x+58, menu_y+27, C.dark_blue)
         local show_left = open_shop == ST.buy
             and shop_sel_twr ~= 1
             or shop_sel_twr + 3 < 6
         local show_right = open_shop == ST.buy
             and shop_sel_twr ~= 3
             -- or
+        -- draw left button
         if show_left then
-            print('⬅️', 49, 100, C.indigo)
-            rectfill(51, 100, 53, 103, C.dark_gray)
-            local offy = shop_pressing_left and 1 or 0
-            print('⬅️', 49, 99+offy, C.light_gray)
+            local off_x = shop_pressing_left and -1 or 0
+            rectfill(menu_x+16+off_x, menu_y+4,
+                     menu_x+18+off_x, menu_y+7, C.dark_gray)
+            print('⬅️', menu_x+14+off_x, menu_y+3, C.light_gray)
         else
-            print('⬅️', 49, 100, C.dark_gray)
+            print('⬅️', menu_x+14, menu_y+3, C.dark_gray)
         end
+        -- draw right button
         if show_right then
-            print('➡️', 73, 100, C.indigo)
-            rectfill(75, 100, 77, 103, C.dark_gray)
-            local offy = shop_pressing_right and 1 or 0
-            print('➡️', 73, 99+offy, C.light_gray)
+            local off_x = shop_pressing_right and 1 or 0
+            rectfill(menu_x+40+off_x, menu_y+4,
+                     menu_x+42+off_x, menu_y+7, C.dark_gray)
+            print('➡️', menu_x+38+off_x, menu_y+3, C.light_gray)
         else
-            print('➡️', 73, 100, C.dark_gray)
+            print('➡️', menu_x+38, menu_y+3, C.dark_gray)
         end
+        -- draw tower
+        pal(C.dark_blue, C.black)
+            spr(shop_sel_twr, menu_x+26, menu_y+2)
+        pal()
+        -- draw menu items
         if open_shop == ST.buy then
-            pal(C.dark_blue, C.black)
-            spr(shop_sel_twr, 61, 99)
-            pal()
-            local offx = shop_sel_opt==1 and 1 or 0
-            print('buy', 44+offx, 108, C.white)
-            print('20', 60, 108, C.indigo)
+            print('buy', menu_x+9, menu_y+12, C.white)
+            print('20', menu_x+25, menu_y+12, C.indigo)
         elseif open_shop == ST.upgrade then
-            spr(shop_sel_twr, 62-2, 99-2)
-            local offx = shop_sel_opt==1 and 1 or 0
-            print('upgrade', 44+offx, 108, C.white)
-            print('20', 60, 108, C.indigo)
+            print('upgrade', menu_x+9, menu_y+12, C.white)
         end
-        -- arrow
-        spr(14, 38, shop_sel_opt==1 and 108 or 116)
-        local offx = shop_sel_opt==2 and 1 or 0
-        print('cancel', 44+offx, 116, C.white)
+        print('cancel', menu_x+9, menu_y+20, C.white)
+        -- draw menu item arrow
+        spr(14, menu_x+3, menu_y+(shop_sel_opt==1 and 12 or 20))
     end
 
     -- if sending == 0 then
