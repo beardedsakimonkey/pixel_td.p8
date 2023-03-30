@@ -130,7 +130,7 @@ function _update60()
         sending -= 1
     end
     -- Update selection
-    if not open_shop then
+    if not open_menu then
         if btnp(B.left)  then move_selection(B.left) end
         if btnp(B.right) then move_selection(B.right) end
         if btnp(B.up)    then move_selection(B.up) end
@@ -158,8 +158,8 @@ function _update60()
     end
 
     -- Handle button press
-    if open_shop then
-        update_shop()
+    if open_menu then
+        update_menu()
     else
         if btnp(B.z) then
             local twr = tbl_find(towers, twr_is_selected)
@@ -172,7 +172,7 @@ function _update60()
                 end
             else
                 -- Open buy menu
-                open_shop = ST.buy
+                open_menu = ST.buy
                 -- local x, y = sel.dst_x/10, sel.dst_y/10
             end
         end
@@ -484,9 +484,9 @@ function _draw()
         end
     end)
 
-    -- Draw buy/upgrade shop menu
-    if open_shop then
-        draw_shop()
+    -- Draw buy/upgrade/bonus menu
+    if open_menu then
+        draw_menu()
     end
 
     -- if sending == 0 then
