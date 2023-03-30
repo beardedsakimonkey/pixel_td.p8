@@ -32,3 +32,9 @@ end
 function easeout(t)
     return 1 - (1-t)^2
 end
+
+local function wrap(min, v, max)
+    if v > max then return min end
+    if v < min then return max end
+    return v
+end

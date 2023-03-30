@@ -59,10 +59,18 @@ function _init()
     init_grid_bitmap()
     init_path_points()
 
+    -- Initialize buy/upgrade/bonus menu
+    init_menus(do_buy)
+
     -- Make towers
     make_tower(TWR.red, 2, 4)
     make_tower(TWR.red, 3, 4)
     make_tower(TWR.red, 4, 4)
+end
+
+function do_buy(menu)
+    local g = p2g(sel.dst_x, sel.dst_y)
+    make_tower(menu.sel_twr, g.x, g.y)
 end
 
 -- Helps impl of selection movement
@@ -130,7 +138,7 @@ function _update60()
         sending -= 1
     end
     -- Update selection
-    if not open_menu then
+    if not buy_menu.open and not upgrade_menu.open then
         if btnp(B.left)  then move_selection(B.left) end
         if btnp(B.right) then move_selection(B.right) end
         if btnp(B.up)    then move_selection(B.up) end
@@ -158,22 +166,17 @@ function _update60()
     end
 
     -- Handle button press
-    if open_menu then
-        update_menu()
+    if buy_menu.open then
+        buy_menu:update()
+    elseif upgrade_menu.open then
+        upgrade_menu:update()
     else
         if btnp(B.z) then
             local twr = tbl_find(towers, twr_is_selected)
             if twr then
-                -- Upgrade tower
-                if twr.type < 7 then
-                    twr.type += 3
-                    twr.dmg += 3
-                    twr.range += 3
-                end
+                upgrade_menu.open = true
             else
-                -- Open buy menu
-                open_menu = ST.buy
-                -- local x, y = sel.dst_x/10, sel.dst_y/10
+                buy_menu.open = true
             end
         end
         if btnp(B.x) then
@@ -181,12 +184,6 @@ function _update60()
                 -- Send next wave
                 wave += 1
                 sending = 10
-            else
-                local twr = tbl_find(towers, twr_is_selected)
-                if twr then
-                    -- Sell tower
-                    del(towers, twr)
-                end
             end
         end
     end
@@ -484,10 +481,9 @@ function _draw()
         end
     end)
 
-    -- Draw buy/upgrade/bonus menu
-    if open_menu then
-        draw_menu()
-    end
+    -- Draw menus
+    buy_menu:draw()
+    upgrade_menu:draw()
 
     -- if sending == 0 then
     --     local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange

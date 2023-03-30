@@ -1,78 +1,115 @@
-ST = {buy = 1, upgrade = 2}
-
 -- Public
-open_menu = ST.buy
+buy_menu = nil
+upgrade_menu = nil
 
--- Private
-menu_sel_opt = 1
-menu_sel_twr = 1
-menu_pressing_right = false
-menu_pressing_left = false
+--------------------------------------------------------------------------------
+local Menu = {}
 
-function update_menu()
-    menu_pressing_right = btn(B.right)
-    menu_pressing_left = btn(B.left)
-    if btnp(B.down) and menu_sel_opt == 1 then
-        menu_sel_opt = 2
+function Menu.new(x, y, w, h)
+    local m = {
+        x=x, y=y,
+        w=w, h=h,
+        open=false,
+        items={},
+        sel_item=1,
+    }
+    setmetatable(m, {__index = Menu})
+    return m
+end
+
+function Menu:draw()
+    if not self.open then return end
+    -- Draw menu
+    do
+        local x1, y1, x2, y2 = self.x, self.y, self.x+self.w, self.y+self.h
+        rect(x1-2, y1-2, x2+2, y2+2, C.black)
+        rect(x1-1, y1-1, x2+1, y2+1, C.light_gray)
+        rectfill(x1, y1, x2, y2, C.black)
     end
-    if btnp(B.up) and menu_sel_opt == 2 then
-        menu_sel_opt = 1
+
+    -- Draw menu items
+    for i, item in ipairs(self.items) do
+        local color = (i == self.sel_item) and C.white or C.light_gray
+        print(item.text, self.x+9, self.y+item.y, color)
     end
-    if btnp(B.left) then
-        menu_sel_twr = max(1, menu_sel_twr-1)
-    end
-    if btnp(B.right) then
-        menu_sel_twr = min(3, menu_sel_twr+1)
-    end
-    if btnp(B.x) then
-        open_menu = nil
-    end
-    if btnp(B.z) then
-        open_menu = nil
+
+    -- Draw menu item arrow
+    print('>', self.x+3, self.y+self.items[self.sel_item].y, C.white)
+
+    if self.draw_extra then
+        self:draw_extra()
     end
 end
 
-function draw_menu()
-    local menu_x = 35; local menu_y = 94
-    rect(menu_x-2, menu_y-2, menu_x+60, menu_y+29, C.black)
-    rect(menu_x-1, menu_y-1, menu_x+59, menu_y+28, C.light_gray)
-    rectfill(menu_x, menu_y, menu_x+58, menu_y+27, C.dark_blue)
-    local show_left = open_menu == ST.buy
-        and menu_sel_twr ~= 1
-        or menu_sel_twr + 3 < 6
-    local show_right = open_menu == ST.buy
-        and menu_sel_twr ~= 3
-        -- or
-    -- draw left button
-    if show_left then
-        local off_x = menu_pressing_left and -1 or 0
-        rectfill(menu_x+16+off_x, menu_y+4,
-                    menu_x+18+off_x, menu_y+7, C.dark_gray)
-        print('⬅️', menu_x+14+off_x, menu_y+3, C.light_gray)
-    else
-        print('⬅️', menu_x+14, menu_y+3, C.dark_gray)
+function Menu:update()
+    if not self.open then return end
+    if btnp(B.up) then
+        self.sel_item = wrap(1, self.sel_item-1, #self.items)
     end
-    -- draw right button
-    if show_right then
-        local off_x = menu_pressing_right and 1 or 0
-        rectfill(menu_x+40+off_x, menu_y+4,
-                    menu_x+42+off_x, menu_y+7, C.dark_gray)
-        print('➡️', menu_x+38+off_x, menu_y+3, C.light_gray)
-    else
-        print('➡️', menu_x+38, menu_y+3, C.dark_gray)
+    if btnp(B.down) then
+        self.sel_item = wrap(1, self.sel_item+1, #self.items)
     end
-    -- draw tower
-    pal(C.dark_blue, C.black)
-        spr(menu_sel_twr, menu_x+26, menu_y+2)
-    pal()
-    -- draw menu items
-    if open_menu == ST.buy then
-        print('buy', menu_x+9, menu_y+12, C.white)
-        print('20', menu_x+25, menu_y+12, C.indigo)
-    elseif open_menu == ST.upgrade then
-        print('upgrade', menu_x+9, menu_y+12, C.white)
+    if btnp(B.x) then
+        self:close()
     end
-    print('cancel', menu_x+9, menu_y+20, C.white)
-    -- draw menu item arrow
-    spr(14, menu_x+3, menu_y+(menu_sel_opt==1 and 12 or 20))
+    if btnp(B.z) then
+        self.items[self.sel_item].cb(self)
+        self:close()
+    end
+
+    if self.update_extra then
+        self:update_extra()
+    end
+end
+
+function Menu:close()
+    self.open = false
+    self.sel_item = 1
+end
+--------------------------------------------------------------------------------
+
+function init_menus(do_buy)
+    buy_menu = Menu.new(35, 97, 58, 27)
+    add(buy_menu.items, {text='buy', y=11, cb=do_buy})
+    add(buy_menu.items, {text='cancel', y=11+8, cb=buy_menu.close})
+
+    buy_menu.open = true
+    buy_menu.sel_twr = 1
+
+    function buy_menu:update_extra()
+        self.pressing_right = btn(B.right)
+        self.pressing_left  = btn(B.left)
+        if btnp(B.left)  then self.sel_twr = mid(1, self.sel_twr-1, 3) end
+        if btnp(B.right) then self.sel_twr = mid(1, self.sel_twr+1, 3) end
+    end
+
+    function buy_menu:draw_extra()
+        local can_left = self.sel_twr > 1
+        local can_right = self.sel_twr < 3
+
+        -- Draw left button
+        if can_left then
+            local off_x = self.pressing_left and -1 or 0
+            rectfill(self.x+16+off_x, self.y+4,
+                     self.x+18+off_x, self.y+7, C.dark_gray)
+            print('⬅️', self.x+14+off_x, self.y+3, C.light_gray)
+        else
+            print('⬅️', self.x+14, self.y+3, C.dark_gray)
+        end
+
+        -- Draw right button
+        if can_right then
+            local off_x = self.pressing_right and 1 or 0
+            rectfill(self.x+40+off_x, self.y+4,
+                        self.x+42+off_x, self.y+7, C.dark_gray)
+            print('➡️', self.x+38+off_x, self.y+3, C.light_gray)
+        else
+            print('➡️', self.x+38, self.y+3, C.dark_gray)
+        end
+
+        -- Draw tower
+        spr(self.sel_twr, self.x+26, self.y+2)
+    end
+
+    upgrade_menu = Menu.new(1, 2, 1, 2)
 end
