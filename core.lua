@@ -60,7 +60,7 @@ function _init()
     init_path_points()
 
     -- Initialize buy/upgrade/bonus menu
-    init_menus(do_buy)
+    init_menus()
 
     -- Make towers
     make_tower(TWR.red, 2, 4)
@@ -71,6 +71,18 @@ end
 function do_buy(menu)
     local g = p2g(sel.dst_x, sel.dst_y)
     make_tower(menu.sel_twr, g.x, g.y)
+end
+
+function do_sell(menu)
+    local twr = tbl_find(towers, twr_is_selected)
+    del(towers, twr)
+end
+
+function do_upgrade(menu)
+    local twr = tbl_find(towers, twr_is_selected)
+    local g = p2g(sel.dst_x, sel.dst_y)
+    make_tower(twr.type+3, g.x, g.y)
+    del(towers, twr)
 end
 
 -- Helps impl of selection movement
@@ -138,7 +150,7 @@ function _update60()
         sending -= 1
     end
     -- Update selection
-    if not buy_menu.open and not upgrade_menu.open then
+    if not buy_menu.is_open and not upg_menu.is_open then
         if btnp(B.left)  then move_selection(B.left) end
         if btnp(B.right) then move_selection(B.right) end
         if btnp(B.up)    then move_selection(B.up) end
@@ -166,17 +178,17 @@ function _update60()
     end
 
     -- Handle button press
-    if buy_menu.open then
+    if buy_menu.is_open then
         buy_menu:update()
-    elseif upgrade_menu.open then
-        upgrade_menu:update()
+    elseif upg_menu.is_open then
+        upg_menu:update()
     else
         if btnp(B.z) then
             local twr = tbl_find(towers, twr_is_selected)
             if twr then
-                upgrade_menu.open = true
+                upg_menu:open()
             else
-                buy_menu.open = true
+                buy_menu:open()
             end
         end
         if btnp(B.x) then
@@ -483,7 +495,7 @@ function _draw()
 
     -- Draw menus
     buy_menu:draw()
-    upgrade_menu:draw()
+    upg_menu:draw()
 
     -- if sending == 0 then
     --     local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
