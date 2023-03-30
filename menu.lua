@@ -4,20 +4,27 @@ upg_menu = nil
 --------------------------------------------------------------------------------
 local Menu = {}
 
+local OFFSCREEN = 130
+
 function Menu.new(cfg)
     local m = {
-        x=cfg.x, y=cfg.y,
+        x=cfg.x, dst_y=cfg.dst_y,
         w=cfg.w, h=cfg.h,
         is_open=false,
         items={},
         cur_idx=1,
+        y=OFFSCREEN,
+        -- track start time & y of animation to make interruptible
+        st=0, sy=OFFSCREEN,
     }
     setmetatable(m, {__index = Menu})
     return m
 end
 
 function Menu:draw()
-    if not self.is_open then return end
+    if self.y == OFFSCREEN then
+        return
+    end
     do
         local x1, y1, x2, y2 = self.x, self.y, self.x+self.w-1, self.y+self.h-1
         rect(x1-2, y1-2, x2+2, y2+2, C.black)
@@ -34,7 +41,14 @@ function Menu:draw()
 end
 
 function Menu:update()
-    if not self.is_open then return end
+    if self.is_open and self.y ~= self.dst_y then
+        self.y = lerp(self.sy, self.dst_y, easeout(min(1, (time()-self.st)*6)))
+    elseif not self.is_open and self.y ~= OFFSCREEN then
+        self.y = lerp(self.sy, OFFSCREEN, easeout(min(1, (time()-self.st)*6)))
+    end
+end
+
+function Menu:handle_btn()
     if btnp(B.up) then
         self.cur_idx = wrap(1, self.cur_idx-1, #self.items)
     end
@@ -52,24 +66,27 @@ end
 
 function Menu:close()
     self.is_open = false
+    self.st = time()
+    self.sy = self.y
 end
 
 function Menu:open()
     self.cur_idx = 1
     self.is_open = true
+    self.st = time()
+    self.sy = self.y
 end
 --------------------------------------------------------------------------------
 
 function init_menus()
-    buy_menu = Menu.new({x=35, y=97, w=59, h=27})
+    buy_menu = Menu.new({x=35, dst_y=97, w=59, h=27})
     add(buy_menu.items, {text='buy',    y=11+8*0, cb=do_buy})
     add(buy_menu.items, {text='cancel', y=11+8*1, cb=buy_menu.close})
 
     buy_menu.sel_twr = 1
 
-    buy_menu.update = function(self)
-        if not self.is_open then return end
-        Menu.update(self)
+    buy_menu.handle_btn = function(self)
+        Menu.handle_btn(self)
         self.pressing_right = btn(B.right)
         self.pressing_left  = btn(B.left)
         if btnp(B.left)  then self.sel_twr = mid(1, self.sel_twr-1, 3) end
@@ -77,7 +94,9 @@ function init_menus()
     end
 
     buy_menu.draw = function(self)
-        if not self.is_open then return end
+        if self.y == OFFSCREEN then
+            return
+        end
         Menu.draw(self)
         local can_left = self.sel_twr > 1
         local can_right = self.sel_twr < 3
@@ -106,13 +125,15 @@ function init_menus()
         self.sel_twr = 1
     end
 
-    upg_menu = Menu.new({x=35, y=89, w=59, h=36})
+    upg_menu = Menu.new({x=35, dst_y=89, w=59, h=36})
     add(upg_menu.items, {text='upgrade', y=12+8*0, cb=do_upgrade})
     add(upg_menu.items, {text='sell',    y=12+8*1, cb=do_sell})
     add(upg_menu.items, {text='cancel',  y=12+8*2, cb=upg_menu.close})
 
     upg_menu.draw = function(self)
-        if not self.is_open then return end
+        if self.y == OFFSCREEN then
+            return
+        end
         Menu.draw(self)
         print('20', self.x+44, self.y+12+8*0, C.indigo)
         print('20', self.x+44, self.y+12+8*1, C.indigo)

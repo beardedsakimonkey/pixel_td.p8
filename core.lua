@@ -177,11 +177,14 @@ function _update60()
         end
     end
 
+    buy_menu:update()
+    upg_menu:update()
+
     -- Handle button press
     if buy_menu.is_open then
-        buy_menu:update()
+        buy_menu:handle_btn()
     elseif upg_menu.is_open then
-        upg_menu:update()
+        upg_menu:handle_btn()
     else
         if btnp(B.z) then
             local twr = tbl_find(towers, twr_is_selected)
