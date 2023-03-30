@@ -32,8 +32,6 @@ function Menu:draw()
     end
 
     print('>', self.x+3, self.y+self.items_y+8*(self.sel_item-1), C.white)
-
-    if self.draw_extra then self:draw_extra() end
 end
 
 function Menu:update()
@@ -44,15 +42,13 @@ function Menu:update()
     if btnp(B.down) then
         self.sel_item = wrap(1, self.sel_item+1, #self.items)
     end
-    if btnp(B.x) then
-        self:close()
-    end
     if btnp(B.z) then
         self.items[self.sel_item].cb(self)
         self:close()
     end
-
-    if self.update_extra then self:update_extra() end
+    if btnp(B.x) then
+        self:close()
+    end
 end
 
 function Menu:close()
@@ -62,7 +58,6 @@ end
 function Menu:open()
     self.sel_item = 1
     self.is_open = true
-    if self.open_extra then self:open_extra() end
 end
 --------------------------------------------------------------------------------
 
@@ -73,14 +68,18 @@ function init_menus()
 
     buy_menu.sel_twr = 1
 
-    function buy_menu:update_extra()
+    buy_menu.update = function(self)
+        if not self.is_open then return end
+        Menu.update(self)
         self.pressing_right = btn(B.right)
         self.pressing_left  = btn(B.left)
         if btnp(B.left)  then self.sel_twr = mid(1, self.sel_twr-1, 3) end
         if btnp(B.right) then self.sel_twr = mid(1, self.sel_twr+1, 3) end
     end
 
-    function buy_menu:draw_extra()
+    buy_menu.draw = function(self)
+        if not self.is_open then return end
+        Menu.draw(self)
         local can_left = self.sel_twr > 1
         local can_right = self.sel_twr < 3
         if can_left then
@@ -107,11 +106,14 @@ function init_menus()
     add(upg_menu.items, {text='sell',    cb=do_sell})
     add(upg_menu.items, {text='cancel',  cb=upg_menu.close})
 
-    function upg_menu:draw_extra()
+    upg_menu.draw = function(self)
+        if not self.is_open then return end
+        Menu.draw(self)
         spr(self.twr, self.x+26, self.y+2)
     end
 
-    function upg_menu:open_extra()
+    upg_menu.open = function(self)
+        Menu.open(self)
         local twr = tbl_find(towers, twr_is_selected)
         self.twr = twr.type
     end
