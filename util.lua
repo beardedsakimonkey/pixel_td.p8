@@ -6,6 +6,7 @@ C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
      peach=15}
 
 TWR = {green=1, red=2, blue=3}
+corner = {TL=1, TR=2, BL=3, BR=4, TOP=5, LEFT=6, RIGHT=7, BOT=8}
 
 function tbl_filter(t, fn)
     local res = {}
@@ -37,4 +38,19 @@ function wrap(min, v, max)
     if v > max then return min end
     if v < min then return max end
     return v
+end
+
+-- Convert grid coordinates to pixel coordinates
+function g2p(cell)
+    local top  = (cell.y * 12) - 2
+    local left = (cell.x * 12) - 2
+    return {top=top, left=left, bot=top+12, right=left+12}
+end
+
+-- Convert pixel coordinates to grid coordinates
+function p2g(x, y)
+    return {
+        x=flr((x+2)/12),
+        y=flr((y+2)/12),
+    }
 end

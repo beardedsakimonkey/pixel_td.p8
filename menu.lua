@@ -14,7 +14,7 @@ function Menu.new(cfg)
         items={},
         cur_idx=1,
         y=OFFSCREEN,
-        -- track start time & y of animation to make interruptible
+        -- track start time & y of animation to make it interruptible
         st=0, sy=OFFSCREEN,
     }
     setmetatable(m, {__index = Menu})
