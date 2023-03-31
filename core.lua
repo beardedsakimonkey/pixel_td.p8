@@ -24,6 +24,8 @@ enemies = {}
 towers = {}
 wave = 1
 sending = 0 -- number of enemies to send this wave
+gold = 50
+lives = 20
 
 --------------------------------------------------------------------------------
 -- INIT
@@ -362,6 +364,23 @@ function _draw()
     -- Draw menus
     buy_menu:draw()
     upg_menu:draw()
+
+    -- Draw stats
+    do
+        local lives = tostr(lives)
+        local x = 127 - #lives*4
+        local y = 2
+        print(lives, x, y, C.light_gray)
+        x -= 9
+        spr(18, x, y)
+
+        local gold = tostr(gold)
+        x -= 3 + #gold*4
+        print(gold, x, y, C.light_gray)
+        x -= 7
+        spr(17, x, y)
+    end
+
 
     -- if sending == 0 then
     --     local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
