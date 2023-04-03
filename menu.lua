@@ -35,7 +35,8 @@ function Menu.draw(m)
         print(item.text, m.x+9, m.y+item.y, color)
     end
 
-    print('>', m.x+3, m.y+m.items[m.cur_idx].y, C.white)
+    -- print('>', m.x+3, m.y+m.items[m.cur_idx].y, C.light_gray)
+    spr(19, m.x+3, m.y+m.items[m.cur_idx].y)
 end
 
 function Menu.update(m)
@@ -111,7 +112,9 @@ function init_menus()
         else
             print('➡️', m.x+38, m.y+3, C.dark_gray)
         end
+        if m.sel_twr <= 3 then pal(1, 0) end
         spr(m.sel_twr, m.x+26, m.y+2)
+        pal()
         print('20', m.x+26, m.y+11+8*0, C.indigo)
     end
 
@@ -130,7 +133,9 @@ function init_menus()
         Menu.draw(m)
         print('20', m.x+44, m.y+12+8*0, C.indigo)
         print('20', m.x+44, m.y+12+8*1, C.indigo)
+        if m.twr <= 3 then pal(1, 0) end
         spr(m.twr, m.x+26, m.y+2)
+        pal()
     end
 
     upg_menu.open = function(m)
