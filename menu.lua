@@ -29,7 +29,7 @@ function Menu:draw()
         local x1, y1, x2, y2 = self.x, self.y, self.x+self.w-1, self.y+self.h-1
         rect(x1-2, y1-2, x2+2, y2+2, C.black)
         rect(x1-1, y1-1, x2+1, y2+1, C.light_gray)
-        rectfill(x1, y1, x2, y2, C.black)
+        rectfill(x1, y1, x2, y2, C.dark_blue)
     end
 
     for i, item in ipairs(self.items) do
@@ -87,8 +87,13 @@ function init_menus()
 
     buy_menu.handle_btn = function(self)
         Menu.handle_btn(self)
-        self.pressing_right = btn(B.right)
-        self.pressing_left  = btn(B.left)
+        -- Don't nudge if btn pressed down while disabled
+        if self.pressing_right or (not self.pressing_right and self.sel_twr ~= 3) then
+            self.pressing_right = btn(B.right)
+        end
+        if self.pressing_left or (not self.pressing_left and self.sel_twr ~= 1) then
+            self.pressing_left = btn(B.left)
+        end
         if btnp(B.left)  then self.sel_twr = mid(1, self.sel_twr-1, 3) end
         if btnp(B.right) then self.sel_twr = mid(1, self.sel_twr+1, 3) end
     end
@@ -98,8 +103,8 @@ function init_menus()
             return
         end
         Menu.draw(self)
-        local can_left = self.sel_twr > 1
-        local can_right = self.sel_twr < 3
+        local can_left  = self.sel_twr ~= 1 or self.pressing_left
+        local can_right = self.sel_twr ~= 3 or self.pressing_right
         if can_left then
             local off_x = self.pressing_left and -1 or 0
             rectfill(self.x+16+off_x, self.y+4,
