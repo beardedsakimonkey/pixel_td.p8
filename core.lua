@@ -316,7 +316,7 @@ function _draw()
             line(a.left, a.bot-1, a.left, a.top+1, C.black)
         end
 
-        -- draw path enter/exit decoration
+        -- draw path decoration
         for j = 1, #map, #map-1 do
             local c = map[j].c
             local spr_x = (c == corner.TOP or c == corner.BOT) and 80 or 96
@@ -328,8 +328,6 @@ function _draw()
             sspr(spr_x, 0, 12, 12, left, top, 12, 12, flip_x, flip_y)
         end
     end
-
-    draw_selection()
 
     foreach(towers, function(twr)
         -- Draw tower
@@ -360,6 +358,8 @@ function _draw()
             rect(enmy.x-1, hp_y, (enmy.x-1)+hp_rem-1, hp_y, C.green)
         end
     end)
+
+    draw_selection()
 
     -- Draw menus
     buy_menu:draw()
