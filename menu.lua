@@ -79,6 +79,9 @@ function init_menus()
     add(buy_menu.items, {text='cancel', y=11+8*1, cb=buy_menu.close})
 
     buy_menu.sel_twr = 1
+    buy_menu.carousel_y = 0
+    buy_menu.carousel_sy = 0
+    buy_menu.carousel_st = 0
 
     buy_menu.handle_btn = function(m)
         Menu.handle_btn(m)
@@ -89,8 +92,27 @@ function init_menus()
         if m.pressing_left or (not m.pressing_left and m.sel_twr ~= 1) then
             m.pressing_left = btn(B.left)
         end
-        if btnp(B.left)  then m.sel_twr = mid(1, m.sel_twr-1, 3) end
-        if btnp(B.right) then m.sel_twr = mid(1, m.sel_twr+1, 3) end
+        if btnp(B.left) and m.sel_twr > 1 then
+            m.sel_twr -= 1
+            m.carousel_sy = m.carousel_y
+            m.carousel_st = time()
+        end
+        if btnp(B.right) and m.sel_twr < 3 then
+            m.sel_twr += 1
+            m.carousel_sy = m.carousel_y
+            m.carousel_st = time()
+        end
+    end
+
+    local CAROUSEL_GAP = 20
+
+    buy_menu.update = function(m)
+        Menu.update(m)
+        m.carousel_y = lerp(
+            m.carousel_sy,
+            (m.sel_twr-1)*-CAROUSEL_GAP,
+            easeout(min(1, (time()-m.carousel_st)*2))
+        )
     end
 
     buy_menu.draw = function(m)
@@ -112,9 +134,13 @@ function init_menus()
         else
             print('➡️', m.x+38, m.y+3, C.dark_gray)
         end
-        if m.sel_twr <= 3 then pal(1, 0) end
-        spr(m.sel_twr, m.x+26, m.y+2)
-        pal()
+        clip(m.x+21, m.y+2, 17, 7)
+        for i=1,3 do
+            if m.sel_twr <= 3 then pal(1, 0) end
+            spr(i, m.x+26+((i-1)*CAROUSEL_GAP)+m.carousel_y, m.y+2)
+            pal()
+        end
+        clip()
         print('20', m.x+26, m.y+11+8*0, C.indigo)
     end
 

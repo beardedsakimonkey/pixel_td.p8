@@ -109,9 +109,6 @@ function _update60()
     end
     update_selection()
 
-    buy_menu:update()
-    upg_menu:update()
-
     -- Handle button press
     if buy_menu.is_open then
         buy_menu:handle_btn()
@@ -134,6 +131,9 @@ function _update60()
             end
         end
     end
+
+    buy_menu:update()
+    upg_menu:update()
 
     -- Move enemies
     foreach(enemies, move_enemy)

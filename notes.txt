@@ -1,12 +1,11 @@
 Juice:
 - rubber banding when can't move selection
-- bottom menu animates up/down
 - screen shake on enemy reaching end
 - cloud of puff/sparkles when buying/upgrading tower
 - tracer on green laser
 - enemy death?
-- gold amount winds down after buying something
+- gold amount winds down after buying something?
+- when hovering over the buy button, show the tower in the map with its range visible
 
 Ideas:
 - shoot 2/3 at a time for upgraded red tower
-- when hovering over the buy button, show the tower in the map with its range visible
