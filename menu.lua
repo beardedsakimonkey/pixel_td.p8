@@ -31,8 +31,8 @@ function Menu.draw(m)
     end
 
     for i, item in ipairs(m.items) do
-        local color = (i == m.cur_idx) and C.white or C.light_gray
-        print(item.text, m.x+9, m.y+item.y, color)
+        print(item.text, m.x+9, m.y+item.y,
+            i == m.cur_idx and C.white or C.light_gray)
     end
 
     -- print('>', m.x+3, m.y+m.items[m.cur_idx].y, C.light_gray)
@@ -66,8 +66,8 @@ function Menu.close(m)
 end
 
 function Menu.open(m)
-    m.cur_idx = 1
     m.is_open = true
+    m.cur_idx = 1
     m.st = time()
     m.sy = m.y
 end

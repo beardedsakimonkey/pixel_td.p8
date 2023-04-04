@@ -4,6 +4,7 @@ sel = {
     src_x=58, src_y=46,
     tx=0, ty=0, -- animation start time
 }
+-- Helps impl of selection movement
 grid_bitmap = {}
 
 -- Todo: this doesn't actually do the moving
@@ -55,7 +56,6 @@ local function move_selection(dir)
 end
 
 function init_selection()
-    -- Helps impl of selection movement
     for _=0, 10 do
         add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
     end

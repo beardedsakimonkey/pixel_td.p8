@@ -6,7 +6,7 @@ C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
      peach=15}
 
 TWR = {green=1, red=2, blue=3}
-corner = {TL=1, TR=2, BL=3, BR=4, TOP=5, LEFT=6, RIGHT=7, BOT=8}
+CRNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
 
 function tbl_filter(t, fn)
     local res = {}

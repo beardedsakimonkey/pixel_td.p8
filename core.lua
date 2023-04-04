@@ -1,23 +1,23 @@
 t = 0
 map = {
-    {x=1,  y=0,  c=corner.TOP},
-    {x=1,  y=3,  c=corner.BL},
-    {x=3,  y=3,  c=corner.BR},
-    {x=3,  y=1,  c=corner.TL},
-    {x=7,  y=1,  c=corner.TR},
-    {x=7,  y=3,  c=corner.BL},
-    {x=9,  y=3,  c=corner.TR},
-    {x=9,  y=5,  c=corner.BR},
-    {x=8,  y=5,  c=corner.TL},
-    {x=8,  y=7,  c=corner.BR},
-    {x=5,  y=7,  c=corner.BL},
-    {x=5,  y=5,  c=corner.TR},
-    {x=2,  y=5,  c=corner.TL},
-    {x=2,  y=7,  c=corner.BR},
-    {x=1,  y=7,  c=corner.TL},
-    {x=1,  y=9,  c=corner.BL},
-    {x=9,  y=9,  c=corner.TR},
-    {x=9,  y=10, c=corner.BOT},
+    {x=1,  y=0,  c=CRNR.top},
+    {x=1,  y=3,  c=CRNR.bl},
+    {x=3,  y=3,  c=CRNR.br},
+    {x=3,  y=1,  c=CRNR.tl},
+    {x=7,  y=1,  c=CRNR.tr},
+    {x=7,  y=3,  c=CRNR.bl},
+    {x=9,  y=3,  c=CRNR.tr},
+    {x=9,  y=5,  c=CRNR.br},
+    {x=8,  y=5,  c=CRNR.tl},
+    {x=8,  y=7,  c=CRNR.br},
+    {x=5,  y=7,  c=CRNR.bl},
+    {x=5,  y=5,  c=CRNR.tr},
+    {x=2,  y=5,  c=CRNR.tl},
+    {x=2,  y=7,  c=CRNR.br},
+    {x=1,  y=7,  c=CRNR.tl},
+    {x=1,  y=9,  c=CRNR.bl},
+    {x=9,  y=9,  c=CRNR.tr},
+    {x=9,  y=10, c=CRNR.bot},
 }
 path_points = {}
 enemies = {}
@@ -306,22 +306,22 @@ function _draw()
 
         -- cover up unwanted borders
         local a = g2p(cell_a)
-        if cell_a.c == corner.BL then
+        if cell_a.c == CRNR.bl then
             line(a.right, a.bot-1, a.right, a.top+1, C.black)
-        elseif cell_a.c == corner.BR then
+        elseif cell_a.c == CRNR.br then
             line(a.left+1, a.top, a.right-1, a.top, C.black)
-        elseif cell_a.c == corner.TL then
+        elseif cell_a.c == CRNR.tl then
             line(a.left+1, a.bot, a.right-1, a.bot, C.black)
-        elseif cell_a.c == corner.TR then
+        elseif cell_a.c == CRNR.tr then
             line(a.left, a.bot-1, a.left, a.top+1, C.black)
         end
 
         -- draw path decoration
         for j = 1, #map, #map-1 do
             local c = map[j].c
-            local spr_x = (c == corner.TOP or c == corner.BOT) and 80 or 96
-            local flip_x = c == corner.RIGHT
-            local flip_y = c == corner.BOT
+            local spr_x = (c == CRNR.top or c == CRNR.bot) and 80 or 96
+            local flip_x = c == CRNR.right
+            local flip_y = c == CRNR.bot
             local p = g2p(map[j])
             local top = mid(0, p.top, 116)
             local left = mid(0, p.left, 117)
@@ -392,11 +392,11 @@ end
 function get_cell_corner(grid_cell)
     local cell = g2p(grid_cell)
     local c = grid_cell.c
-    if c == corner.TOP   then return {x = cell.left,  y = cell.top} end
-    if c == corner.RIGHT then return {x = cell.right, y = cell.top} end
-    if c == corner.BOT   then return {x = cell.right, y = cell.bot} end
-    if c == corner.TL    then return {x = cell.left,  y = cell.bot} end
-    if c == corner.BL    then return {x = cell.right, y = cell.bot} end
-    if c == corner.BR    then return {x = cell.right, y = cell.top} end
-    if c == corner.TR    then return {x = cell.left,  y = cell.top} end
+    if c == CRNR.top   then return {x = cell.left,  y = cell.top} end
+    if c == CRNR.right then return {x = cell.right, y = cell.top} end
+    if c == CRNR.bot   then return {x = cell.right, y = cell.bot} end
+    if c == CRNR.tl    then return {x = cell.left,  y = cell.bot} end
+    if c == CRNR.bl    then return {x = cell.right, y = cell.bot} end
+    if c == CRNR.br    then return {x = cell.right, y = cell.top} end
+    if c == CRNR.tr    then return {x = cell.left,  y = cell.top} end
 end
