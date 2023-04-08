@@ -54,3 +54,22 @@ function p2g(x, y)
         y=flr((y+2)/12),
     }
 end
+
+-- Based on https://github.com/chenglou/react-motion/blob/master/src/stepper.js
+function spring(cur_pos, dst_pos, cur_vel, cfg)
+    local s = cfg.stiffness or 180
+    local d = cfg.damping or 120
+    local m = cfg.mass or 1
+    local p = cfg.precision or 0.01
+
+    local Fspring = -s * (cur_pos - dst_pos)
+    local Fdamper = -d * cur_vel
+    local acc = (Fspring + Fdamper) / m
+    local new_vel = cur_vel + acc/60
+    local new_pos = cur_pos + new_vel/60
+
+    if abs(cur_vel) < p and abs(new_pos - cur_pos) < p then
+        return dst_pos, 0
+    end
+    return new_pos, new_vel
+end

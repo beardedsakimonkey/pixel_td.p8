@@ -4,7 +4,7 @@ upg_menu = nil
 --------------------------------------------------------------------------------
 local Menu = {}
 
-local OFFSCREEN = 130
+local OFFSCREEN = 131
 
 function Menu.new(cfg)
     local m = {
@@ -14,8 +14,7 @@ function Menu.new(cfg)
         items={},
         cur_idx=1,
         y=OFFSCREEN,
-        -- track start time & y of animation to make it interruptible
-        st=0, sy=OFFSCREEN,
+        v=0,
     }
     setmetatable(m, {__index = Menu})
     return m
@@ -40,11 +39,12 @@ function Menu.draw(m)
 end
 
 function Menu.update(m)
-    if m.is_open and m.y ~= m.dst_y then
-        m.y = lerp(m.sy, m.dst_y, easeout(min(1, (time()-m.st)*6)))
-    elseif not m.is_open and m.y ~= OFFSCREEN then
-        m.y = lerp(m.sy, OFFSCREEN, easeout(min(1, (time()-m.st)*6)))
-    end
+    local dest_y = m.is_open and m.dst_y or OFFSCREEN
+    m.y, m.v = spring(m.y, dest_y, m.v, {
+        stiffness = 180,
+        damping = 12,
+        mass = 0.25,
+    })
 end
 
 function Menu.handle_btn(m)
@@ -61,15 +61,11 @@ end
 
 function Menu.close(m)
     m.is_open = false
-    m.st = time()
-    m.sy = m.y
 end
 
 function Menu.open(m)
     m.is_open = true
     m.cur_idx = 1
-    m.st = time()
-    m.sy = m.y
 end
 --------------------------------------------------------------------------------
 
@@ -111,7 +107,7 @@ function init_menus()
         m.carousel_y = lerp(
             m.carousel_sy,
             (m.sel_twr-1)*-CAROUSEL_GAP,
-            easeout(min(1, (time()-m.carousel_st)*2))
+            easeout(min(1, (time()-m.carousel_st)*4))
         )
     end
 
