@@ -7,6 +7,26 @@ sel = {
 -- Helps impl of selection movement
 grid_bitmap = {}
 
+function init_selection()
+    for _=0, 10 do
+        add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+    end
+    for i=2, #map do
+        local ca, cb = map[i-1], map[i]
+        if ca.x == cb.x then
+            local step = ca.y < cb.y and 1 or -1
+            for j = ca.y, cb.y, step do
+                grid_bitmap[j+1][ca.x+1] = 1
+            end
+        elseif ca.y == cb.y then
+            local step = ca.x < cb.x and 1 or -1
+            for j = ca.x, cb.x, step do
+                grid_bitmap[ca.y+1][j+1] = 1
+            end
+        end
+    end
+end
+
 -- Todo: this doesn't actually do the moving
 local function move_selection(dir)
     -- Find destination cell
@@ -53,26 +73,6 @@ local function move_selection(dir)
     local p = g2p({x=dst_x, y=dst_y})
     sel.dst_x = p.left
     sel.dst_y = p.top
-end
-
-function init_selection()
-    for _=0, 10 do
-        add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-    end
-    for i=2, #map do
-        local ca, cb = map[i-1], map[i]
-        if ca.x == cb.x then
-            local step = ca.y < cb.y and 1 or -1
-            for j = ca.y, cb.y, step do
-                grid_bitmap[j+1][ca.x+1] = 1
-            end
-        elseif ca.y == cb.y then
-            local step = ca.x < cb.x and 1 or -1
-            for j = ca.x, cb.x, step do
-                grid_bitmap[ca.y+1][j+1] = 1
-            end
-        end
-    end
 end
 
 function update_selection()

@@ -75,8 +75,8 @@ function init_menus()
     add(buy_menu.items, {text='cancel', y=11+8*1, cb=buy_menu.close})
 
     buy_menu.sel_twr = 1
-    buy_menu.carousel_y = 0
-    buy_menu.carousel_sy = 0
+    buy_menu.carousel_x = 0
+    buy_menu.carousel_sx = 0
     buy_menu.carousel_st = 0
 
     buy_menu.handle_btn = function(m)
@@ -90,12 +90,12 @@ function init_menus()
         end
         if btnp(B.left) and m.sel_twr > 1 then
             m.sel_twr -= 1
-            m.carousel_sy = m.carousel_y
+            m.carousel_sx = m.carousel_x
             m.carousel_st = time()
         end
         if btnp(B.right) and m.sel_twr < 3 then
             m.sel_twr += 1
-            m.carousel_sy = m.carousel_y
+            m.carousel_sx = m.carousel_x
             m.carousel_st = time()
         end
     end
@@ -104,8 +104,8 @@ function init_menus()
 
     buy_menu.update = function(m)
         Menu.update(m)
-        m.carousel_y = lerp(
-            m.carousel_sy,
+        m.carousel_x = lerp(
+            m.carousel_sx,
             (m.sel_twr-1)*-CAROUSEL_GAP,
             easeout(min(1, (time()-m.carousel_st)*4))
         )
@@ -133,7 +133,7 @@ function init_menus()
         clip(m.x+21, m.y+2, 17, 7)
         for i=1,3 do
             if m.sel_twr <= 3 then pal(1, 0) end
-            spr(i, m.x+26+((i-1)*CAROUSEL_GAP)+m.carousel_y, m.y+2)
+            spr(i, m.x+26+((i-1)*CAROUSEL_GAP)+m.carousel_x, m.y+2)
             pal()
         end
         clip()
