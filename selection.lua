@@ -1,8 +1,9 @@
+local _p = g2p({x=5, y=4})
 sel = {
-    dst_x=58, dst_y=46,
-    x=58,     y=46,
-    src_x=58, src_y=46,
-    tx=0, ty=0, -- animation start time
+    dst_x=_p.left, dst_y=_p.top,
+    x=_p.left,     y=_p.top,
+    src_x=_p.left, src_y=_p.top,
+    vx=0, vy=0,
 }
 -- Helps impl of selection movement
 grid_bitmap = {}
@@ -40,10 +41,12 @@ local function move_selection(dir)
         dst_x += cell_dx
         dst_y += cell_dy
         -- bail if we reached a boundary
-        if dst_x <= 0 or dst_y <= 0 or
-            dst_x >= 10 or dst_y >= 10 then
-            return
-        end
+        local VEL = 670 -- rubber banding velocity
+        if dst_x <= 0 then sel.vx = -VEL; return end
+        if dst_x >= 10 then sel.vx = VEL; return end
+        if dst_y >= 10 then sel.vy = VEL; return end
+        if dst_y <= 0 then sel.vy = -VEL; return end
+
         -- break if it's a valid cell
         if grid_bitmap[dst_y+1][dst_x+1] == 0 then
             break
@@ -53,19 +56,11 @@ local function move_selection(dir)
     if cell_dx ~= 0 then
         if sel.x ~= sel.dst_x then
             sel.src_x = sel.x
-            sel.tx = time()
-        end
-        if sel.tx == 0 then
-            sel.tx = time()
         end
     end
     if cell_dy ~= 0 then
         if sel.y ~= sel.dst_y then
             sel.src_y = sel.y
-            sel.ty = time()
-        end
-        if sel.ty == 0 then
-            sel.ty = time()
         end
     end
 
@@ -82,25 +77,21 @@ function update_selection()
         if btnp(B.up)    then move_selection(B.up) end
         if btnp(B.down)  then move_selection(B.down) end
     end
-    if sel.tx ~= 0 then -- is animating
-        local dt = min(1, (time() - sel.tx)*6)
-        if dt == 1 then -- done animating
-            sel.x = sel.dst_x
-            sel.src_x = sel.dst_x
-            sel.tx = 0
-        else
-            sel.x = lerp(sel.src_x, sel.dst_x, easeout(dt))
-        end
+
+    local cfg = {
+        stiffness = 200,
+        damping = 12,
+        mass = 0.2,
+        precision = 0.9,
+    }
+    sel.x, sel.vx = spring(sel.x, sel.dst_x, sel.vx, cfg)
+    sel.y, sel.vy = spring(sel.y, sel.dst_y, sel.vy, cfg)
+
+    if sel.x == sel.dst_x and sel.vx == 0 then -- done animating x
+        sel.src_x = sel.dst_x
     end
-    if sel.ty ~= 0 then -- is animating
-        local dt = min(1, (time() - sel.ty)*6)
-        if dt == 1 then -- done animating
-            sel.y = sel.dst_y
-            sel.src_y = sel.dst_y
-            sel.ty = 0
-        else
-            sel.y = lerp(sel.src_y, sel.dst_y, easeout(dt))
-        end
+    if sel.y == sel.dst_y and sel.vy == 0 then -- done animating y
+        sel.src_y = sel.dst_y
     end
 end
 
