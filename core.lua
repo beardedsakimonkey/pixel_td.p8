@@ -23,7 +23,7 @@ path_points = {}
 enemies = {}
 towers = {}
 wave = 1
-sending = 0 -- number of enemies to send this wave
+sending = 0
 gold = 50
 lives = 20
 
@@ -38,7 +38,7 @@ function _init()
     init_selection()
     init_path_points()
 
-    -- Initialize buy/upgrade/bonus menu
+    -- Set up buy/upgrade/bonus menu
     init_menus()
 
     -- Make towers
@@ -278,7 +278,7 @@ end
 
 -- Todo: perf
 function is_in_range(enmy, twr)
-    return (((enmy.x - twr.x*10)^2) + ((enmy.y - twr.y*10)^2)) < (twr.range^2)
+    return (enmy.x - twr.x*10)^2 + (enmy.y - twr.y*10)^2 < twr.range^2
 end
 
 function twr_is_selected(twr)

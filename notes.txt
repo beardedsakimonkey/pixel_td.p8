@@ -1,5 +1,4 @@
 Juice:
-- rubber banding when can't move selection
 - screen shake on enemy reaching end
 - cloud of puff/sparkles when buying/upgrading tower
 - tracer on green laser
