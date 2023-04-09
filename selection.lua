@@ -6,7 +6,7 @@ sel = {
     vx=0, vy=0,
 }
 -- Helps impl of selection movement
-grid_bitmap = {}
+local grid_bitmap = {}
 
 function init_selection_aux()
     for _=0, 10 do

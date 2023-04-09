@@ -127,17 +127,18 @@ function _update60()
 
             local enmy = blt.enemy
             local oldx, oldy = blt.x, blt.y
+
+            -- update bullet position
             local dx = enmy.x - blt.x
             local dy = enmy.y - blt.y
             blt.rotation = atan2(dx, dy)
-            -- update bullet position
             blt.x = blt.x + cos(blt.rotation)*1
             blt.y = blt.y + sin(blt.rotation)*1
 
             -- handle collision
             if collide(blt, enmy) then
                 enmy.hp = max(0, enmy.hp-twr.dmg)
-                blt.can_remove = true
+                del(twr.bullets, blt)
             else
                 -- add particle
                 if t%2 == 0 then
@@ -145,11 +146,8 @@ function _update60()
                 end
             end
         end)
-        -- remove bullets
-        twr.bullets = tbl_filter(twr.bullets, function(blt)
-            return not blt.can_remove
-        end)
     end)
+
     -- Fire bullets
     foreach(towers, function(twr)
         twr.cd = max(0, twr.cd-1)
