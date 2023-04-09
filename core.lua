@@ -43,6 +43,7 @@ function _init()
     make_tower(TWR.red, 2, 4)
     make_tower(TWR.red, 3, 4)
     make_tower(TWR.red, 4, 4)
+    make_tower(TWR.green, 4, 2)
 end
 
 function do_buy(menu)
@@ -113,64 +114,7 @@ function _update60()
     upg_menu:update()
 
     update_enemies()
-
-    -- Move bullets
-    foreach(towers, function(twr)
-        foreach(twr.bullets, function(blt)
-            local enmy = blt.enemy
-            if enmy.hp == 0 then
-                del(twr.bullets, blt)
-                return
-            end
-
-            -- update particles
-            for p in all(blt.particles) do
-                p.age += 1
-                if p.age > 3 then
-                    del(blt.particles, p)
-                end
-            end
-
-            local oldx, oldy = blt.x, blt.y
-
-            -- update bullet position
-            local dx = enmy.x - blt.x
-            local dy = enmy.y - blt.y
-            blt.rotation = atan2(dx, dy)
-            blt.x = blt.x + cos(blt.rotation)*1
-            blt.y = blt.y + sin(blt.rotation)*1
-
-            -- handle collision
-            if collide(blt, enmy) then
-                enmy.hp = max(0, enmy.hp-twr.dmg)
-                del(twr.bullets, blt)
-            else
-                -- add particle
-                if t%2 == 0 then
-                    add(blt.particles, {x=oldx, y=oldy, age=1})
-                end
-            end
-        end)
-    end)
-
-    -- Fire bullets
-    foreach(towers, function(twr)
-        twr.cd = max(0, twr.cd-1)
-        if twr.cd > 0 then return end
-        for enmy in all(enemies) do
-            if is_in_range(enmy, twr) then
-                local p = g2p(twr)
-                add(twr.bullets, {
-                    x=p.left+6, y=p.top+6,
-                    rotation=0,
-                    enemy=enmy,
-                    particles={},
-                })
-                twr.cd = 40
-                break
-            end
-        end
-    end)
+    update_bullets()
 end
 
 function collide(blt, enmy)
@@ -183,6 +127,7 @@ function is_in_range(enmy, twr)
     return (enmy.x - twr.x*10)^2 + (enmy.y - twr.y*10)^2 < twr.range^2
 end
 
+-- TODO: make find_sel_tower function
 function twr_is_selected(twr)
     local g = p2g(sel.dst_x, sel.dst_y)
     return twr.x == g.x and twr.y == g.y
@@ -235,24 +180,23 @@ function _draw()
         end
     end
 
+    -- Draw towers
     foreach(towers, function(twr)
-        -- Draw tower
         local p = g2p(twr)
         spr(twr.type, p.left+3, p.top+3)
-        if twr_is_selected(twr) then -- draw range
-            circ(p.left+4, p.top+4, twr.range, C.light_gray)
-        end
-
-        -- Draw bullets
-        for blt in all(twr.bullets) do
-            pset(blt.x, blt.y, C.red)
-            -- Draw particles
-            for part in all(blt.particles) do
-                pset(part.x, part.y, C.dark_purple)
-            end
-        end
     end)
 
+    -- Draw tower range
+    if upg_menu.is_open then
+        foreach(towers, function(twr)
+            local p = g2p(twr)
+            if twr_is_selected(twr) then
+                circ(p.left+4, p.top+4, twr.range, C.light_gray)
+            end
+        end)
+    end
+
+    draw_bullets()
     draw_enemies()
     draw_selection()
 

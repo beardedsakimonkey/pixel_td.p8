@@ -113,9 +113,7 @@ function draw_enemies()
         -- Draw hp
         local hp_y = enmy.y - 4
         rect(enmy.x-1, hp_y, enmy.x+1, hp_y, C.dark_green)
-        if enmy.hp > 0 then
-            local hp_rem = ceil(enmy.hp / enmy.max_hp*3)
-            rect(enmy.x-1, hp_y, (enmy.x-1)+hp_rem-1, hp_y, C.green)
-        end
+        local hp_rem = ceil(enmy.hp / enmy.max_hp*3)
+        rect(enmy.x-1, hp_y, (enmy.x-1)+hp_rem-1, hp_y, C.green)
     end)
 end
