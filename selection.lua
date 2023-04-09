@@ -8,7 +8,7 @@ sel = {
 -- Helps impl of selection movement
 grid_bitmap = {}
 
-function init_selection()
+function init_selection_aux()
     for _=0, 10 do
         add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
     end

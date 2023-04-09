@@ -4,6 +4,7 @@ __lua__
 #include util.lua
 #include menu.lua
 #include selection.lua
+#include enemy.lua
 #include core.lua
 __gfx__
 00000000000000000000000000000000000000000000000000000000bbbbbbb0eeeeeee0ccccccc0011111111111000000000000000000000000000000000000
