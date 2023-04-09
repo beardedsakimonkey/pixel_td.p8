@@ -8,7 +8,6 @@ function make_enemy(hp)
         y=path_points[1].y,
         dx=0, dy=0.5,
         hp=hp, max_hp=hp,
-        can_remove=false,
     })
 end
 
@@ -65,7 +64,9 @@ local function move_enemy(e)
                 e.dy = going_down and abs(e.dx) or -abs(e.dx)
                 e.dx = 0
             else
-                e.can_remove = true
+                -- enemy got to the end
+                e.hp = 0
+                remove_life()
             end
         else
             e.x += e.dx
@@ -84,7 +85,9 @@ local function move_enemy(e)
                 e.dx = going_right and abs(e.dy) or -abs(e.dy)
                 e.dy = 0
             else
-                e.can_remove = true
+                -- enemy got to the end
+                e.hp = 0
+                remove_life()
             end
         else
             e.y += e.dy
@@ -92,14 +95,15 @@ local function move_enemy(e)
     end
 end
 
+local function del_enemy(enmy)
+    if enmy.hp == 0 then
+        del(enemies, enmy)
+    end
+end
+
 function update_enemies()
     foreach(enemies, move_enemy)
-    -- foreach(enemies, del_enemy)
-
-    -- Remove enemies
-    enemies = tbl_filter(enemies, function(enmy)
-        return not enmy.can_remove and enmy.hp > 0
-    end)
+    foreach(enemies, del_enemy)
 end
 
 function draw_enemies()
@@ -114,5 +118,4 @@ function draw_enemies()
             rect(enmy.x-1, hp_y, (enmy.x-1)+hp_rem-1, hp_y, C.green)
         end
     end)
-
 end

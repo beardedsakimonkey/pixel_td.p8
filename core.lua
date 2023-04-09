@@ -66,7 +66,7 @@ function make_tower(type, x, y)
     add(towers, {
         type=type,
         x=x, y=y, -- in grid coordinates
-        range=28,
+        range=30,
         bullets={},
         cd=0, -- in frames
         dmg=2,
@@ -117,6 +117,12 @@ function _update60()
     -- Move bullets
     foreach(towers, function(twr)
         foreach(twr.bullets, function(blt)
+            local enmy = blt.enemy
+            if enmy.hp == 0 then
+                del(twr.bullets, blt)
+                return
+            end
+
             -- update particles
             for p in all(blt.particles) do
                 p.age += 1
@@ -125,7 +131,6 @@ function _update60()
                 end
             end
 
-            local enmy = blt.enemy
             local oldx, oldy = blt.x, blt.y
 
             -- update bullet position
@@ -154,9 +159,6 @@ function _update60()
         if twr.cd > 0 then return end
         for enmy in all(enemies) do
             if is_in_range(enmy, twr) then
-                -- Todo: what happens when enemy dies from another bullet?
-                -- perhaps we keep enemy objects around with a 'dead' flag until
-                -- all of them are dead?
                 local p = g2p(twr)
                 add(twr.bullets, {
                     x=p.left+6, y=p.top+6,
@@ -184,6 +186,10 @@ end
 function twr_is_selected(twr)
     local g = p2g(sel.dst_x, sel.dst_y)
     return twr.x == g.x and twr.y == g.y
+end
+
+function remove_life()
+    lives -= 1
 end
 
 --------------------------------------------------------------------------------
@@ -233,9 +239,9 @@ function _draw()
         -- Draw tower
         local p = g2p(twr)
         spr(twr.type, p.left+3, p.top+3)
-        -- if twr_is_selected(twr) then -- draw range
-        --     circ(p.left+4, p.top+4, twr.range, C.light_gray)
-        -- end
+        if twr_is_selected(twr) then -- draw range
+            circ(p.left+4, p.top+4, twr.range, C.light_gray)
+        end
 
         -- Draw bullets
         for blt in all(twr.bullets) do
