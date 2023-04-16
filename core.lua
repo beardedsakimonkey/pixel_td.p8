@@ -20,7 +20,7 @@ map = {
     {x=9,  y=10, c=CRNR.bot},
 }
 towers = {}
-wave = 1
+wave = 0
 sending = 0
 gold = 50
 lives = 20
@@ -87,6 +87,7 @@ function _update60()
         make_enemy(hp)
         sending -= 1
     end
+
     update_selection()
 
     -- Handle button press
@@ -178,7 +179,7 @@ function _draw()
             local p = g2p(map[j])
             local top = mid(0, p.top, 116)
             local left = mid(0, p.left, 117)
-            sspr(spr_x, 0, 12, 12, left, top, 12, 12, flip_x, flip_y)
+            sspr(spr_x, 8, 12, 12, left, top, 12, 12, flip_x, flip_y)
         end
     end
 

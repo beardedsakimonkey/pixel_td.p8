@@ -5,6 +5,7 @@ upg_menu = nil
 local Menu = {}
 
 local OFFSCREEN = 131
+local MAX_TWR = 3 -- how many types of towers are there
 
 function Menu.new(cfg)
     local m = {
@@ -34,8 +35,7 @@ function Menu.draw(m)
             i == m.cur_idx and C.white or C.light_gray)
     end
 
-    -- print('>', m.x+3, m.y+m.items[m.cur_idx].y, C.light_gray)
-    spr(19, m.x+3, m.y+m.items[m.cur_idx].y)
+    spr(19, m.x+MAX_TWR, m.y+m.items[m.cur_idx].y)
 end
 
 function Menu.update(m)
@@ -82,7 +82,7 @@ function init_menus()
     buy_menu.handle_btn = function(m)
         Menu.handle_btn(m)
         -- Don't nudge if btn pressed down while disabled
-        if m.pressing_right or (not m.pressing_right and m.sel_twr ~= 3) then
+        if m.pressing_right or (not m.pressing_right and m.sel_twr ~= MAX_TWR) then
             m.pressing_right = btn(B.right)
         end
         if m.pressing_left or (not m.pressing_left and m.sel_twr ~= 1) then
@@ -93,7 +93,7 @@ function init_menus()
             m.carousel_sx = m.carousel_x
             m.carousel_st = time()
         end
-        if btnp(B.right) and m.sel_twr < 3 then
+        if btnp(B.right) and m.sel_twr < MAX_TWR then
             m.sel_twr += 1
             m.carousel_sx = m.carousel_x
             m.carousel_st = time()
@@ -107,7 +107,7 @@ function init_menus()
         m.carousel_x = lerp(
             m.carousel_sx,
             (m.sel_twr-1)*-CAROUSEL_GAP,
-            easeout(min(1, (time()-m.carousel_st)*4))
+            easeout(min(1, (time()-m.carousel_st)*MAX_TWR))
         )
     end
 
@@ -115,10 +115,10 @@ function init_menus()
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
         local can_left  = m.sel_twr ~= 1 or m.pressing_left
-        local can_right = m.sel_twr ~= 3 or m.pressing_right
+        local can_right = m.sel_twr ~= MAX_TWR or m.pressing_right
         if can_left then
             local off_x = m.pressing_left and -1 or 0
-            rectfill(m.x+16+off_x, m.y+4, m.x+18+off_x, m.y+7, C.dark_gray)
+            rectfill(m.x+16+off_x, m.y+3, m.x+18+off_x, m.y+7, C.dark_gray)
             print('⬅️', m.x+14+off_x, m.y+3, C.light_gray)
         else
             print('⬅️', m.x+14, m.y+3, C.dark_gray)
@@ -131,8 +131,8 @@ function init_menus()
             print('➡️', m.x+38, m.y+3, C.dark_gray)
         end
         clip(m.x+21, m.y+2, 17, 7)
-        for i=1,3 do
-            if m.sel_twr <= 3 then pal(1, 0) end
+        for i=1,MAX_TWR do
+            if m.sel_twr <= MAX_TWR then pal(1, 0) end
             spr(i, m.x+26+((i-1)*CAROUSEL_GAP)+m.carousel_x, m.y+2)
             pal()
         end
