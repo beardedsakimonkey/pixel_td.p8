@@ -25,6 +25,8 @@ sending = 0
 gold = 50
 lives = 20
 
+local MAX_WAVE = 20
+
 --------------------------------------------------------------------------------
 -- INIT
 --------------------------------------------------------------------------------
@@ -199,6 +201,17 @@ function _draw()
     draw_bullets()
     draw_enemies()
     draw_selection()
+
+    -- Draw wave count
+    do
+        local str = wave .. '/' .. MAX_WAVE
+        local strlen = #str * 3
+        local left = 128/2 - strlen/2
+        local top = 123
+        local right = 128/2 + strlen/2
+        rectfill(left-1, top-1, right+1, top+5, C.black)
+        print(str, left, top, C.dark_blue)
+    end
 
     -- Draw menus
     buy_menu:draw()
