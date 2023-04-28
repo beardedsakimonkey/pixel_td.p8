@@ -2,11 +2,11 @@ enemies = {}
 -- Helps impl of enemy movement
 local path_points = {}
 
-function make_enemy(hp)
+function make_enemy(hp, dx, dy)
     add(enemies, {
         x=path_points[1].x,
         y=path_points[1].y,
-        dx=0, dy=0.5,
+        dx=dx, dy=dy,
         hp=hp, max_hp=hp,
     })
 end

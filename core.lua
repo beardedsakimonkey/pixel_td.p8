@@ -86,7 +86,12 @@ function _update60()
     -- Make enemy
     if sending > 0 and t%20 == 0 then
         local hp = 3*wave
-        make_enemy(hp)
+        local dx, dy = 0, 0
+        if     map[1].c == CRNR.top   then dy = 0.5
+        elseif map[1].c == CRNR.left  then dx = 0.5
+        elseif map[1].c == CRNR.right then dx = -0.5
+        elseif map[1].c == CRNR.bot   then dy = -0.5 end
+        make_enemy(hp, dx, dy)
         sending -= 1
     end
 
