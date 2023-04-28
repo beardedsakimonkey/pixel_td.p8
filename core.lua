@@ -43,9 +43,9 @@ function _init()
 
     -- Make towers
     -- make_tower(TWR.red, 2, 4)
-    make_tower(TWR.green, 3, 4)
-    make_tower(TWR.green, 4, 4)
-    make_tower(TWR.green, 4, 2)
+    -- make_tower(TWR.green, 3, 4)
+    -- make_tower(TWR.green, 4, 4)
+    make_tower(TWR.yellow, 4, 2)
     foreach(towers, function(twr) twr.age = nil end)
 end
 

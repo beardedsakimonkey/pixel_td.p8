@@ -43,7 +43,6 @@ local function fire_bullet_red(twr)
         if is_in_range(enmy, twr) then
             local p = g2p(twr)
             add(twr.bullets, {
-                type=twr.type,
                 x=p.left+6, y=p.top+6,
                 rotation=0,
                 enemy=enmy,
@@ -90,14 +89,13 @@ local function fire_bullet_green(twr)
     for enmy in all(enemies) do
         if is_in_range(enmy, twr) then
             add(twr.bullets, {
-                type=twr.type,
                 -- x=0, y=0,
                 -- rotation=0,
                 age=0,
                 enemy=enmy,
                 particles={},
             })
-            break
+            return
         end
     end
 end
@@ -116,6 +114,77 @@ local function draw_bullets_green(twr)
     end
 end
 
+-- Yellow ----------------------------------------------------------------------
+
+local MAX_BULLETS_YELLOW = 3
+local MAX_AGE_YELLOW = 60
+
+local function update_bullets_yellow(twr)
+    for blt in all(twr.bullets) do
+        if blt.enemy.hp == 0 then
+            del(twr.bullets, blt)
+        else
+            blt.age += 1
+        end
+    end
+    if #twr.bullets == 0 then return end
+    if twr.bullets[1].age >= MAX_AGE_YELLOW then
+        twr.bullets = {}
+    else
+        if twr.bullets[1].age == 30 then
+            -- register damage & slow
+            for blt in all(twr.bullets) do
+                blt.enemy.hp = max(0, blt.enemy.hp-twr.dmg)
+                blt.enemy.slow = 0.3
+                blt.enemy.slow_dur = 100
+            end
+        end
+    end
+end
+
+local function fire_bullet_yellow(twr)
+    twr.cd = max(0, twr.cd-1)
+    if twr.cd > 0 or #twr.bullets > 0 then return end
+    for enmy in all(enemies) do
+        if is_in_range(enmy, twr) then
+            add(twr.bullets, {
+                -- x=0, y=0,
+                -- rotation=0,
+                age=0,
+                enemy=enmy,
+                -- particles={},
+            })
+            twr.cd = 120
+            if #twr.bullets > MAX_BULLETS_YELLOW then
+                return
+            end
+        end
+    end
+end
+
+local function draw_bullets_yellow(twr)
+    for blt in all(twr.bullets) do
+        local t = g2p(twr)
+        local color
+        if blt.age >= 20 and blt.age <= 42 then
+            if     blt.age <= 23 then color = C.dark_blue
+            elseif blt.age <= 24 then color = C.brown
+            elseif blt.age <= 27 then color = C.orange
+            elseif blt.age <= 30 then color = C.yellow
+            elseif blt.age <= 36 then color = C.peach
+            elseif blt.age <= 37 then color = C.white
+            elseif blt.age <= 39 then color = C.peach
+            elseif blt.age <= 40 then color = C.yellow
+            elseif blt.age <= 41 then color = C.orange
+            else                      color = C.brown end
+            line(t.left+6, t.top+6, blt.enemy.x, blt.enemy.y, color)
+            -- don't cover up center pixel
+            pset(t.left+6, t.top+6, C.black)
+            pset(blt.enemy.x, blt.enemy.y, C.black)
+        end
+    end
+end
+
 --------------------------------------------------------------------------------
 
 function update_bullets()
@@ -128,6 +197,8 @@ function update_bullets()
             foreach(twr.bullets, function(blt)
                 update_bullet_green(twr, blt)
             end)
+        elseif twr.type == TWR.yellow then
+            update_bullets_yellow(twr)
         end
     end)
     foreach(towers, function(twr)
@@ -135,6 +206,8 @@ function update_bullets()
             fire_bullet_red(twr)
         elseif twr.type == TWR.green then
             fire_bullet_green(twr)
+        elseif twr.type == TWR.yellow then
+            fire_bullet_yellow(twr)
         end
     end)
 end
@@ -145,6 +218,8 @@ function draw_bullets()
             draw_bullets_red(twr)
         elseif twr.type == TWR.green then
             draw_bullets_green(twr)
+        elseif twr.type == TWR.yellow then
+            draw_bullets_yellow(twr)
         end
     end)
 end

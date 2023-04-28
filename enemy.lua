@@ -8,6 +8,7 @@ function make_enemy(hp, dx, dy)
         y=path_points[1].y,
         dx=dx, dy=dy,
         hp=hp, max_hp=hp,
+        slow=1, slow_dur=0,
     })
 end
 
@@ -69,7 +70,7 @@ local function move_enemy(e)
                 remove_life()
             end
         else
-            e.x += e.dx
+            e.x += (e.dx * e.slow)
         end
     elseif e.dy ~= 0 then -- moving vertically
         local down = e.dy > 0
@@ -90,7 +91,7 @@ local function move_enemy(e)
                 remove_life()
             end
         else
-            e.y += e.dy
+            e.y += (e.dy * e.slow)
         end
     end
 end
@@ -102,6 +103,13 @@ local function del_enemy(enmy)
 end
 
 function update_enemies()
+    foreach(enemies, function(enmy)
+        if enmy.slow_dur == 0 then
+            enmy.slow = 1
+        else
+            enmy.slow_dur -= 1
+        end
+    end)
     foreach(enemies, move_enemy)
     foreach(enemies, del_enemy)
 end
