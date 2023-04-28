@@ -21,7 +21,6 @@ map = {
 }
 towers = {}
 wave = 0
-sending = 0
 gold = 50
 lives = 20
 
@@ -83,18 +82,6 @@ end
 --------------------------------------------------------------------------------
 function _update60()
     t += 1
-    -- Make enemy
-    if sending > 0 and t%20 == 0 then
-        local hp = 3*wave
-        local dx, dy = 0, 0
-        if     map[1].c == CRNR.top   then dy = 0.5
-        elseif map[1].c == CRNR.left  then dx = 0.5
-        elseif map[1].c == CRNR.right then dx = -0.5
-        elseif map[1].c == CRNR.bot   then dy = -0.5 end
-        make_enemy(hp, dx, dy)
-        sending -= 1
-    end
-
     update_selection()
 
     -- Handle button press
@@ -112,17 +99,14 @@ function _update60()
             end
         end
         if btnp(B.x) then
-            if sending == 0 then
-                -- Send next wave
-                wave += 1
-                sending = 10
-            end
+            send_wave()
         end
     end
 
     buy_menu:update()
     upg_menu:update()
 
+    spawn_enemy()
     update_enemies()
     update_bullets()
 

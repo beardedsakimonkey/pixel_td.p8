@@ -1,12 +1,10 @@
-B = {left=0, right=1, up=2, down=3, z=4, x=5}
-
-C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
-     dark_gray=5, light_gray=6, white=7,       red=8,        orange=9,
-     yellow=10,   green=11,     blue=12,       indigo=13,    pink=14,
-     peach=15}
-
-TWR = {green=1, red=2, yellow=3}
-CRNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
+local function tbl_len(t)
+    local len = 0
+    for _ in pairs(t) do
+        len += 1
+    end
+    return len
+end
 
 function tbl_filter(t, fn)
     local res = {}
@@ -25,6 +23,16 @@ function tbl_find(t, fn)
         end
     end
 end
+
+B = {left=0, right=1, up=2, down=3, z=4, x=5}
+C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
+     dark_gray=5, light_gray=6, white=7,       red=8,        orange=9,
+     yellow=10,   green=11,     blue=12,       indigo=13,    pink=14,
+     peach=15}
+TWR = {green=1, red=2, yellow=3}
+CRNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
+ENMY = {circ_sm=1, rect_sm=2, diam=3, arrow=4}
+ENMY_LEN = tbl_len(ENMY)
 
 function lerp(a, b, t)
     return a + (b-a)*t

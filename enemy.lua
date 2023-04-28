@@ -1,13 +1,15 @@
+sending = 0
 enemies = {}
 -- Helps impl of enemy movement
 local path_points = {}
 
-function make_enemy(hp, dx, dy)
+local function make_enemy(type, max_hp, dx, dy)
     add(enemies, {
+        type=type,
         x=path_points[1].x,
         y=path_points[1].y,
         dx=dx, dy=dy,
-        hp=hp, max_hp=hp,
+        hp=max_hp, max_hp=max_hp,
         slow=1, slow_dur=0,
     })
 end
@@ -102,6 +104,21 @@ local function del_enemy(enmy)
     end
 end
 
+function spawn_enemy()
+    if sending > 0 and t%20 == 0 then
+        sending -= 1
+        local dx, dy = 0, 0
+        if     map[1].c == CRNR.top   then dy = 0.5
+        elseif map[1].c == CRNR.left  then dx = 0.5
+        elseif map[1].c == CRNR.right then dx = -0.5
+        elseif map[1].c == CRNR.bot   then dy = -0.5 end
+        local max_hp = 3*wave
+        local type = wave % ENMY_LEN
+        if type == 0 then type = ENMY_LEN end
+        make_enemy(type, max_hp, dx, dy)
+    end
+end
+
 function update_enemies()
     foreach(enemies, function(enmy)
         if enmy.slow_dur == 0 then
@@ -117,11 +134,37 @@ end
 function draw_enemies()
     foreach(enemies, function(enmy)
         -- Draw enemy
-        circ(enmy.x, enmy.y, 1, C.light_gray)
+        if enmy.type == ENMY.circ_sm then
+            circ(enmy.x, enmy.y, 1, C.light_gray)
+        elseif enmy.type == ENMY.rect_sm then
+            rect(enmy.x-1, enmy.y-1, enmy.x+1, enmy.y+1, C.light_gray)
+        elseif enmy.type == ENMY.diam then
+            line(enmy.x, enmy.y-2, enmy.x-2, enmy.y, C.light_gray) -- top left
+            line(enmy.x, enmy.y+2) -- bot left
+            line(enmy.x+2, enmy.y) -- bot right
+            line(enmy.x, enmy.y-2) -- top right
+        elseif enmy.type == ENMY.arrow then
+            if enmy.dx ~= 0 then
+                line(enmy.x, enmy.y-2,
+                     enmy.x+(enmy.dx > 0 and 2 or -2), enmy.y, C.light_gray)
+                line(enmy.x, enmy.y+2)
+            else
+                line(enmy.x-2, enmy.y,
+                     enmy.x, enmy.y+(enmy.dy > 0 and 2 or -2), C.light_gray)
+                line(enmy.x+2, enmy.y)
+            end
+        end
         -- Draw hp
         local hp_y = enmy.y - 4
         rect(enmy.x-1, hp_y, enmy.x+1, hp_y, C.dark_green)
         local hp_rem = ceil(enmy.hp / enmy.max_hp*3)
         rect(enmy.x-1, hp_y, (enmy.x-1)+hp_rem-1, hp_y, C.green)
     end)
+end
+
+function send_wave()
+    if sending == 0 then
+        wave += 1
+        sending = 10
+    end
 end
