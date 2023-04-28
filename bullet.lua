@@ -68,19 +68,37 @@ end
 
 local function update_bullet_green(twr, blt)
     local enmy = blt.enemy
-    if enmy.hp == 0 then
+    if enmy.hp == 0 or not is_in_range(enmy, twr) then
         del(twr.bullets, blt)
-        return
+    else
+        blt.age += 1
+        if blt.age > 2 then -- don't trigger damage every frame
+            enmy.hp = max(0, enmy.hp-twr.dmg)
+            blt.age = 0
+        end
+        -- update particle
+        local oldx, oldy = enmy.x, enmy.y
+        if t%3 == 0 then
+            deli(blt.particles, 1)
+            add(blt.particles, {x=oldx, y=oldy, age=1})
+        end
     end
-    if not is_in_range(enmy, twr) then
-        del(twr.bullets, blt)
-        return
-    end
-    local oldx, oldy = blt.enemy.x, blt.enemy.y
-    -- add particle
-    if t%3 == 0 then
-        deli(blt.particles, 1)
-        add(blt.particles, {x=oldx, y=oldy, age=1})
+end
+
+local function fire_bullet_green(twr)
+    if #twr.bullets > 0 then return end
+    for enmy in all(enemies) do
+        if is_in_range(enmy, twr) then
+            add(twr.bullets, {
+                type=twr.type,
+                -- x=0, y=0,
+                -- rotation=0,
+                age=0,
+                enemy=enmy,
+                particles={},
+            })
+            break
+        end
     end
 end
 
@@ -98,33 +116,20 @@ local function draw_bullets_green(twr)
     end
 end
 
-local function fire_bullet_green(twr)
-    if #twr.bullets > 0 then return end
-    for enmy in all(enemies) do
-        if is_in_range(enmy, twr) then
-            add(twr.bullets, {
-                type=twr.type,
-                x=0, y=0,
-                rotation=0,
-                enemy=enmy,
-                particles={},
-            })
-            break
-        end
-    end
-end
-
 --------------------------------------------------------------------------------
 
 function update_bullets()
     foreach(towers, function(twr)
         if twr.type == TWR.red then
-            foreach(twr.bullets, function(blt) update_bullet_red(twr, blt) end)
+            foreach(twr.bullets, function(blt)
+                update_bullet_red(twr, blt)
+            end)
         elseif twr.type == TWR.green then
-            foreach(twr.bullets, function(blt) update_bullet_green(twr, blt) end)
+            foreach(twr.bullets, function(blt)
+                update_bullet_green(twr, blt)
+            end)
         end
     end)
-
     foreach(towers, function(twr)
         if twr.type == TWR.red then
             fire_bullet_red(twr)

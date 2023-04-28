@@ -42,9 +42,9 @@ function _init()
     init_menus()
 
     -- Make towers
-    make_tower(TWR.red, 2, 4)
-    make_tower(TWR.red, 3, 4)
-    make_tower(TWR.red, 4, 4)
+    -- make_tower(TWR.red, 2, 4)
+    make_tower(TWR.green, 3, 4)
+    make_tower(TWR.green, 4, 4)
     make_tower(TWR.green, 4, 2)
     foreach(towers, function(twr) twr.age = nil end)
 end
@@ -73,7 +73,7 @@ function make_tower(type, x, y)
         range=30,
         bullets={},
         cd=0, -- in frames
-        dmg=2,
+        dmg=type == TWR.green and 0.2 or 2,
         age=0,
     })
 end
@@ -202,8 +202,8 @@ function _draw()
         if twr.age and (twr.age\2)%2 == 0 then
             pal({
                 [0]=C.dark_gray,
-                [1]=C.dark_gray,
-                [2]=C.dark_gray,
+                [1]=C.light_gray,
+                [2]=C.light_gray,
                 [3]=C.light_gray,
                 [4]=C.light_gray,
                 [5]=C.light_gray,

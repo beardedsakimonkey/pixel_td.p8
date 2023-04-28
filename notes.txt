@@ -1,8 +1,6 @@
 Juice:
 - screen shake on enemy reaching end
-- cloud of puff/sparkles when buying/upgrading tower
-- tracer on green laser
-- enemy death?
+- green laser fades out + in after switching targets
 - gold amount winds down after buying something?
 - when hovering over the buy button, show the tower in the map with its range visible
 - sheen on path?
