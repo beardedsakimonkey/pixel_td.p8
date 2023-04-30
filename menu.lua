@@ -105,6 +105,7 @@ function init_menus()
     end
 
     local CAROUSEL_GAP = 20
+    local BUY_PRICE = 20
 
     buy_menu.update = function(m)
         Menu.update(m)
@@ -141,12 +142,13 @@ function init_menus()
             pal()
         end
         clip()
-        print('20', m.x+26, m.y+11+8*0, C.indigo)
+        print(BUY_PRICE, m.x+26, m.y+11+8*0, C.indigo)
     end
 
     buy_menu.open = function(m)
         Menu.open(m)
         m.sel_twr = 1
+        m.items[1].disabled = gold < BUY_PRICE
     end
 
     upg_menu = Menu.new({x=35, dst_y=89, w=59, h=36})

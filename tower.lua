@@ -17,9 +17,9 @@ tower_cfg = {
     [12] = {dmg=2,   range=30, atkspd=120}, -- lvl 4 yellow
 }
 
-function is_green_twr(type)  return type%3 == 1 end
-function is_red_twr(type)    return type%3 == 2 end
-function is_yellow_twr(type) return type%3 == 0 end
+function is_green_twr(type)  return type % MAX_TWR == 1 end
+function is_red_twr(type)    return type % MAX_TWR == 2 end
+function is_yellow_twr(type) return type % MAX_TWR == 0 end
 
 function init_towers()
     local GREEN, RED, YELLOW = 1, 2, 3
