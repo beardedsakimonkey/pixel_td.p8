@@ -165,3 +165,21 @@ function init_menus()
         m.twr = twr.type
     end
 end
+--------------------------------------------------------------------------------
+
+function do_buy(menu)
+    local g = p2g(sel.dst_x, sel.dst_y)
+    make_tower(menu.sel_twr, g.x, g.y)
+end
+
+function do_sell(menu)
+    local twr = tbl_find(towers, twr_is_selected)
+    del(towers, twr)
+end
+
+function do_upgrade(menu)
+    local twr = tbl_find(towers, twr_is_selected)
+    local g = p2g(sel.dst_x, sel.dst_y)
+    make_tower(twr.type+3, g.x, g.y)
+    del(towers, twr)
+end

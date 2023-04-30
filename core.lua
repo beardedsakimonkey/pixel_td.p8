@@ -1,4 +1,3 @@
-t = 0
 map = {
     {x=1,  y=0,  c=CRNR.top},
     {x=1,  y=3,  c=CRNR.bl},
@@ -19,15 +18,32 @@ map = {
     {x=9,  y=9,  c=CRNR.tr},
     {x=9,  y=10, c=CRNR.bot},
 }
-wave = 0
-gold = 50
-lives = 20
 waves = {
     {hp=3,  speed=0.5, type=ENMY.circ_sm},
     {hp=6,  speed=0.5, type=ENMY.rect_sm},
     {hp=9,  speed=0.5, type=ENMY.diam},
     {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=12, speed=0.8, type=ENMY.arrow},
 }
+wave = 0
+gold = 50
+lives = 20
+t = 0
 
 --------------------------------------------------------------------------------
 -- INIT
@@ -42,23 +58,6 @@ function _init()
 
     init_menus()
     init_towers()
-end
-
-function do_buy(menu)
-    local g = p2g(sel.dst_x, sel.dst_y)
-    make_tower(menu.sel_twr, g.x, g.y)
-end
-
-function do_sell(menu)
-    local twr = tbl_find(towers, twr_is_selected)
-    del(towers, twr)
-end
-
-function do_upgrade(menu)
-    local twr = tbl_find(towers, twr_is_selected)
-    local g = p2g(sel.dst_x, sel.dst_y)
-    make_tower(twr.type+3, g.x, g.y)
-    del(towers, twr)
 end
 
 --------------------------------------------------------------------------------
