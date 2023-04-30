@@ -30,8 +30,10 @@ function Menu.draw(m)
     end
 
     for i, item in ipairs(m.items) do
-        print(item.text, m.x+9, m.y+item.y,
-            i == m.cur_idx and C.white or C.light_gray)
+        local c = item.disabled and C.dark_gray
+                or (i == m.cur_idx) and C.white
+                or C.light_gray
+        print(item.text, m.x+9, m.y+item.y, c)
     end
 
     spr(19, m.x+MAX_TWR, m.y+m.items[m.cur_idx].y)
@@ -50,8 +52,11 @@ function Menu.handle_btn(m)
     if btnp(B.up)   then m.cur_idx = wrap(1, m.cur_idx-1, #m.items) end
     if btnp(B.down) then m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
     if btnp(B.z) then
-        m.items[m.cur_idx].cb(m)
-        m:close()
+        local item = m.items[m.cur_idx]
+        if not item.disabled then
+            item.cb(m)
+            m:close()
+        end
     end
     if btnp(B.x) then
         m:close()
@@ -163,6 +168,7 @@ function init_menus()
         Menu.open(m)
         local twr = tbl_find(towers, twr_is_selected)
         m.twr = twr.type
+        m.items[1].disabled = twr.type+MAX_TWR > #tower_cfg
     end
 end
 --------------------------------------------------------------------------------
@@ -180,6 +186,6 @@ end
 function do_upgrade(menu)
     local twr = tbl_find(towers, twr_is_selected)
     local g = p2g(sel.dst_x, sel.dst_y)
-    make_tower(twr.type+3, g.x, g.y)
+    make_tower(twr.type+MAX_TWR, g.x, g.y)
     del(towers, twr)
 end

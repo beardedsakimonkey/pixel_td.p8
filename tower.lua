@@ -2,7 +2,7 @@ towers = {}
 
 MAX_TWR = 3 -- how many types of towers are there
 
-local tower_cfg = {
+tower_cfg = {
     [1]  = {dmg=2,   range=30, atkspd=40},  -- lvl 1 green
     [2]  = {dmg=0.2, range=30, atkspd=0},   -- lvl 1 red
     [3]  = {dmg=2,   range=30, atkspd=120}, -- lvl 1 yellow
