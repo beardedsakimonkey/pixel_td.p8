@@ -48,7 +48,7 @@ local function fire_bullet_red(twr)
                 enemy=enmy,
                 particles={},
             })
-            twr.cd = 40
+            twr.cd = twr.atkspd
             break
         end
     end
@@ -154,7 +154,7 @@ local function fire_bullet_yellow(twr)
                 enemy=enmy,
                 -- particles={},
             })
-            twr.cd = 120
+            twr.cd = twr.atkspd
             if #twr.bullets > MAX_BULLETS_YELLOW then
                 return
             end
@@ -189,24 +189,24 @@ end
 
 function update_bullets()
     foreach(towers, function(twr)
-        if twr.type == TWR.red then
+        if is_red_twr(twr.type) then
             foreach(twr.bullets, function(blt)
                 update_bullet_red(twr, blt)
             end)
-        elseif twr.type == TWR.green then
+        elseif is_green_twr(twr.type) then
             foreach(twr.bullets, function(blt)
                 update_bullet_green(twr, blt)
             end)
-        elseif twr.type == TWR.yellow then
+        elseif is_yellow_twr(twr.type) then
             update_bullets_yellow(twr)
         end
     end)
     foreach(towers, function(twr)
-        if twr.type == TWR.red then
+        if is_red_twr(twr.type) then
             fire_bullet_red(twr)
-        elseif twr.type == TWR.green then
+        elseif is_green_twr(twr.type) then
             fire_bullet_green(twr)
-        elseif twr.type == TWR.yellow then
+        elseif is_yellow_twr(twr.type) then
             fire_bullet_yellow(twr)
         end
     end)
@@ -214,11 +214,11 @@ end
 
 function draw_bullets()
     foreach(towers, function(twr)
-        if twr.type == TWR.red then
+        if is_red_twr(twr.type) then
             draw_bullets_red(twr)
-        elseif twr.type == TWR.green then
+        elseif is_green_twr(twr.type) then
             draw_bullets_green(twr)
-        elseif twr.type == TWR.yellow then
+        elseif is_yellow_twr(twr.type) then
             draw_bullets_yellow(twr)
         end
     end)

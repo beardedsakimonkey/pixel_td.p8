@@ -5,7 +5,6 @@ upg_menu = nil
 local Menu = {}
 
 local OFFSCREEN = 131
-local MAX_TWR = 3 -- how many types of towers are there
 
 function Menu.new(cfg)
     local m = {
