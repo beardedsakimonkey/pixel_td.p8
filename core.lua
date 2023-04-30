@@ -23,8 +23,12 @@ towers = {}
 wave = 0
 gold = 50
 lives = 20
-
-local MAX_WAVE = 20
+waves = {
+    {hp=3,  speed=0.5, type=ENMY.circ_sm},
+    {hp=6,  speed=0.5, type=ENMY.rect_sm},
+    {hp=9,  speed=0.5, type=ENMY.diam},
+    {hp=12, speed=0.8, type=ENMY.arrow},
+}
 
 --------------------------------------------------------------------------------
 -- INIT
@@ -45,7 +49,7 @@ function _init()
     -- make_tower(TWR.green, 3, 4)
     -- make_tower(TWR.green, 4, 4)
     make_tower(TWR.yellow, 4, 2)
-    foreach(towers, function(twr) twr.age = nil end)
+    foreach(towers, function(twr) twr.age = nil end) -- don't animate
 end
 
 function do_buy(menu)
@@ -227,11 +231,12 @@ function _draw()
 
     -- Draw wave count
     do
-        local str = wave .. '/' .. MAX_WAVE
-        local strlen = #str * 3
-        local left = 128/2 - strlen/2
+        local str = wave .. '/' .. #waves
+        local mid = 128/2 - 1  -- sub one because its zero-indexed
+        local pxlen = #str*4 - 1 -- don't count seperator of 1st char
+        local left = mid - pxlen\2
+        local right = mid + pxlen\2
         local top = 123
-        local right = 128/2 + strlen/2
         rectfill(left-1, top-1, right+1, top+5, C.black)
         print(str, left, top, C.dark_blue)
     end

@@ -107,15 +107,13 @@ end
 function spawn_enemy()
     if sending > 0 and t%20 == 0 then
         sending -= 1
+        local w = waves[wave]
         local dx, dy = 0, 0
-        if     map[1].c == CRNR.top   then dy = 0.5
-        elseif map[1].c == CRNR.left  then dx = 0.5
-        elseif map[1].c == CRNR.right then dx = -0.5
-        elseif map[1].c == CRNR.bot   then dy = -0.5 end
-        local max_hp = 3*wave
-        local type = wave % ENMY_LEN
-        if type == 0 then type = ENMY_LEN end
-        make_enemy(type, max_hp, dx, dy)
+        if     map[1].c == CRNR.top   then dy = w.speed
+        elseif map[1].c == CRNR.left  then dx = w.speed
+        elseif map[1].c == CRNR.right then dx = -w.speed
+        elseif map[1].c == CRNR.bot   then dy = -w.speed end
+        make_enemy(w.type, w.hp, dx, dy)
     end
 end
 
