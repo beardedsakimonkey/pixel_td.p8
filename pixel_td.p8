@@ -4,6 +4,7 @@ __lua__
 #include util.lua
 #include menu.lua
 #include selection.lua
+#include tower.lua
 #include enemy.lua
 #include bullet.lua
 #include core.lua

@@ -19,7 +19,6 @@ map = {
     {x=9,  y=9,  c=CRNR.tr},
     {x=9,  y=10, c=CRNR.bot},
 }
-towers = {}
 wave = 0
 gold = 50
 lives = 20
@@ -41,15 +40,8 @@ function _init()
     init_selection_aux()
     init_enemy_aux()
 
-    -- Set up buy/upgrade/bonus menu
     init_menus()
-
-    -- Make towers
-    -- make_tower(TWR.red, 2, 4)
-    -- make_tower(TWR.green, 3, 4)
-    -- make_tower(TWR.green, 4, 4)
-    make_tower(TWR.yellow, 4, 2)
-    foreach(towers, function(twr) twr.age = nil end) -- don't animate
+    init_towers()
 end
 
 function do_buy(menu)
@@ -67,18 +59,6 @@ function do_upgrade(menu)
     local g = p2g(sel.dst_x, sel.dst_y)
     make_tower(twr.type+3, g.x, g.y)
     del(towers, twr)
-end
-
-function make_tower(type, x, y)
-    add(towers, {
-        type=type,
-        x=x, y=y, -- in grid coordinates
-        range=30,
-        bullets={},
-        cd=0, -- in frames
-        dmg=type == TWR.green and 0.2 or 2,
-        age=0,
-    })
 end
 
 --------------------------------------------------------------------------------
@@ -113,17 +93,7 @@ function _update60()
     spawn_enemy()
     update_enemies()
     update_bullets()
-
-    -- Update towers
-    for tower in all(towers) do
-        if tower.age then
-            if tower.age < 24 then
-                tower.age += 1
-            else
-                tower.age = nil
-            end
-        end
-    end
+    update_towers()
 end
 
 function collide(blt, enmy)
@@ -136,7 +106,7 @@ function is_in_range(enmy, twr)
     return (enmy.x - twr.x*10)^2 + (enmy.y - twr.y*10)^2 < twr.range^2
 end
 
--- TODO: make find_sel_tower function
+-- Todo: make find_sel_tower function
 function twr_is_selected(twr)
     local g = p2g(sel.dst_x, sel.dst_y)
     return twr.x == g.x and twr.y == g.y
@@ -155,6 +125,18 @@ function _draw()
     -- Draw grid lines
     for y = 10, 127, 12 do line(0, y, 127, y, C.dark_blue) end
     for x = 10, 127, 12 do line(x, 0, x, 127, C.dark_blue) end
+
+    -- Draw wave count
+    do
+        local str = wave .. '/' .. #waves
+        local mid = 128/2 - 1  -- sub one because its zero-indexed
+        local pxlen = #str*4 - 1 -- don't count seperator of 1st char
+        local left = mid - pxlen\2
+        local right = mid + pxlen\2
+        local top = 123
+        rectfill(left-1, top-1, right+1, top+5, C.black)
+        print(str, left, top, C.dark_blue)
+    end
 
     -- Draw path
     for i = 2, #map do
@@ -189,59 +171,12 @@ function _draw()
         end
     end
 
-    -- Draw towers
-    foreach(towers, function(twr)
-        local p = g2p(twr)
-        if twr.age and (twr.age\2)%2 == 0 then
-            pal({
-                [0]=C.dark_gray,
-                [1]=C.light_gray,
-                [2]=C.light_gray,
-                [3]=C.light_gray,
-                [4]=C.light_gray,
-                [5]=C.light_gray,
-                [6]=C.white,
-                [7]=C.white,
-                [8]=C.light_gray,
-                [9]=C.light_gray,
-                [10]=C.light_gray,
-                [11]=C.white,
-                [12]=C.white,
-                [13]=C.light_gray,
-                [14]=C.white,
-                [15]=C.white}, 0)
-        end
-        spr(twr.type, p.left+3, p.top+3)
-        pal(0)
-    end)
 
-    -- Draw tower range
-    if upg_menu.is_open then
-        foreach(towers, function(twr)
-            local p = g2p(twr)
-            if twr_is_selected(twr) then
-                circ(p.left+4, p.top+4, twr.range, C.light_gray)
-            end
-        end)
-    end
-
+    draw_towers()
     draw_bullets()
     draw_enemies()
     draw_selection()
 
-    -- Draw wave count
-    do
-        local str = wave .. '/' .. #waves
-        local mid = 128/2 - 1  -- sub one because its zero-indexed
-        local pxlen = #str*4 - 1 -- don't count seperator of 1st char
-        local left = mid - pxlen\2
-        local right = mid + pxlen\2
-        local top = 123
-        rectfill(left-1, top-1, right+1, top+5, C.black)
-        print(str, left, top, C.dark_blue)
-    end
-
-    -- Draw menus
     buy_menu:draw()
     upg_menu:draw()
 
