@@ -49,6 +49,13 @@ function remove_life()
     lives -= 1
 end
 
+function find_sel_tower()
+    return tbl_find(towers, function(twr)
+        local g = p2g(sel.dst_x, sel.dst_y)
+        return twr.x == g.x and twr.y == g.y
+    end)
+end
+
 --------------------------------------------------------------------------------
 -- INIT
 --------------------------------------------------------------------------------
@@ -78,7 +85,7 @@ function _update60()
         upg_menu:handle_btn()
     else
         if btnp(B.z) then
-            local twr = tbl_find(towers, twr_is_selected)
+            local twr = find_sel_tower()
             if twr then
                 upg_menu:open()
             else
@@ -97,12 +104,6 @@ function _update60()
     update_enemies()
     update_bullets()
     update_towers()
-end
-
--- Todo: make find_sel_tower function
-function twr_is_selected(twr)
-    local g = p2g(sel.dst_x, sel.dst_y)
-    return twr.x == g.x and twr.y == g.y
 end
 
 --------------------------------------------------------------------------------

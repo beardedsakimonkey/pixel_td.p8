@@ -168,7 +168,7 @@ function init_menus()
 
     upg_menu.open = function(m)
         Menu.open(m)
-        local twr = tbl_find(towers, twr_is_selected)
+        local twr = find_sel_tower()
         m.twr = twr.type
         m.items[1].disabled = twr.type+MAX_TWR > #tower_cfg
     end
@@ -181,12 +181,12 @@ function do_buy(menu)
 end
 
 function do_sell(menu)
-    local twr = tbl_find(towers, twr_is_selected)
+    local twr = find_sel_tower()
     del(towers, twr)
 end
 
 function do_upgrade(menu)
-    local twr = tbl_find(towers, twr_is_selected)
+    local twr = find_sel_tower()
     local g = p2g(sel.dst_x, sel.dst_y)
     make_tower(twr.type+MAX_TWR, g.x, g.y)
     del(towers, twr)

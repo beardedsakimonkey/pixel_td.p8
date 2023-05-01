@@ -88,11 +88,10 @@ function draw_towers()
 
     -- draw tower range
     if upg_menu.is_open then
-        foreach(towers, function(twr)
+        local twr = find_sel_tower()
+        if twr then
             local p = g2p(twr)
-            if twr_is_selected(twr) then
-                circ(p.left+4, p.top+4, twr.range, C.light_gray)
-            end
-        end)
+            circ(p.left+4, p.top+4, twr.range, C.light_gray)
+        end
     end
 end
