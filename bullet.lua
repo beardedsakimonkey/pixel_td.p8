@@ -1,3 +1,13 @@
+local function collide(blt, enmy)
+    return blt.x > enmy.x-1 and blt.x < enmy.x+1
+    and blt.y > enmy.y-1 and blt.y < enmy.y+1
+end
+
+-- Todo: perf
+local function is_in_range(enmy, twr)
+    return (enmy.x - twr.x*10)^2 + (enmy.y - twr.y*10)^2 < twr.range^2
+end
+
 -- Red -------------------------------------------------------------------------
 
 local function update_bullet_red(twr, blt)

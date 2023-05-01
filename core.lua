@@ -19,9 +19,9 @@ map = {
     {x=9,  y=10, c=CRNR.bot},
 }
 waves = {
-    {hp=3,  speed=0.5, type=ENMY.circ_sm},
-    {hp=6,  speed=0.5, type=ENMY.rect_sm},
-    {hp=9,  speed=0.5, type=ENMY.diam},
+    {hp=3,  speed=0.5, type=ENMY.circ},
+    {hp=6,  speed=0.5, type=ENMY.rect},
+    {hp=9,  speed=0.5, type=ENMY.diamond},
     {hp=12, speed=0.8, type=ENMY.arrow},
     {hp=12, speed=0.8, type=ENMY.arrow},
     {hp=12, speed=0.8, type=ENMY.arrow},
@@ -44,6 +44,10 @@ wave = 0
 gold = 50
 lives = 20
 t = 0
+
+function remove_life()
+    lives -= 1
+end
 
 --------------------------------------------------------------------------------
 -- INIT
@@ -95,24 +99,10 @@ function _update60()
     update_towers()
 end
 
-function collide(blt, enmy)
-    return blt.x > enmy.x-1 and blt.x < enmy.x+1
-       and blt.y > enmy.y-1 and blt.y < enmy.y+1
-end
-
--- Todo: perf
-function is_in_range(enmy, twr)
-    return (enmy.x - twr.x*10)^2 + (enmy.y - twr.y*10)^2 < twr.range^2
-end
-
 -- Todo: make find_sel_tower function
 function twr_is_selected(twr)
     local g = p2g(sel.dst_x, sel.dst_y)
     return twr.x == g.x and twr.y == g.y
-end
-
-function remove_life()
-    lives -= 1
 end
 
 --------------------------------------------------------------------------------
@@ -170,7 +160,6 @@ function _draw()
         end
     end
 
-
     draw_towers()
     draw_bullets()
     draw_enemies()
@@ -194,7 +183,6 @@ function _draw()
         x -= 7
         spr(17, x, y)
     end
-
 
     -- if sending == 0 then
     --     local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
