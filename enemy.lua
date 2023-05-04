@@ -160,9 +160,14 @@ function draw_enemies()
     end)
 end
 
+function can_send_wave()
+    return sending == 0 and #enemies == 0
+end
+
 function send_wave()
-    if sending == 0 then
+    if can_send_wave() then
         wave += 1
         sending = 10
+        show_hint = false
     end
 end

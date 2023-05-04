@@ -3,18 +3,21 @@ towers = {}
 MAX_TWR = 3 -- how many types of towers are there
 
 tower_cfg = {
-    [1]  = {dmg=0.2, range=30, atkspd=0},   -- lvl 1 green
-    [2]  = {dmg=2,   range=30, atkspd=40},  -- lvl 1 red
-    [3]  = {dmg=2,   range=30, atkspd=120}, -- lvl 1 yellow
-    [4]  = {dmg=0.2, range=30, atkspd=0},   -- lvl 2 green
-    [5]  = {dmg=2,   range=30, atkspd=40},  -- lvl 2 red
-    [6]  = {dmg=2,   range=30, atkspd=120}, -- lvl 2 yellow
-    [7]  = {dmg=0.2, range=30, atkspd=0},   -- lvl 3 green
-    [8]  = {dmg=2,   range=30, atkspd=40},  -- lvl 3 red
-    [9]  = {dmg=2,   range=30, atkspd=120}, -- lvl 3 yellow
-    [10] = {dmg=0.2, range=30, atkspd=0},   -- lvl 4 green
-    [11] = {dmg=2,   range=30, atkspd=40},  -- lvl 4 red
-    [12] = {dmg=2,   range=30, atkspd=120}, -- lvl 4 yellow
+    {dmg=0.2, range=30, atkspd=0},   -- lvl 1 green
+    {dmg=2,   range=30, atkspd=40},  -- lvl 1 red
+    {dmg=2,   range=30, atkspd=120}, -- lvl 1 yellow
+
+    {dmg=0.2, range=30, atkspd=0},   -- lvl 2 green
+    {dmg=2,   range=30, atkspd=40},  -- lvl 2 red
+    {dmg=2,   range=30, atkspd=120}, -- lvl 2 yellow
+
+    {dmg=0.2, range=30, atkspd=0},   -- lvl 3 green
+    {dmg=2,   range=30, atkspd=40},  -- lvl 3 red
+    {dmg=2,   range=30, atkspd=120}, -- lvl 3 yellow
+
+    {dmg=0.2, range=30, atkspd=0},   -- lvl 4 green
+    {dmg=2,   range=30, atkspd=40},  -- lvl 4 red
+    {dmg=2,   range=30, atkspd=120}, -- lvl 4 yellow
 }
 
 function is_green_twr(type)  return type % MAX_TWR == 1 end

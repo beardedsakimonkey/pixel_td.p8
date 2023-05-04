@@ -71,6 +71,7 @@ function _init()
     init_towers()
 end
 
+
 --------------------------------------------------------------------------------
 -- UPDATE
 --------------------------------------------------------------------------------
@@ -104,6 +105,7 @@ function _update60()
     update_enemies()
     update_bullets()
     update_towers()
+    update_hint()
 end
 
 --------------------------------------------------------------------------------
@@ -185,11 +187,7 @@ function _draw()
         spr(17, x, y)
     end
 
-    -- if sending == 0 then
-    --     local c = (t%4 == 0 or (t-1)%4 == 0) and C.pink or C.orange
-    --     print('❎ send wave', 22, 1, c)
-    -- end
-    color(C.red)
+    draw_hint()
 end
 
 function get_cell_corner(grid_cell)
