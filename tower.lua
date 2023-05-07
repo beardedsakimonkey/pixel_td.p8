@@ -33,11 +33,13 @@ function init_towers()
     foreach(towers, function(twr) twr.age = nil end) -- don't animate
 end
 
-function make_tower(type, x, y)
+function make_tower(type, gx, gy)
     local cfg = tower_cfg[type]
+    local p = g2p({x=gx, y=gy})
     add(towers, {
         type=type,
-        x=x, y=y, -- in grid coordinates
+        gx=gx, gy=gy, -- in grid coordinates
+        x=p.left+6, y=p.top+6, -- in pixel coordinates
         bullets={},
         max_bullets=cfg.max_bullets or 1,
         cd=0, -- in frames
@@ -85,7 +87,7 @@ function draw_towers()
             }, 0)
         end
         -- draw tower
-        local p = g2p(twr)
+        local p = g2p({x=twr.gx, y=twr.gy})
         spr(twr.type, p.left+3, p.top+3)
         pal(0)
     end)
@@ -94,8 +96,7 @@ function draw_towers()
     if upg_menu.is_open then
         local twr = find_sel_tower()
         if twr then
-            local p = g2p(twr)
-            circ(p.left+4, p.top+4, twr.range, C.light_gray)
+            circ(twr.x, twr.y, twr.range, C.light_gray)
         end
     end
 end

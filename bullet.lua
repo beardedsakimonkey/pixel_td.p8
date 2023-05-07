@@ -5,8 +5,7 @@ end
 
 -- Todo: perf
 local function is_in_range(enmy, twr)
-    local p = g2p(twr)
-    return (enmy.x - p.left+6)^2 + (enmy.y - p.top+6)^2 < twr.range^2
+    return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < twr.range^2
 end
 
 -- Red -------------------------------------------------------------------------
@@ -52,9 +51,8 @@ local function fire_bullet_red(twr)
     if twr.cd > 0 then return end
     for enmy in all(enemies) do
         if is_in_range(enmy, twr) then
-            local p = g2p(twr)
             add(twr.bullets, {
-                x=p.left+6, y=p.top+6,
+                x=twr.x, y=twr.y,
                 rotation=0,
                 enemy=enmy,
                 particles={},
@@ -112,13 +110,12 @@ end
 local function draw_bullets_green(twr)
     local blt = twr.bullets[1]
     if blt then
-        local t = g2p(twr)
         for part in all(blt.particles) do
-            line(t.left+6, t.top+6, part.x, part.y, C.dark_green)
+            line(twr.x, twr.y, part.x, part.y, C.dark_green)
         end
-        line(t.left+6, t.top+6, blt.enemy.x, blt.enemy.y, C.green)
+        line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, C.green)
         -- don't cover up center pixel
-        pset(t.left+6, t.top+6, C.black)
+        pset(twr.x, twr.y, C.black)
         pset(blt.enemy.x, blt.enemy.y, C.black)
     end
 end
@@ -175,7 +172,6 @@ end
 
 local function draw_bullets_yellow(twr)
     for blt in all(twr.bullets) do
-        local t = g2p(twr)
         local color
         if blt.age >= 20 and blt.age <= 42 then
             if     blt.age <= 23 then color = C.dark_blue
@@ -188,9 +184,9 @@ local function draw_bullets_yellow(twr)
             elseif blt.age <= 40 then color = C.yellow
             elseif blt.age <= 41 then color = C.orange
             else                      color = C.brown end
-            line(t.left+6, t.top+6, blt.enemy.x, blt.enemy.y, color)
+            line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
             -- don't cover up center pixel
-            pset(t.left+6, t.top+6, C.black)
+            pset(twr.x, twr.y, C.black)
             pset(blt.enemy.x, blt.enemy.y, C.black)
         end
     end
