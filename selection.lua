@@ -1,8 +1,8 @@
 local _p = g2p({x=5, y=4})
+-- Todo: consider adding gx/gy
 sel = {
     dst_x=_p.left, dst_y=_p.top,
     x=_p.left,     y=_p.top,
-    src_x=_p.left, src_y=_p.top,
     vx=0, vy=0,
 }
 -- Helps impl of selection movement
@@ -53,17 +53,6 @@ local function move_selection(dir)
         end
     end
 
-    if cell_dx ~= 0 then
-        if sel.x ~= sel.dst_x then
-            sel.src_x = sel.x
-        end
-    end
-    if cell_dy ~= 0 then
-        if sel.y ~= sel.dst_y then
-            sel.src_y = sel.y
-        end
-    end
-
     -- Update destination
     local p = g2p({x=dst_x, y=dst_y})
     sel.dst_x = p.left
@@ -86,13 +75,6 @@ function update_selection()
     }
     sel.x, sel.vx = spring(sel.x, sel.dst_x, sel.vx, cfg)
     sel.y, sel.vy = spring(sel.y, sel.dst_y, sel.vy, cfg)
-
-    if sel.x == sel.dst_x and sel.vx == 0 then -- done animating x
-        sel.src_x = sel.dst_x
-    end
-    if sel.y == sel.dst_y and sel.vy == 0 then -- done animating y
-        sel.src_y = sel.dst_y
-    end
 end
 
 function draw_selection()
