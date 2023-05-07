@@ -51,8 +51,7 @@ end
 
 function find_sel_tower()
     return tbl_find(towers, function(twr)
-        local g = p2g(sel.dst_x, sel.dst_y)
-        return twr.gx == g.x and twr.gy == g.y
+        return twr.gx == sel.dst_gx and twr.gy == sel.dst_gy
     end)
 end
 

@@ -54,14 +54,6 @@ function g2p(cell)
     return {top=top, left=left, bot=top+12, right=left+12}
 end
 
--- Convert pixel coordinates to grid coordinates
-function p2g(x, y)
-    return {
-        x=flr((x+2)/12),
-        y=flr((y+2)/12),
-    }
-end
-
 -- Based on https://github.com/chenglou/react-motion/blob/master/src/stepper.js
 function spring(cur_pos, dst_pos, cur_vel, cfg)
     local s = cfg.stiffness or 180

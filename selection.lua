@@ -1,8 +1,9 @@
-local _p = g2p({x=5, y=4})
--- Todo: consider adding gx/gy
+local _init_pos = {x=5, y=4}
+local _p = g2p(_init_pos)
 sel = {
-    dst_x=_p.left, dst_y=_p.top,
-    x=_p.left,     y=_p.top,
+    dst_x=_p.left,      dst_y=_p.top,
+    dst_gx=_init_pos.x, dst_gy=_init_pos.y,
+    x=_p.left,          y=_p.top,
     vx=0, vy=0,
 }
 -- Helps impl of selection movement
@@ -31,9 +32,7 @@ end
 -- Todo: this doesn't actually do the moving
 local function move_selection(dir)
     -- Find destination cell
-    local g = p2g(sel.dst_x, sel.dst_y)
-    local dst_x = g.x
-    local dst_y = g.y
+    local dst_x, dst_y = sel.dst_gx, sel.dst_gy
     local cell_dx = dir == B.right and 1 or dir == B.left and -1 or 0
     local cell_dy = dir == B.down and  1 or dir == B.up   and -1 or 0
     while true do
@@ -57,6 +56,8 @@ local function move_selection(dir)
     local p = g2p({x=dst_x, y=dst_y})
     sel.dst_x = p.left
     sel.dst_y = p.top
+    sel.dst_gx = dst_x
+    sel.dst_gy = dst_y
 end
 
 function update_selection()

@@ -176,8 +176,7 @@ end
 --------------------------------------------------------------------------------
 
 function do_buy(menu)
-    local g = p2g(sel.dst_x, sel.dst_y)
-    make_tower(menu.sel_twr, g.x, g.y)
+    make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
 end
 
 function do_sell(menu)
@@ -187,7 +186,6 @@ end
 
 function do_upgrade(menu)
     local twr = find_sel_tower()
-    local g = p2g(sel.dst_x, sel.dst_y)
-    make_tower(twr.type+MAX_TWR, g.x, g.y)
+    make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
     del(towers, twr)
 end
