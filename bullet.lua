@@ -99,8 +99,6 @@ local function fire_bullet_green(twr)
     for enmy in all(enemies) do
         if is_in_range(enmy, twr) then
             add(twr.bullets, {
-                -- x=0, y=0,
-                -- rotation=0,
                 age=0,
                 enemy=enmy,
                 particles={},
@@ -126,9 +124,6 @@ end
 
 -- Yellow ----------------------------------------------------------------------
 
-local MAX_BULLETS_YELLOW = 3
-local MAX_AGE_YELLOW = 60
-
 local function update_bullets_yellow(twr)
     for blt in all(twr.bullets) do
         if blt.enemy.hp == 0 then
@@ -138,7 +133,7 @@ local function update_bullets_yellow(twr)
         end
     end
     if #twr.bullets == 0 then return end
-    if twr.bullets[1].age >= MAX_AGE_YELLOW then
+    if twr.bullets[1].age >= 60 then
         twr.bullets = {}
     else
         if twr.bullets[1].age == 30 then
@@ -156,18 +151,12 @@ local function fire_bullet_yellow(twr)
     twr.cd = max(0, twr.cd-1)
     if twr.cd > 0 or #twr.bullets > 0 then return end
     for enmy in all(enemies) do
-        if is_in_range(enmy, twr) then
+        if #twr.bullets < twr.max_bullets and is_in_range(enmy, twr) then
             add(twr.bullets, {
-                -- x=0, y=0,
-                -- rotation=0,
                 age=0,
                 enemy=enmy,
-                -- particles={},
             })
             twr.cd = twr.atkspd
-            if #twr.bullets > MAX_BULLETS_YELLOW then
-                return
-            end
         end
     end
 end

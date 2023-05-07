@@ -3,21 +3,21 @@ towers = {}
 MAX_TWR = 3 -- how many types of towers are there
 
 tower_cfg = {
-    {dmg=0.2, range=30, atkspd=0},   -- lvl 1 green
-    {dmg=2,   range=30, atkspd=40},  -- lvl 1 red
-    {dmg=2,   range=30, atkspd=120}, -- lvl 1 yellow
+    {dmg=0.2, range=30},                            -- lvl 1 green
+    {dmg=2,   range=30, atkspd=40},                 -- lvl 1 red
+    {dmg=2,   range=30, atkspd=120},                -- lvl 1 yellow
 
-    {dmg=0.2, range=30, atkspd=0},   -- lvl 2 green
-    {dmg=2,   range=30, atkspd=40},  -- lvl 2 red
-    {dmg=2,   range=30, atkspd=120}, -- lvl 2 yellow
+    {dmg=0.2, range=30},                            -- lvl 2 green
+    {dmg=2,   range=30, atkspd=40},                 -- lvl 2 red
+    {dmg=2,   range=30, atkspd=120, max_bullets=2}, -- lvl 2 yellow
 
-    {dmg=0.2, range=30, atkspd=0},   -- lvl 3 green
-    {dmg=2,   range=30, atkspd=40},  -- lvl 3 red
-    {dmg=2,   range=30, atkspd=120}, -- lvl 3 yellow
+    {dmg=0.2, range=30},                            -- lvl 3 green
+    {dmg=2,   range=30, atkspd=40},                 -- lvl 3 red
+    {dmg=2,   range=30, atkspd=120, max_bullets=3}, -- lvl 3 yellow
 
-    {dmg=0.2, range=30, atkspd=0},   -- lvl 4 green
-    {dmg=2,   range=30, atkspd=40},  -- lvl 4 red
-    {dmg=2,   range=30, atkspd=120}, -- lvl 4 yellow
+    {dmg=0.2, range=30},                            -- lvl 4 green
+    {dmg=2,   range=30, atkspd=40},                 -- lvl 4 red
+    {dmg=2,   range=30, atkspd=120, max_bullets=4}, -- lvl 4 yellow
 }
 
 function is_green_twr(type)  return type % MAX_TWR == 1 end
@@ -39,8 +39,9 @@ function make_tower(type, x, y)
         type=type,
         x=x, y=y, -- in grid coordinates
         bullets={},
+        max_bullets=cfg.max_bullets or 1,
         cd=0, -- in frames
-        atkspd=cfg.atkspd,
+        atkspd=cfg.atkspd or 0,
         dmg=cfg.dmg,
         range=cfg.range,
         age=0, -- for flicker
