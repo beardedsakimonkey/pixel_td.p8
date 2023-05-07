@@ -63,7 +63,6 @@ end
 
 function draw_towers()
     foreach(towers, function(twr)
-        local p = g2p(twr)
         -- draw flicker
         if twr.age and (twr.age\2)%2 == 0 then
             pal({
@@ -86,6 +85,7 @@ function draw_towers()
             }, 0)
         end
         -- draw tower
+        local p = g2p(twr)
         spr(twr.type, p.left+3, p.top+3)
         pal(0)
     end)

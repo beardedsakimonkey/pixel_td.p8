@@ -5,7 +5,8 @@ end
 
 -- Todo: perf
 local function is_in_range(enmy, twr)
-    return (enmy.x - twr.x*10)^2 + (enmy.y - twr.y*10)^2 < twr.range^2
+    local p = g2p(twr)
+    return (enmy.x - p.left+6)^2 + (enmy.y - p.top+6)^2 < twr.range^2
 end
 
 -- Red -------------------------------------------------------------------------
