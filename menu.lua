@@ -105,7 +105,6 @@ function init_menus()
     end
 
     local CAROUSEL_GAP = 20
-    local BUY_PRICE = 20
 
     buy_menu.update = function(m)
         Menu.update(m)
@@ -142,13 +141,13 @@ function init_menus()
             pal()
         end
         clip()
-        print(BUY_PRICE, m.x+26, m.y+11+8*0, C.indigo)
+        print(tower_cfg[m.sel_twr].buy, m.x+26, m.y+11+8*0, C.indigo)
     end
 
     buy_menu.open = function(m)
         Menu.open(m)
         m.sel_twr = 1
-        m.items[1].disabled = gold < BUY_PRICE
+        m.items[1].disabled = gold < tower_cfg[m.sel_twr].buy
     end
 
     upg_menu = Menu.new({x=35, dst_y=89, w=59, h=36})
@@ -159,33 +158,37 @@ function init_menus()
     upg_menu.draw = function(m)
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
-        print('20', m.x+44, m.y+12+8*0, C.indigo)
-        print('20', m.x+44, m.y+12+8*1, C.indigo)
-        if m.twr <= 3 then pal(1, 0) end
-        spr(m.twr, m.x+26, m.y+2)
+        if m.twr.upg then
+            print(m.twr.upg, m.x+44, m.y+12+8*0, C.indigo)
+        end
+        print(m.twr.sell, m.x+44, m.y+12+8*1, C.indigo)
+        if m.twr.type <= 3 then pal(1, 0) end
+        spr(m.twr.type, m.x+26, m.y+2)
         pal()
     end
 
     upg_menu.open = function(m)
         Menu.open(m)
-        local twr = find_sel_tower()
-        m.twr = twr.type
-        m.items[1].disabled = twr.type+MAX_TWR > #tower_cfg
+        m.twr = find_sel_tower()
+        m.items[1].disabled = not m.twr.upg or gold < m.twr.upg
     end
 end
 --------------------------------------------------------------------------------
 
 function do_buy(menu)
-    make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
+    local twr = make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
+    gold -= twr.buy
 end
 
 function do_sell(menu)
     local twr = find_sel_tower()
+    gold += twr.sell
     del(towers, twr)
 end
 
 function do_upgrade(menu)
     local twr = find_sel_tower()
     make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
+    gold -= twr.upg
     del(towers, twr)
 end

@@ -41,7 +41,7 @@ waves = {
     {hp=12, speed=0.8, type=ENMY.arrow},
 }
 wave = 0
-gold = 50
+gold = 500
 lives = 20
 t = 0
 

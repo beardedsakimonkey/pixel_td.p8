@@ -3,21 +3,21 @@ towers = {}
 MAX_TWR = 3 -- how many types of towers are there
 
 tower_cfg = {
-    {dmg=0.2, range=30},                            -- lvl 1 green
-    {dmg=2,   range=30, atkspd=40},                 -- lvl 1 red
-    {dmg=2,   range=30, atkspd=120},                -- lvl 1 yellow
+    {dmg=0.2, range=30,                            buy=20, upg=20, sell=20}, -- lvl 1 green
+    {dmg=2,   range=30, atkspd=40,                 buy=20, upg=20, sell=20}, -- lvl 1 red
+    {dmg=2,   range=30, atkspd=120,                buy=20, upg=20, sell=20}, -- lvl 1 yellow
 
-    {dmg=0.2, range=30},                            -- lvl 2 green
-    {dmg=2,   range=30, atkspd=40,  max_bullets=2}, -- lvl 2 red
-    {dmg=2,   range=30, atkspd=120, max_bullets=2}, -- lvl 2 yellow
+    {dmg=0.2, range=30,                            upg=20, sell=20}, -- lvl 2 green
+    {dmg=2,   range=30, atkspd=40,  max_bullets=2, upg=20, sell=20}, -- lvl 2 red
+    {dmg=2,   range=30, atkspd=120, max_bullets=2, upg=20, sell=20}, -- lvl 2 yellow
 
-    {dmg=0.2, range=30},                            -- lvl 3 green
-    {dmg=2,   range=30, atkspd=40,  max_bullets=3}, -- lvl 3 red
-    {dmg=2,   range=30, atkspd=120, max_bullets=3}, -- lvl 3 yellow
+    {dmg=0.2, range=30,                            upg=20, sell=20}, -- lvl 3 green
+    {dmg=2,   range=30, atkspd=40,  max_bullets=3, upg=20, sell=20}, -- lvl 3 red
+    {dmg=2,   range=30, atkspd=120, max_bullets=3, upg=20, sell=20}, -- lvl 3 yellow
 
-    {dmg=0.2, range=30},                            -- lvl 4 green
-    {dmg=2,   range=30, atkspd=40,  max_bullets=4}, -- lvl 4 red
-    {dmg=2,   range=30, atkspd=120, max_bullets=4}, -- lvl 4 yellow
+    {dmg=0.2, range=30,                            sell=20}, -- lvl 4 green
+    {dmg=2,   range=30, atkspd=40,  max_bullets=4, sell=20}, -- lvl 4 red
+    {dmg=2,   range=30, atkspd=120, max_bullets=4, sell=20}, -- lvl 4 yellow
 }
 
 function is_green_twr(type)  return type % MAX_TWR == 1 end
@@ -36,7 +36,7 @@ end
 function make_tower(type, gx, gy)
     local cfg = tower_cfg[type]
     local p = g2p({x=gx, y=gy})
-    add(towers, {
+    return add(towers, {
         type=type,
         gx=gx, gy=gy, -- in grid coordinates
         x=p.left+6, y=p.top+6, -- in pixel coordinates
@@ -47,6 +47,7 @@ function make_tower(type, gx, gy)
         dmg=cfg.dmg,
         range=cfg.range,
         age=0, -- for flicker
+        buy=cfg.buy, sell=cfg.sell, upg=cfg.upg,
     })
 end
 
