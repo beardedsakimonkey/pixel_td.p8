@@ -74,6 +74,7 @@ end
 -- UPDATE
 --------------------------------------------------------------------------------
 function _update60()
+    debug = {}
     t += 1
     update_selection()
 
@@ -186,6 +187,13 @@ function _draw()
     end
 
     draw_hint()
+
+    -- Draw debug messages
+    color(C.light_gray)
+    cursor(2, 2)
+    for msg in all(debug) do
+        print(msg)
+    end
 end
 
 function get_cell_corner(grid_cell)
