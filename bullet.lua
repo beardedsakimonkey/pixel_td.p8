@@ -125,18 +125,29 @@ end
 -- Yellow ----------------------------------------------------------------------
 
 local function update_bullets_yellow(twr)
+    local REGISTER_DMG = 30
+    local num_bullets = #twr.bullets
+    local misfires = 0 -- enemy died before bullet registered damage
     for blt in all(twr.bullets) do
         if blt.enemy.hp == 0 then
+            if blt.age < REGISTER_DMG then
+                misfires += 1
+            end
             del(twr.bullets, blt)
         else
             blt.age += 1
         end
     end
+    -- if all bullets were misfired, reset cd
+    if misfires > 0 and misfires == num_bullets then
+        twr.cd = 0
+        return
+    end
     if #twr.bullets == 0 then return end
     if twr.bullets[1].age >= 60 then
         twr.bullets = {}
     else
-        if twr.bullets[1].age == 30 then
+        if twr.bullets[1].age == REGISTER_DMG then
             -- register damage & slow
             for blt in all(twr.bullets) do
                 blt.enemy.hp = max(0, blt.enemy.hp-twr.dmg)
@@ -167,8 +178,8 @@ local function draw_bullets_yellow(twr)
         local color
         if blt.age >= 20 and blt.age <= 42 then
             if     blt.age <= 23 then color = C.dark_blue
-            elseif blt.age <= 24 then color = C.brown
-            elseif blt.age <= 27 then color = C.orange
+            elseif blt.age <= 26 then color = C.brown
+            elseif blt.age <= 28 then color = C.orange
             elseif blt.age <= 30 then color = C.yellow
             elseif blt.age <= 36 then color = C.peach
             elseif blt.age <= 37 then color = C.white
