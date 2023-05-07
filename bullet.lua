@@ -50,7 +50,7 @@ local function fire_bullet_red(twr)
     twr.cd = max(0, twr.cd-1)
     if twr.cd > 0 then return end
     for enmy in all(enemies) do
-        if is_in_range(enmy, twr) then
+        if #twr.bullets < twr.max_bullets and is_in_range(enmy, twr) then
             add(twr.bullets, {
                 x=twr.x, y=twr.y,
                 rotation=0,
@@ -58,7 +58,6 @@ local function fire_bullet_red(twr)
                 particles={},
             })
             twr.cd = twr.atkspd
-            break
         end
     end
 end
