@@ -19,41 +19,31 @@ map = {
     {x=9,  y=10, c=CRNR.bot},
 }
 waves = {
-    {hp=3,  speed=0.5, type=ENMY.circ},
-    {hp=6,  speed=0.5, type=ENMY.rect},
-    {hp=9,  speed=0.5, type=ENMY.diamond},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
-    {hp=12, speed=0.8, type=ENMY.arrow},
+    {hp=3,  speed=0.25, gold=4, type=ENMY.circ},
+    {hp=6,  speed=0.25, gold=4, type=ENMY.rect},
+    {hp=9,  speed=0.25, gold=4, type=ENMY.diamond},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
+    {hp=12, speed=0.5,  gold=4, type=ENMY.arrow},
 }
 wave = 0
-gold = 500
+gold = 100
 lives = 20
 t = 0
-
-function remove_life()
-    lives -= 1
-end
-
-function find_sel_tower()
-    return tbl_find(towers, function(twr)
-        return twr.gx == sel.dst_gx and twr.gy == sel.dst_gy
-    end)
-end
 
 --------------------------------------------------------------------------------
 -- INIT

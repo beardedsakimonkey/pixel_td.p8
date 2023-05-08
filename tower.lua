@@ -3,33 +3,39 @@ towers = {}
 MAX_TWR = 3 -- how many types of towers are there
 
 tower_cfg = {
-    {dmg=0.2, range=30,                            buy=20, upg=20, sell=20}, -- lvl 1 green
-    {dmg=2,   range=30, atkspd=40,                 buy=20, upg=20, sell=20}, -- lvl 1 red
-    {dmg=2,   range=30, atkspd=120,                buy=20, upg=20, sell=20}, -- lvl 1 yellow
+    {dmg=0.2, range=30,                            buy=40, upg=20, sell=20}, -- lvl 1 green
+    {dmg=2,   range=30, atkspd=40,                 buy=40, upg=20, sell=20}, -- lvl 1 red
+    {dmg=2,   range=30, atkspd=120,                buy=40, upg=20, sell=20}, -- lvl 1 yellow
 
-    {dmg=0.2, range=30,                            upg=20, sell=20}, -- lvl 2 green
-    {dmg=2,   range=30, atkspd=40,  max_bullets=2, upg=20, sell=20}, -- lvl 2 red
-    {dmg=2,   range=30, atkspd=120, max_bullets=2, upg=20, sell=20}, -- lvl 2 yellow
+    {dmg=0.2, range=33,                            upg=20, sell=20}, -- lvl 2 green
+    {dmg=2,   range=33, atkspd=40,  max_bullets=2, upg=20, sell=20}, -- lvl 2 red
+    {dmg=2,   range=33, atkspd=120, max_bullets=2, upg=20, sell=20}, -- lvl 2 yellow
 
-    {dmg=0.2, range=30,                            upg=20, sell=20}, -- lvl 3 green
-    {dmg=2,   range=30, atkspd=40,  max_bullets=3, upg=20, sell=20}, -- lvl 3 red
-    {dmg=2,   range=30, atkspd=120, max_bullets=3, upg=20, sell=20}, -- lvl 3 yellow
+    {dmg=0.2, range=36,                            upg=20, sell=20}, -- lvl 3 green
+    {dmg=2,   range=36, atkspd=40,  max_bullets=3, upg=20, sell=20}, -- lvl 3 red
+    {dmg=2,   range=36, atkspd=120, max_bullets=3, upg=20, sell=20}, -- lvl 3 yellow
 
-    {dmg=0.2, range=30,                            sell=20}, -- lvl 4 green
-    {dmg=2,   range=30, atkspd=40,  max_bullets=4, sell=20}, -- lvl 4 red
-    {dmg=2,   range=30, atkspd=120, max_bullets=4, sell=20}, -- lvl 4 yellow
+    {dmg=0.2, range=39,                            sell=20}, -- lvl 4 green
+    {dmg=2,   range=39, atkspd=40,  max_bullets=4, sell=20}, -- lvl 4 red
+    {dmg=2,   range=39, atkspd=120, max_bullets=4, sell=20}, -- lvl 4 yellow
 }
 
 function is_green_twr(type)  return type % MAX_TWR == 1 end
 function is_red_twr(type)    return type % MAX_TWR == 2 end
 function is_yellow_twr(type) return type % MAX_TWR == 0 end
 
+function find_sel_tower()
+    return tbl_find(towers, function(twr)
+        return twr.gx == sel.dst_gx and twr.gy == sel.dst_gy
+    end)
+end
+
 function init_towers()
     local GREEN, RED, YELLOW = 1, 2, 3
-    make_tower(RED, 2, 4)
+    -- make_tower(RED, 2, 4)
     -- make_tower(GREEN, 3, 4)
     -- make_tower(GREEN, 4, 4)
-    make_tower(YELLOW, 4, 2)
+    -- make_tower(YELLOW, 4, 2)
     foreach(towers, function(twr) twr.age = nil end) -- don't animate
 end
 

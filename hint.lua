@@ -35,5 +35,7 @@ function draw_hint()
     -- Draw button
     local glisten_delay = 300 -- 10 sec
     local s = 48 + max(0, (t\2)%(glisten_delay+11) - glisten_delay)
+    palt(C.black, false)
     spr(s, x, y)
+    palt()
 end

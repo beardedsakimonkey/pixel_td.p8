@@ -147,6 +147,7 @@ function init_menus()
     buy_menu.open = function(m)
         Menu.open(m)
         m.sel_twr = 1
+        -- Todo: update this dynamically
         m.items[1].disabled = gold < tower_cfg[m.sel_twr].buy
     end
 

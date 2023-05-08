@@ -3,7 +3,7 @@ enemies = {}
 -- Helps impl of enemy movement
 local path_points = {}
 
-local function make_enemy(type, max_hp, dx, dy)
+local function make_enemy(type, max_hp, gold, dx, dy)
     add(enemies, {
         type=type,
         x=path_points[1].x,
@@ -11,6 +11,7 @@ local function make_enemy(type, max_hp, dx, dy)
         dx=dx, dy=dy,
         hp=max_hp, max_hp=max_hp,
         slow=1, slow_dur=0,
+        gold=gold,
     })
 end
 
@@ -69,7 +70,7 @@ local function move_enemy(e)
             else
                 -- enemy got to the end
                 e.hp = 0
-                remove_life()
+                lives -= 1
             end
         else
             e.x += (e.dx * e.slow)
@@ -90,7 +91,7 @@ local function move_enemy(e)
             else
                 -- enemy got to the end
                 e.hp = 0
-                remove_life()
+                lives -= 1
             end
         else
             e.y += (e.dy * e.slow)
@@ -113,7 +114,7 @@ function spawn_enemy()
         elseif map[1].c == CRNR.left  then dx = w.speed
         elseif map[1].c == CRNR.right then dx = -w.speed
         elseif map[1].c == CRNR.bot   then dy = -w.speed end
-        make_enemy(w.type, w.hp, dx, dy)
+        make_enemy(w.type, w.hp, w.gold, dx, dy)
     end
 end
 

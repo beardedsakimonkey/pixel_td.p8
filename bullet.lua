@@ -37,6 +37,9 @@ local function update_bullet_red(twr, blt)
     -- handle collision
     if collide(blt, enmy) then
         enmy.hp = max(0, enmy.hp-twr.dmg)
+        if enmy.hp == 0 then
+            gold += enmy.gold
+        end
         del(twr.bullets, blt)
     else
         -- add particle
@@ -81,6 +84,9 @@ local function update_bullet_green(twr, blt)
         blt.age += 1
         if blt.age > 2 then -- don't trigger damage every frame
             enmy.hp = max(0, enmy.hp-twr.dmg)
+            if enmy.hp == 0 then
+                gold += enmy.gold
+            end
             blt.age = 0
         end
         -- update particle
@@ -147,9 +153,13 @@ local function update_bullets_yellow(twr)
         if twr.bullets[1].age == REGISTER_DMG then
             -- register damage & slow
             for blt in all(twr.bullets) do
-                blt.enemy.hp = max(0, blt.enemy.hp-twr.dmg)
-                blt.enemy.slow = 0.3
-                blt.enemy.slow_dur = 100
+                local enmy = blt.enemy
+                enmy.hp = max(0, enmy.hp-twr.dmg)
+                if enmy.hp == 0 then
+                    gold += enmy.gold
+                end
+                enmy.slow = 0.3
+                enmy.slow_dur = 100
             end
         end
     end
