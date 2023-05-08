@@ -1,5 +1,4 @@
 Juice:
 - screen shake on enemy reaching end
-- green laser fades out + in after switching targets
 - gold amount winds down after buying something?
 - when hovering over the buy button, show the tower in the map with its range visible

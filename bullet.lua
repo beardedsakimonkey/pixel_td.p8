@@ -82,18 +82,11 @@ local function update_bullet_green(twr, blt)
         del(twr.bullets, blt)
     else
         blt.age += 1
-        if blt.age > 2 then -- don't trigger damage every frame
+        if blt.age%3 == 0 then -- don't trigger damage every frame
             enmy.hp = max(0, enmy.hp-twr.dmg)
             if enmy.hp == 0 then
                 gold += enmy.gold
             end
-            blt.age = 0
-        end
-        -- update particle
-        local oldx, oldy = enmy.x, enmy.y
-        if t%3 == 0 then
-            deli(blt.particles, 1)
-            add(blt.particles, {x=oldx, y=oldy, age=1})
         end
     end
 end
@@ -105,7 +98,6 @@ local function fire_bullet_green(twr)
             add(twr.bullets, {
                 age=0,
                 enemy=enmy,
-                particles={},
             })
             return
         end
@@ -113,12 +105,12 @@ local function fire_bullet_green(twr)
 end
 
 local function draw_bullets_green(twr)
-    local blt = twr.bullets[1]
-    if blt then
-        for part in all(blt.particles) do
-            line(twr.x, twr.y, part.x, part.y, C.dark_green)
-        end
-        line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, C.green)
+    for blt in all(twr.bullets) do
+        local v = cos((blt.age%61)/60)
+        local color = v > 0.95 and C.dark_blue
+                    or v > 0.6 and C.dark_green
+                    or C.green
+        line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
         -- don't cover up center pixel
         pset(twr.x, twr.y, C.black)
         pset(blt.enemy.x, blt.enemy.y, C.black)
