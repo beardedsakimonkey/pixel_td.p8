@@ -81,6 +81,9 @@ end
 function draw_selection()
     local top   = sel.y + 1
     local left  = sel.x + 1
+    -- snap to upper pixel when moving right/down
+    if sel.vy > 0 then top = ceil(top) end
+    if sel.vx > 0 then left = ceil(left) end
     local bot   = top + 10
     local right = left + 10
     local color = C.light_gray

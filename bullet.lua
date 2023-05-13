@@ -1,3 +1,4 @@
+-- Todo: support variable hitbox
 local function collide(blt, enmy)
     return blt.x > enmy.x-1 and blt.x < enmy.x+1
        and blt.y > enmy.y-1 and blt.y < enmy.y+1
