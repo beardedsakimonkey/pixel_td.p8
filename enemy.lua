@@ -3,6 +3,16 @@ enemies = {}
 -- Helps impl of enemy movement
 local path_points = {}
 
+function init_enemy_aux()
+    for i = 1, #map do
+        local p = g2p(map[i])
+        add(path_points, {
+            x = p.left + 6,
+            y = p.top + 6,
+        })
+    end
+end
+
 local MAX_DEATH_AGE = 3
 
 local function make_enemy(type, max_hp, gold, dx, dy)
@@ -18,13 +28,26 @@ local function make_enemy(type, max_hp, gold, dx, dy)
     })
 end
 
-function init_enemy_aux()
-    for i = 1, #map do
-        local p = g2p(map[i])
-        add(path_points, {
-            x = p.left + 6,
-            y = p.top + 6,
-        })
+function spawn_enemy()
+    if sending > 0 then
+        local w = waves[wave]
+        -- Send out enemies with a 10px gap
+        -- speed (px/frame) * X frames = 10px
+        --  => X = 10px / speed
+        local frames = flr(10/w.speed)
+        if t % frames == 0 then
+            sending -= 1
+            local dx, dy = 0, 0
+            if     map[1].c == CRNR.top   then dy = w.speed
+            elseif map[1].c == CRNR.left  then dx = w.speed
+            elseif map[1].c == CRNR.right then dx = -w.speed
+            elseif map[1].c == CRNR.bot   then dy = -w.speed end
+            if w.boss_hp and sending == 0 then
+                make_enemy(ENMY.boss, w.boss_hp, w.boss_gold, dx, dy)
+            else
+                make_enemy(w.type, w.hp, w.gold, dx, dy)
+            end
+        end
     end
 end
 
@@ -103,35 +126,6 @@ local function move_enemy(e)
     end
 end
 
-local function del_enemy(enmy)
-    if enmy.hp == 0 and enmy.death_age == MAX_DEATH_AGE then
-        del(enemies, enmy)
-    end
-end
-
-function spawn_enemy()
-    if sending > 0 then
-        local w = waves[wave]
-        -- Send out enemies with a 10px gap
-        -- speed (px/frame) * X frames = 10px
-        --  => X = 10px / speed
-        local frames = flr(10/w.speed)
-        if t % frames == 0 then
-            sending -= 1
-            local dx, dy = 0, 0
-            if     map[1].c == CRNR.top   then dy = w.speed
-            elseif map[1].c == CRNR.left  then dx = w.speed
-            elseif map[1].c == CRNR.right then dx = -w.speed
-            elseif map[1].c == CRNR.bot   then dy = -w.speed end
-            if w.boss_hp and sending == 0 then
-                make_enemy(ENMY.boss, w.boss_hp, w.boss_gold, dx, dy)
-            else
-                make_enemy(w.type, w.hp, w.gold, dx, dy)
-            end
-        end
-    end
-end
-
 function update_enemies()
     foreach(enemies, function(enmy)
         -- update death animation
@@ -147,7 +141,12 @@ function update_enemies()
         -- update position
         move_enemy(enmy)
     end)
-    foreach(enemies, del_enemy)
+    foreach(enemies, function(enmy)
+        -- delete enemy
+        if enmy.hp == 0 and enmy.death_age == MAX_DEATH_AGE then
+            del(enemies, enmy)
+        end
+    end)
 end
 
 function draw_enemies()
