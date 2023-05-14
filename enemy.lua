@@ -97,7 +97,8 @@ local function move_enemy(e)
             else
                 -- enemy got to the end
                 e.hp = 0
-                lives -= 1
+                e.death_age = MAX_DEATH_AGE
+                remove_life()
             end
         else
             e.x += (e.dx * e.slow)
@@ -118,7 +119,8 @@ local function move_enemy(e)
             else
                 -- enemy got to the end
                 e.hp = 0
-                lives -= 1
+                e.death_age = MAX_DEATH_AGE
+                remove_life()
             end
         else
             e.y += (e.dy * e.slow)

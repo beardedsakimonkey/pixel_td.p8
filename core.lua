@@ -64,10 +64,17 @@ wave = 0
 gold = 100
 lives = 20
 bonuses = {}
+-- TODO: handle interest
 interest = 3
 bonus_dmg = 1
 bonus_rng = 1
 t = 0
+shake = 0
+
+function remove_life()
+    lives -= 1
+    shake = 3
+end
 
 --------------------------------------------------------------------------------
 -- INIT
@@ -123,6 +130,15 @@ function _update60()
     bonus_menu:update() -- should go after update_enemies()
 
     update_hint() -- should go after bonus_menu:update()
+
+    -- Shake camera
+    if shake > 0 then
+        local shake_x = rnd(shake) - shake/2
+        local shake_y = rnd(shake) - shake/2
+        camera(shake_x, shake_y)
+        shake *= 0.9
+        if shake < 0.3 then shake = 0 end
+    end
 end
 
 --------------------------------------------------------------------------------
@@ -198,6 +214,10 @@ function _draw()
     upg_menu:draw()
     bonus_menu:draw()
 
+    draw_hint()
+    -- things drawn below will not be affected by screen shake
+    camera()
+
     -- Draw stats
     do
         local lives = tostr(lives)
@@ -213,8 +233,6 @@ function _draw()
         x -= 7
         spr(17, x, y)
     end
-
-    draw_hint()
 
     -- Draw debug messages
     color(C.light_gray)
