@@ -119,7 +119,11 @@ function spawn_enemy()
             elseif map[1].c == CRNR.left  then dx = w.speed
             elseif map[1].c == CRNR.right then dx = -w.speed
             elseif map[1].c == CRNR.bot   then dy = -w.speed end
-            make_enemy(w.type, w.hp, w.gold, dx, dy)
+            if w.boss_hp and sending == 0 then
+                make_enemy(ENMY.boss, w.boss_hp, w.boss_gold, dx, dy)
+            else
+                make_enemy(w.type, w.hp, w.gold, dx, dy)
+            end
         end
     end
 end
@@ -158,6 +162,8 @@ function draw_enemies()
                      enmy.x, enmy.y+(enmy.dy > 0 and 2 or -2), C.light_gray)
                 line(enmy.x+2, enmy.y)
             end
+        elseif enmy.type == ENMY.boss then
+            circ(enmy.x, enmy.y, 2, C.yellow)
         end
         -- Draw hp
         local hp_y = enmy.y - 4

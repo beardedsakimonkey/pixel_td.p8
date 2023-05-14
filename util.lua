@@ -1,11 +1,3 @@
-local function tbl_len(t)
-    local len = 0
-    for _ in pairs(t) do
-        len += 1
-    end
-    return len
-end
-
 function tbl_filter(t, fn)
     local res = {}
     foreach(t, function(v)
@@ -30,8 +22,7 @@ C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
      yellow=10,   green=11,     blue=12,       indigo=13,    pink=14,
      peach=15}
 CRNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
-ENMY = {circ=1, rect=2, diamond=3, arrow=4}
-ENMY_LEN = tbl_len(ENMY)
+ENMY = {circ=1, rect=2, diamond=3, arrow=4, boss=5}
 BNS = {int=1, dmg=2, rng=3}
 
 function lerp(a, b, t)
