@@ -160,8 +160,10 @@ function draw_enemies()
         end
         if enmy.type == ENMY.circ then
             circ(enmy.x, enmy.y, 1, C.light_gray)
-        elseif enmy.type == ENMY.rect then
+        elseif enmy.type == ENMY.square then
             rect(enmy.x-1, enmy.y-1, enmy.x+1, enmy.y+1, C.light_gray)
+        elseif enmy.type == ENMY.rect then
+            rect(enmy.x-2, enmy.y-1, enmy.x+2, enmy.y+1, C.light_gray)
         elseif enmy.type == ENMY.diamond then
             line(enmy.x, enmy.y-2, enmy.x-2, enmy.y, C.light_gray) -- top left
             line(enmy.x, enmy.y+2) -- bot left
