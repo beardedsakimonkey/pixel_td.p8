@@ -2,24 +2,6 @@ towers = {}
 
 MAX_TWR = 3 -- how many types of towers are there
 
-tower_cfg = {
-    {dmg=0.2, range=30,                           buy=40, upg=30, sell=40}, -- lvl 1 green
-    {dmg=2,   range=30, atkspd=40,                buy=40, upg=30, sell=40}, -- lvl 1 red
-    {dmg=2,   range=30, atkspd=80,                buy=40, upg=30, sell=40}, -- lvl 1 yellow
-
-    {dmg=0.25,range=33,                           upg=40, sell=70}, -- lvl 2 green
-    {dmg=2,   range=33, atkspd=40, max_bullets=2, upg=40, sell=70}, -- lvl 2 red
-    {dmg=3,   range=33, atkspd=70, max_bullets=2, upg=40, sell=70}, -- lvl 2 yellow
-
-    {dmg=0.3, range=36,                           upg=50, sell=110}, -- lvl 3 green
-    {dmg=2,   range=36, atkspd=40, max_bullets=3, upg=50, sell=110}, -- lvl 3 red
-    {dmg=4,   range=36, atkspd=60, max_bullets=3, upg=50, sell=110}, -- lvl 3 yellow
-
-    {dmg=0.35,range=39,                           sell=160}, -- lvl 4 green
-    {dmg=2,   range=39, atkspd=40, max_bullets=4, sell=160}, -- lvl 4 red
-    {dmg=5,   range=39, atkspd=50, max_bullets=4, sell=160}, -- lvl 4 yellow
-}
-
 function is_green_twr(type)  return type % MAX_TWR == 1 end
 function is_red_twr(type)    return type % MAX_TWR == 2 end
 function is_yellow_twr(type) return type % MAX_TWR == 0 end
