@@ -188,6 +188,15 @@ function _draw()
 
     draw_hint()
 
+    -- Draw bonuses
+    for i, bonus in ipairs(bonuses) do
+        local s
+        if     bonus == BNS.int then s = 35
+        elseif bonus == BNS.dmg then s = 36
+        elseif bonus == BNS.rng then s = 37 end
+        spr(s, 2+12*(i-1), 122)
+    end
+
     -- Draw debug messages
     color(C.light_gray)
     cursor(2, 2)
