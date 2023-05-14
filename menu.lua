@@ -166,7 +166,7 @@ function init_menus()
         print(m.twr.sell, m.x+44, m.y+12+8*1, C.indigo)
         if m.twr.type <= 3 then pal(1, 0) end
         spr(m.twr.type, m.x+26, m.y+2)
-        pal()
+        pal(0)
     end
 
     upg_menu.open = function(m)
@@ -196,15 +196,15 @@ function init_menus()
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
         print('bonus', m.x+25, m.y+3, C.light_gray)
-        if m.cur_idx == 1 then pal(C.indigo, C.yellow) end
+        if m.cur_idx == 1 then pal(C.indigo, C.yellow, 0) end
         spr(32, 91, m.y+11+8*0)
-        pal()
-        if m.cur_idx == 2 then pal(C.indigo, C.red) end
+        pal(0)
+        if m.cur_idx == 2 then pal(C.indigo, C.red, 0) end
         spr(33, 91, m.y+11+8*1)
-        pal()
-        if m.cur_idx == 3 then pal(C.indigo, C.green) end
+        pal(0)
+        if m.cur_idx == 3 then pal(C.indigo, C.green, 0) end
         spr(34, 91, m.y+11+8*2)
-        pal()
+        pal(0)
     end
 
     bonus_menu.handle_btn = function(m)
