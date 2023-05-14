@@ -48,16 +48,8 @@ function wrap(min, v, max)
     return v
 end
 
--- Note: only supports positive numbers
 function round(v)
-    local rem = v%1
-    if rem == 0 then
-        return v
-    elseif rem < 0.5 then
-        return flr(v)
-    else
-        return ceil(v)
-    end
+    return flr(v+0.5)
 end
 
 -- Convert grid coordinates to pixel coordinates
