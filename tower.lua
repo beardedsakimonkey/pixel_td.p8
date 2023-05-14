@@ -42,7 +42,7 @@ end
 function make_tower(type, gx, gy)
     local cfg = tower_cfg[type]
     local p = g2p({x=gx, y=gy})
-    return add(towers, {
+    local twr = setmetatable({
         type=type,
         gx=gx, gy=gy, -- in grid coordinates
         x=p.left+6, y=p.top+6, -- in pixel coordinates
@@ -54,7 +54,22 @@ function make_tower(type, gx, gy)
         range=cfg.range,
         age=0, -- for flicker
         buy=cfg.buy, sell=cfg.sell, upg=cfg.upg,
+    }, {
+        -- Note: this approach to handling bonus multipliers is brittle because
+        -- we could write back what we read. (eg: twr.range += 1)
+        __index = function(tbl, key)
+            local v = rawget(table, key)
+            if v ~= nil then -- to be safe
+                if key == 'range' then
+                    return v * bonus_rng
+                elseif key == 'dmg' then
+                    return v * bonus_dmg
+                end
+            end
+            return v
+        end
     })
+    return add(towers, twr)
 end
 
 function update_towers()

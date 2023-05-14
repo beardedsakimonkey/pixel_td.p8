@@ -177,9 +177,9 @@ function init_menus()
 
     -- Bonus menu --------------------------------------------------------------
     bonus_menu = Menu.new({x=31, dst_y=89, w=70, h=36})
-    add(bonus_menu.items, {text='+5% interest', y=12+8*0, cb=bonus_int})
-    add(bonus_menu.items, {text='+3% damage',   y=12+8*1, cb=bonus_dmg})
-    add(bonus_menu.items, {text='+4% range',    y=12+8*2, cb=bonus_rng})
+    add(bonus_menu.items, {text='+3% interest', y=12+8*0, cb=bonus_int})
+    add(bonus_menu.items, {text='+5% damage',   y=12+8*1, cb=bonus_dmg})
+    add(bonus_menu.items, {text='+8% range',    y=12+8*2, cb=bonus_rng})
 
     bonus_menu.update = function(m)
         local has_boss = wave > 0 and waves[wave].boss_hp ~= nil
@@ -231,6 +231,6 @@ function do_upgrade(menu)
     del(towers, twr)
 end
 
-function bonus_int(menu) add(bonuses, BNS.int) end
-function bonus_dmg(menu) add(bonuses, BNS.dmg) end
-function bonus_rng(menu) add(bonuses, BNS.rng) end
+function bonus_int(menu) add(bonuses, BNS.int); interest += 3 end
+function bonus_dmg(menu) add(bonuses, BNS.dmg); bonus_dmg += 0.05 end
+function bonus_rng(menu) add(bonuses, BNS.rng); bonus_rng += 0.08 end
