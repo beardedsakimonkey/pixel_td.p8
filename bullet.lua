@@ -40,6 +40,7 @@ local function update_bullet_red(twr, blt)
         enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
         if enmy.hp == 0 then
             gold += enmy.gold
+            enmy.death_age = 0
         end
         del(twr.bullets, blt)
     else
@@ -87,6 +88,7 @@ local function update_bullet_green(twr, blt)
             enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
             if enmy.hp == 0 then
                 gold += enmy.gold
+                enmy.death_age = 0
             end
         end
     end
@@ -150,6 +152,7 @@ local function update_bullets_yellow(twr)
                 enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
                 if enmy.hp == 0 then
                     gold += enmy.gold
+                    enmy.death_age = 0
                 end
                 enmy.slow = 0.3
                 enmy.slow_dur = 100

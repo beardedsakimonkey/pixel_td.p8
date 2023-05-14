@@ -3,6 +3,8 @@ enemies = {}
 -- Helps impl of enemy movement
 local path_points = {}
 
+local MAX_DEATH_AGE = 3
+
 local function make_enemy(type, max_hp, gold, dx, dy)
     add(enemies, {
         type=type,
@@ -12,6 +14,7 @@ local function make_enemy(type, max_hp, gold, dx, dy)
         hp=max_hp, max_hp=max_hp,
         slow=1, slow_dur=0,
         gold=gold,
+        death_age=nil,
     })
 end
 
@@ -39,6 +42,7 @@ local function line_contains_point(l1, l2, p)
 end
 
 local function move_enemy(e)
+    if e.death_age then return end
     -- Find the first line in the map that contains our position
     local l1, l2
     local p = 2
@@ -100,7 +104,7 @@ local function move_enemy(e)
 end
 
 local function del_enemy(enmy)
-    if enmy.hp == 0 then
+    if enmy.hp == 0 and enmy.death_age == MAX_DEATH_AGE then
         del(enemies, enmy)
     end
 end
@@ -130,19 +134,29 @@ end
 
 function update_enemies()
     foreach(enemies, function(enmy)
+        -- update death animation
+        if enmy.death_age then
+            enmy.death_age += 1
+        end
+        -- update slow
         if enmy.slow_dur == 0 then
             enmy.slow = 1
         else
             enmy.slow_dur -= 1
         end
+        -- update position
+        move_enemy(enmy)
     end)
-    foreach(enemies, move_enemy)
     foreach(enemies, del_enemy)
 end
 
 function draw_enemies()
     foreach(enemies, function(enmy)
         -- Draw enemy
+        if enmy.death_age then
+            circ(enmy.x, enmy.y, enmy.death_age+1, C.pink)
+            return
+        end
         if enmy.type == ENMY.circ then
             circ(enmy.x, enmy.y, 1, C.light_gray)
         elseif enmy.type == ENMY.rect then

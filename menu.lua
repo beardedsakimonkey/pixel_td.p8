@@ -183,7 +183,7 @@ function init_menus()
 
     bonus_menu.update = function(m)
         local has_boss = wave > 0 and waves[wave].boss_hp ~= nil
-        if has_boss and #enemies == 0 and not m.is_open and can_send_wave()
+        if has_boss and not m.is_open and can_send_wave()
             -- need this condition to avoid immediately opening bonus menu after
             -- choosing a bonus.
             and #bonuses < wave\5 then
