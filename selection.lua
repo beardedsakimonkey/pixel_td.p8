@@ -61,7 +61,8 @@ local function move_selection(dir)
 end
 
 function update_selection()
-    if not buy_menu.is_open and not upg_menu.is_open then
+    if not buy_menu.is_open and not upg_menu.is_open
+        and not bonus_menu.is_open then
         if btnp(B.left)  then move_selection(B.left) end
         if btnp(B.right) then move_selection(B.right) end
         if btnp(B.up)    then move_selection(B.up) end

@@ -8,7 +8,7 @@ local v = 0
 local t = 0
 
 function update_hint()
-    show_hint = show_hint or can_send_wave()
+    show_hint = show_hint or (can_send_wave() and not bonus_menu.is_open)
     if show_hint then
         t += 1
     else

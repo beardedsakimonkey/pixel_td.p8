@@ -18,22 +18,23 @@ map = {
     {x=9,  y=9,  c=CRNR.tr},
     {x=9,  y=10, c=CRNR.bot},
 }
+-- Note: bosses must be on every 5th wave
 waves = {
     {hp=3,  speed=0.25, gold=4, type=ENMY.circ},
     {hp=6,  speed=0.25, gold=4, type=ENMY.rect},
     {hp=9,  speed=0.25, gold=4, type=ENMY.diamond},
     {hp=7,  speed=0.5,  gold=4, type=ENMY.arrow},
-    {hp=15, speed=0.25, gold=4, type=ENMY.circ},
+    {hp=15, speed=0.25, gold=4, type=ENMY.circ, boss_hp=1},
     {hp=18, speed=0.25, gold=4, type=ENMY.rect},
     {hp=21, speed=0.25, gold=4, type=ENMY.diamond},
     {hp=16, speed=0.5,  gold=4, type=ENMY.arrow},
     {hp=24, speed=0.25, gold=4, type=ENMY.circ},
-    {hp=27, speed=0.25, gold=4, type=ENMY.rect},
+    {hp=27, speed=0.25, gold=4, type=ENMY.rect, boss_hp=1},
     {hp=30, speed=0.25, gold=4, type=ENMY.diamond},
     {hp=25, speed=0.5,  gold=4, type=ENMY.arrow},
     {hp=33, speed=0.25, gold=4, type=ENMY.circ},
     {hp=36, speed=0.25, gold=4, type=ENMY.rect},
-    {hp=39, speed=0.25, gold=4, type=ENMY.diamond},
+    {hp=39, speed=0.25, gold=4, type=ENMY.diamond, boss_hp=1},
     {hp=34, speed=0.5,  gold=4, type=ENMY.arrow},
     {hp=42, speed=0.25, gold=4, type=ENMY.circ},
     {hp=45, speed=0.25, gold=4, type=ENMY.rect},
@@ -43,6 +44,7 @@ waves = {
 wave = 0
 gold = 100
 lives = 20
+bonuses = {}
 t = 0
 
 --------------------------------------------------------------------------------
@@ -73,6 +75,8 @@ function _update60()
         buy_menu:handle_btn()
     elseif upg_menu.is_open then
         upg_menu:handle_btn()
+    elseif bonus_menu.is_open then
+        bonus_menu:handle_btn()
     else
         if btnp(B.z) then
             local twr = find_sel_tower()
@@ -87,14 +91,16 @@ function _update60()
         end
     end
 
-    buy_menu:update()
-    upg_menu:update()
-
     spawn_enemy()
     update_enemies()
     update_bullets()
     update_towers()
-    update_hint()
+
+    buy_menu:update()
+    upg_menu:update()
+    bonus_menu:update() -- should go after update_enemies()
+
+    update_hint() -- should go after bonus_menu:update()
 end
 
 --------------------------------------------------------------------------------
@@ -159,6 +165,7 @@ function _draw()
 
     buy_menu:draw()
     upg_menu:draw()
+    bonus_menu:draw()
 
     -- Draw stats
     do

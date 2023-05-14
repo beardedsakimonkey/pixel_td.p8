@@ -1,7 +1,7 @@
 buy_menu = nil
 upg_menu = nil
+bonus_menu = nil
 
---------------------------------------------------------------------------------
 local Menu = {}
 
 local OFFSCREEN = 131
@@ -71,9 +71,9 @@ function Menu.open(m)
     m.is_open = true
     m.cur_idx = 1
 end
---------------------------------------------------------------------------------
 
 function init_menus()
+    -- Buy menu ----------------------------------------------------------------
     buy_menu = Menu.new({x=35, dst_y=97, w=59, h=27})
     add(buy_menu.items, {text='buy',    y=11+8*0, cb=do_buy})
     add(buy_menu.items, {text='cancel', y=11+8*1, cb=buy_menu.close})
@@ -151,6 +151,7 @@ function init_menus()
         m.items[1].disabled = gold < tower_cfg[m.sel_twr].buy
     end
 
+    -- Upgrade menu ------------------------------------------------------------
     upg_menu = Menu.new({x=35, dst_y=89, w=59, h=36})
     add(upg_menu.items, {text='upgrade', y=12+8*0, cb=do_upgrade})
     add(upg_menu.items, {text='sell',    y=12+8*1, cb=do_sell})
@@ -173,8 +174,44 @@ function init_menus()
         m.twr = find_sel_tower()
         m.items[1].disabled = not m.twr.upg or gold < m.twr.upg
     end
+
+    -- Bonus menu --------------------------------------------------------------
+    bonus_menu = Menu.new({x=31, dst_y=89, w=70, h=36})
+    add(bonus_menu.items, {text='+5% interest', y=12+8*0, cb=bonus_int})
+    add(bonus_menu.items, {text='+3% damage',   y=12+8*1, cb=bonus_dmg})
+    add(bonus_menu.items, {text='+4% range',    y=12+8*2, cb=bonus_rng})
+
+    bonus_menu.update = function(m)
+        local has_boss = wave > 0 and waves[wave].boss_hp ~= nil
+        if has_boss and #enemies == 0 and not m.is_open and can_send_wave()
+            -- need this condition to avoid immediately opening bonus menu after
+            -- choosing a bonus.
+            and #bonuses < wave\5 then
+            Menu.open(m)
+        end
+        Menu.update(m)
+    end
+
+    bonus_menu.draw = function(m)
+        if m.y == OFFSCREEN then return end
+        Menu.draw(m)
+        print('bonus', m.x+25, m.y+3, C.light_gray)
+        if m.cur_idx == 1 then pal(C.indigo, C.yellow) end
+        spr(32, 91, m.y+11+8*0)
+        pal()
+        if m.cur_idx == 2 then pal(C.indigo, C.red) end
+        spr(33, 91, m.y+11+8*1)
+        pal()
+        if m.cur_idx == 3 then pal(C.indigo, C.green) end
+        spr(34, 91, m.y+11+8*2)
+        pal()
+    end
+
+    bonus_menu.handle_btn = function(m)
+        if btnp(B.x) then return end
+        Menu.handle_btn(m)
+    end
 end
---------------------------------------------------------------------------------
 
 function do_buy(menu)
     local twr = make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
@@ -193,3 +230,7 @@ function do_upgrade(menu)
     gold -= twr.upg
     del(towers, twr)
 end
+
+function bonus_int(menu) add(bonuses, BNS.int) end
+function bonus_dmg(menu) add(bonuses, BNS.dmg) end
+function bonus_rng(menu) add(bonuses, BNS.rng) end
