@@ -6,7 +6,7 @@ end
 
 -- Todo: perf
 local function is_in_range(enmy, twr)
-    return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < twr.range^2
+    return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < get_twr_range(twr)^2
 end
 
 -- Red -------------------------------------------------------------------------
@@ -37,7 +37,7 @@ local function update_bullet_red(twr, blt)
 
     -- handle collision
     if collide(blt, enmy) then
-        enmy.hp = max(0, enmy.hp-twr.dmg)
+        enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
         if enmy.hp == 0 then
             gold += enmy.gold
         end
@@ -84,7 +84,7 @@ local function update_bullet_green(twr, blt)
     else
         blt.age += 1
         if blt.age%3 == 0 then -- don't trigger damage every frame
-            enmy.hp = max(0, enmy.hp-twr.dmg)
+            enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
             if enmy.hp == 0 then
                 gold += enmy.gold
             end
@@ -147,7 +147,7 @@ local function update_bullets_yellow(twr)
             -- register damage & slow
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy
-                enmy.hp = max(0, enmy.hp-twr.dmg)
+                enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
                 if enmy.hp == 0 then
                     gold += enmy.gold
                 end

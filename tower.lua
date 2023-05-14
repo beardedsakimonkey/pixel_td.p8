@@ -24,6 +24,9 @@ function is_green_twr(type)  return type % MAX_TWR == 1 end
 function is_red_twr(type)    return type % MAX_TWR == 2 end
 function is_yellow_twr(type) return type % MAX_TWR == 0 end
 
+function get_twr_range(twr)  return round(twr.range * bonus_rng) end
+function get_twr_damage(twr) return round(twr.dmg * bonus_dmg) end
+
 function find_sel_tower()
     return tbl_find(towers, function(twr)
         return twr.gx == sel.dst_gx and twr.gy == sel.dst_gy
@@ -42,7 +45,7 @@ end
 function make_tower(type, gx, gy)
     local cfg = tower_cfg[type]
     local p = g2p({x=gx, y=gy})
-    local twr = setmetatable({
+    return add(towers, {
         type=type,
         gx=gx, gy=gy, -- in grid coordinates
         x=p.left+6, y=p.top+6, -- in pixel coordinates
@@ -54,22 +57,7 @@ function make_tower(type, gx, gy)
         range=cfg.range,
         age=0, -- for flicker
         buy=cfg.buy, sell=cfg.sell, upg=cfg.upg,
-    }, {
-        -- Note: this approach to handling bonus multipliers is brittle because
-        -- we could write back what we read. (eg: twr.range += 1)
-        __index = function(tbl, key)
-            local v = rawget(table, key)
-            if v ~= nil then -- to be safe
-                if key == 'range' then
-                    return v * bonus_rng
-                elseif key == 'dmg' then
-                    return v * bonus_dmg
-                end
-            end
-            return v
-        end
     })
-    return add(towers, twr)
 end
 
 function update_towers()
@@ -118,7 +106,7 @@ function draw_towers()
     if upg_menu.is_open then
         local twr = find_sel_tower()
         if twr then
-            circ(twr.x, twr.y, twr.range, C.light_gray)
+            circ(twr.x, twr.y, get_twr_range(twr), C.light_gray)
         end
     end
 end
