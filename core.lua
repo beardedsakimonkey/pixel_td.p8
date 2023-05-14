@@ -185,6 +185,15 @@ function _draw()
     draw_enemies()
     draw_selection()
 
+    -- Draw bonuses
+    for i, bonus in ipairs(bonuses) do
+        local s
+        if     bonus == BNS.int then s = 35
+        elseif bonus == BNS.dmg then s = 36
+        elseif bonus == BNS.rng then s = 37 end
+        spr(s, 2+12*(i-1), 122)
+    end
+
     buy_menu:draw()
     upg_menu:draw()
     bonus_menu:draw()
@@ -206,15 +215,6 @@ function _draw()
     end
 
     draw_hint()
-
-    -- Draw bonuses
-    for i, bonus in ipairs(bonuses) do
-        local s
-        if     bonus == BNS.int then s = 35
-        elseif bonus == BNS.dmg then s = 36
-        elseif bonus == BNS.rng then s = 37 end
-        spr(s, 2+12*(i-1), 122)
-    end
 
     -- Draw debug messages
     color(C.light_gray)
