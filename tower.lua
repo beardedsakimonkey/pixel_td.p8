@@ -7,7 +7,7 @@ function is_red_twr(type)    return type % MAX_TWR == 2 end
 function is_yellow_twr(type) return type % MAX_TWR == 0 end
 
 function get_twr_range(twr)  return round(twr.range * bonus_rng) end
-function get_twr_damage(twr) return round(twr.dmg * bonus_dmg) end
+function get_twr_damage(twr) return twr.dmg * bonus_dmg end
 
 function find_sel_tower()
     return tbl_find(towers, function(twr)
