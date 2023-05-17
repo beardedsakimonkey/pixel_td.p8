@@ -75,7 +75,7 @@ bonus_dmg = 1
 bonus_rng = 1
 t = 0
 shake = 0
-screen = 'menu'
+screen = 'title'
 
 function remove_life()
     lives -= 1
@@ -101,8 +101,8 @@ end
 -- UPDATE
 --------------------------------------------------------------------------------
 function _update60()
-    if screen == 'menu' then
-        if btnp(B.z) then screen = 'game' end
+    if screen == 'title' then
+        update_title()
         return
     end
 
@@ -161,10 +161,8 @@ function _draw()
     for y = 10, 127, 12 do line(0, y, 127, y, C.dark_blue) end
     for x = 10, 127, 12 do line(x, 0, x, 127, C.dark_blue) end
 
-    if screen == 'menu' then
-        -- Draw title
-        sspr(0, 32, 87, 17, 21, 12)
-
+    if screen == 'title' then
+        draw_title()
         return
     end
 

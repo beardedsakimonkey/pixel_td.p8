@@ -74,7 +74,7 @@ end
 
 function init_menus()
     -- Buy menu ----------------------------------------------------------------
-    buy_menu = Menu.new({x=35, dst_y=97, w=59, h=27})
+    buy_menu = Menu.new({x=35, dst_y=98, w=59, h=27})
     add(buy_menu.items, {text='buy',    y=11+8*0, cb=do_buy})
     add(buy_menu.items, {text='cancel', y=11+8*1, cb=buy_menu.close})
 
