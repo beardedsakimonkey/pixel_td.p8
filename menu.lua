@@ -136,9 +136,9 @@ function init_menus()
         end
         clip(m.x+21, m.y+2, 17, 7)
         for i=1,MAX_TWR do
-            if m.sel_twr <= MAX_TWR then pal(1, 0) end
+            if m.sel_twr <= MAX_TWR then pal(C.dark_blue, C.black) end
             spr(i, m.x+26+((i-1)*CAROUSEL_GAP)+m.carousel_x, m.y+2)
-            pal()
+            pal(0)
         end
         clip()
         print(tower_cfg[m.sel_twr].buy, m.x+26, m.y+11+8*0, C.indigo)
@@ -164,7 +164,7 @@ function init_menus()
             print(m.twr.upg, m.x+44, m.y+12+8*0, C.indigo)
         end
         print(m.twr.sell, m.x+44, m.y+12+8*1, C.indigo)
-        if m.twr.type <= 3 then pal(1, 0) end
+        if m.twr.type <= MAX_TWR then pal(C.dark_blue, C.black) end
         spr(m.twr.type, m.x+26, m.y+2)
         pal(0)
     end
@@ -196,13 +196,13 @@ function init_menus()
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
         print('bonus', m.x+25, m.y+3, C.light_gray)
-        if m.cur_idx == 1 then pal(C.indigo, C.yellow, 0) end
+        if m.cur_idx == 1 then pal(C.indigo, C.yellow) end
         spr(32, 91, m.y+11+8*0)
         pal(0)
-        if m.cur_idx == 2 then pal(C.indigo, C.red, 0) end
+        if m.cur_idx == 2 then pal(C.indigo, C.red) end
         spr(33, 91, m.y+11+8*1)
         pal(0)
-        if m.cur_idx == 3 then pal(C.indigo, C.green, 0) end
+        if m.cur_idx == 3 then pal(C.indigo, C.green) end
         spr(34, 91, m.y+11+8*2)
         pal(0)
     end
