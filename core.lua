@@ -75,6 +75,7 @@ bonus_dmg = 1
 bonus_rng = 1
 t = 0
 shake = 0
+screen = 'menu'
 
 function remove_life()
     lives -= 1
@@ -100,6 +101,10 @@ end
 -- UPDATE
 --------------------------------------------------------------------------------
 function _update60()
+    if screen == 'menu' then
+        return
+    end
+
     debug = {}
     t += 1
     update_selection()
@@ -151,6 +156,22 @@ end
 --------------------------------------------------------------------------------
 function _draw()
     cls(C.black)
+    if screen == 'menu' then
+        -- Draw grid lines
+        for y = -1, 126, 16 do line(0, y, 127, y, C.dark_blue) end
+        for x = -1, 126, 16 do line(x, 0, x, 127, C.dark_blue) end
+        -- Draw title
+        -- sspr(0,  32, 12, 17, 18, 12 + cos((0+time()*8)/16) * 3) -- P
+        -- sspr(15, 32, 4,  17, 33, 12 + cos((1+time()*8)/16) * 3) -- I
+        -- sspr(22, 32, 15, 17, 40, 12 + cos((2+time()*8)/16) * 3) -- X
+        -- sspr(40, 32, 10, 17, 58, 12 + cos((3+time()*8)/16) * 3) -- E
+        -- sspr(52, 32, 11, 17, 70, 12 + cos((4+time()*8)/16) * 3) -- L
+        -- sspr(64, 32, 13, 17, 82, 12 + cos((5+time()*8)/16) * 3) -- T
+        -- sspr(79, 32, 11, 17, 97, 12 + cos((6+time()*8)/16) * 3) -- D
+        sspr(0, 32, 89, 17, 21, 12)
+
+        return
+    end
 
     -- Draw grid lines
     for y = 10, 127, 12 do line(0, y, 127, y, C.dark_blue) end
