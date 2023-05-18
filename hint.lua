@@ -1,3 +1,5 @@
+-- TODO: add a black border around button
+
 show_hint = true
 
 local prev_show_hint = show_hint
@@ -35,7 +37,5 @@ function draw_hint()
     -- Draw button
     local glisten_delay = 300 -- 10 sec
     local s = 48 + max(0, (t\2)%(glisten_delay+11) - glisten_delay)
-    pal(C.green, C.black)
     spr(s, x, y)
-    pal()
 end

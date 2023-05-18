@@ -1,6 +1,6 @@
 -- TODO: animate each letter seperately, staggered
 
-local TITLE_HEIGHT = 17
+local TITLE_HEIGHT = 19
 local OFFSCREEN_Y = -TITLE_HEIGHT
 local y = OFFSCREEN_Y
 local v = 0
@@ -25,7 +25,9 @@ end
 
 function draw_title()
     -- Draw title
-    sspr(0, 32, 88, TITLE_HEIGHT, 20, y)
+    pal(C.pink, C.black)
+    sspr(0, 32, 90, TITLE_HEIGHT, 20, y)
+    pal(0)
     if not started then
         print('🅾️ to start', 43, 100, C.light_gray)
     end
