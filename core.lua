@@ -181,8 +181,8 @@ function _draw()
     -- Draw path
     for i = 2, #map do
         local cell_a, cell_b = map[i-1], map[i]
-        local ca = get_cell_corner(cell_a)
-        local cb = get_cell_corner(cell_b)
+        local ca = get_cell_corner(g2p(cell_a), cell_a.c)
+        local cb = get_cell_corner(g2p(cell_b), cell_b.c)
         rectfill(ca.x, ca.y, cb.x, cb.y, C.black)
         rect(ca.x, ca.y, cb.x, cb.y, C.indigo)
 
@@ -257,9 +257,7 @@ function _draw()
     end
 end
 
-function get_cell_corner(grid_cell)
-    local cell = g2p(grid_cell)
-    local c = grid_cell.c
+function get_cell_corner(cell, c)
     if c == CRNR.top   then return {x = cell.left,  y = cell.top} end
     if c == CRNR.right then return {x = cell.right, y = cell.top} end
     if c == CRNR.bot   then return {x = cell.right, y = cell.bot} end
