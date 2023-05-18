@@ -66,7 +66,18 @@ function draw_title()
     draw_map(89, 52)
     pal(0)
 
-    -- if not started then
-    --     print('🅾️ to start', 43, 100, C.light_gray)
-    -- end
+    do
+        local y = 99
+        -- Draw buttons
+        pal(C.green, C.black)
+        sspr(96, 32, 9, 8, 38, y-1, 9, 8, true)
+        sspr(96, 32, 9, 8, 80, y-1)
+        pal(0)
+
+        -- Draw difficulty
+        local str = 'easy'
+        local x = 56
+        rectfill(x-1, y-1, x-1+(#str*4-1)+1, y-1+6, C.black)
+        print(str, x, y, C.light_gray)
+    end
 end
