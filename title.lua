@@ -1,24 +1,24 @@
 -- TODO: animate each letter seperately, staggered
 
 local TITLE_HEIGHT = 19
-local OFFSCREEN_Y = -TITLE_HEIGHT
-local y = OFFSCREEN_Y
-local v = 0
+local OFFSCREEN_TY = -TITLE_HEIGHT
+local ty = OFFSCREEN_TY
+local tv = 0
 local started = false
 
 function update_title()
     if btnp(B.z) then
         started = true
-        v = 200
+        tv = 200
     end
-    local dest_y = not started and 12 or OFFSCREEN_Y
-    y, v = spring(y, dest_y, v, {
+    local dest_ty = not started and 12 or OFFSCREEN_TY
+    ty, tv = spring(ty, dest_ty, tv, {
         stiffness = 200,
         damping = 12,
         mass = 2,
         precision = 0.2,
     })
-    if y <= OFFSCREEN_Y then
+    if ty <= OFFSCREEN_TY then
         screen = 'game'
     end
 end
@@ -52,7 +52,7 @@ end
 function draw_title()
     -- Draw title
     pal(C.pink, C.black)
-    sspr(0, 32, 90, TITLE_HEIGHT, 20, y)
+    sspr(0, 32, 90, TITLE_HEIGHT, 19, ty)
     pal(0)
 
     -- Draw map (33x33)
