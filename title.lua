@@ -28,14 +28,17 @@ function update_title()
             return
         end
     end
-    if btnp(B.z) then
-        z_age = 0
-    end
-    if btnp(B.left) then
-        sel_map = wrap(1, sel_map-1, #maps)
-    end
-    if btnp(B.right) then
-        sel_map = wrap(1, sel_map+1, #maps)
+    -- Handle button press
+    if z_age == nil then
+        if btnp(B.z) then
+            z_age = 0
+        end
+        if btnp(B.left) then
+            sel_map = wrap(1, sel_map-1, #maps)
+        end
+        if btnp(B.right) then
+            sel_map = wrap(1, sel_map+1, #maps)
+        end
     end
 
     -- Send letters up
