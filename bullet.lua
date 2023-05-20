@@ -1,15 +1,18 @@
--- Todo: support variable hitbox
-local function collide(blt, enmy)
-    return blt.x > enmy.x-1 and blt.x < enmy.x+1
-       and blt.y > enmy.y-1 and blt.y < enmy.y+1
-end
-
 -- Todo: perf
 local function is_in_range(enmy, twr)
     return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < get_twr_range(twr)^2
 end
 
 -- Red -------------------------------------------------------------------------
+
+local function collide(blt, enmy)
+    local left  = enmy.x - enmy.width/2
+    local right = enmy.x + enmy.width/2
+    local top   = enmy.y - enmy.height/2
+    local bot   = enmy.y + enmy.height/2
+    return blt.x >= left and blt.x <= right
+       and blt.y >= top  and blt.y <= bot
+end
 
 local function update_bullet_red(twr, blt)
     local enmy = blt.enemy

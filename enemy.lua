@@ -21,6 +21,20 @@ end
 local MAX_DEATH_AGE = 3
 
 local function make_enemy(type, max_hp, gold, dx, dy)
+    local width, height
+    if type == ENMY.circ then
+        width, height = 3, 3
+    elseif type == ENMY.square then
+        width, height = 3, 3
+    elseif type == ENMY.diamond then
+        width, height = 5, 5
+    elseif type == ENMY.arrow then
+        width, height = 5, 5
+    elseif type == ENMY.rect then
+        width, height = 5, 3
+    elseif type == ENMY.boss then
+        width, height = 5, 5
+    end
     add(enemies, {
         type=type,
         x=path_points[1].x,
@@ -30,6 +44,7 @@ local function make_enemy(type, max_hp, gold, dx, dy)
         slow=1, slow_dur=0,
         gold=gold,
         death_age=nil,
+        width=width, height=height, -- for collision detection
     })
 end
 
@@ -148,6 +163,14 @@ function update_enemies()
         end
         -- update position
         move_enemy(enmy)
+        -- update hitbox
+        if enmy.type == ENMY.arrow then
+            if enmy.dx ~= 0 then
+                enmy.width, enmy.height = 3, 5
+            else
+                enmy.width, enmy.height = 5, 3
+            end
+        end
     end)
     foreach(enemies, function(enmy)
         -- delete enemy

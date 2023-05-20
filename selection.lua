@@ -1,5 +1,5 @@
 function init_selection()
-    local init_pos = {x=5, y=4}
+    local init_pos = {x=5, y=3}
     local p = g2p(init_pos)
     sel = {
         dst_x=p.left,      dst_y=p.top,
