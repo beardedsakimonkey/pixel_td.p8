@@ -178,39 +178,7 @@ function _draw()
         print(str, left, top, C.dark_blue)
     end
 
-    -- Draw path
-    for i = 2, #map do
-        local cell_a, cell_b = map[i-1], map[i]
-        local ca = get_cell_corner(g2p(cell_a), cell_a.c)
-        local cb = get_cell_corner(g2p(cell_b), cell_b.c)
-        rectfill(ca.x, ca.y, cb.x, cb.y, C.black)
-        rect(ca.x, ca.y, cb.x, cb.y, C.indigo)
-
-        -- cover up unwanted borders
-        local a = g2p(cell_a)
-        if cell_a.c == CRNR.bl then
-            line(a.right, a.bot-1, a.right, a.top+1, C.black)
-        elseif cell_a.c == CRNR.br then
-            line(a.left+1, a.top, a.right-1, a.top, C.black)
-        elseif cell_a.c == CRNR.tl then
-            line(a.left+1, a.bot, a.right-1, a.bot, C.black)
-        elseif cell_a.c == CRNR.tr then
-            line(a.left, a.bot-1, a.left, a.top+1, C.black)
-        end
-
-        -- draw path decoration
-        for j = 1, #map, #map-1 do
-            local c = map[j].c
-            local spr_x = (c == CRNR.top or c == CRNR.bot) and 80 or 96
-            local flip_x = c == CRNR.right
-            local flip_y = c == CRNR.bot
-            local p = g2p(map[j])
-            local top = mid(0, p.top, 116)
-            local left = mid(0, p.left, 117)
-            sspr(spr_x, 8, 12, 12, left, top, 12, 12, flip_x, flip_y)
-        end
-    end
-
+    draw_path()
     draw_towers()
     draw_bullets()
     draw_enemies()
@@ -255,6 +223,41 @@ function _draw()
     for msg in all(debug) do
         print(msg)
     end
+end
+
+function draw_path()
+    for i = 2, #map do
+        local cell_a, cell_b = map[i-1], map[i]
+        local ca = get_cell_corner(g2p(cell_a), cell_a.c)
+        local cb = get_cell_corner(g2p(cell_b), cell_b.c)
+        rectfill(ca.x, ca.y, cb.x, cb.y, C.black)
+        rect(ca.x, ca.y, cb.x, cb.y, C.indigo)
+
+        -- cover up unwanted borders
+        local a = g2p(cell_a)
+        if cell_a.c == CRNR.bl then
+            line(a.right, a.bot-1, a.right, a.top+1, C.black)
+        elseif cell_a.c == CRNR.br then
+            line(a.left+1, a.top, a.right-1, a.top, C.black)
+        elseif cell_a.c == CRNR.tl then
+            line(a.left+1, a.bot, a.right-1, a.bot, C.black)
+        elseif cell_a.c == CRNR.tr then
+            line(a.left, a.bot-1, a.left, a.top+1, C.black)
+        end
+
+        -- draw path decoration
+        for j = 1, #map, #map-1 do
+            local c = map[j].c
+            local spr_x = (c == CRNR.top or c == CRNR.bot) and 80 or 96
+            local flip_x = c == CRNR.right
+            local flip_y = c == CRNR.bot
+            local p = g2p(map[j])
+            local top = mid(0, p.top, 116)
+            local left = mid(0, p.left, 117)
+            sspr(spr_x, 8, 12, 12, left, top, 12, 12, flip_x, flip_y)
+        end
+    end
+
 end
 
 function get_cell_corner(cell, c)
