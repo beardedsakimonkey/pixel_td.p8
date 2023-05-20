@@ -216,6 +216,7 @@ end
 function do_buy(menu)
     local twr = make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
     gold -= twr.buy
+    has_bought_tower = true
 end
 
 function do_sell(menu)

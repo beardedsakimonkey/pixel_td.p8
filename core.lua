@@ -76,6 +76,7 @@ bonus_rng = 1
 t = 0
 shake = 0
 screen = 'title'
+has_bought_tower = false
 
 function remove_life()
     lives -= 1
