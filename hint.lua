@@ -52,12 +52,17 @@ end
 
 local function draw_hint_z()
     -- Draw arrow
-    local x = sel.x - 8
+    local flip = sel.x < 20
+    local x = sel.x + (flip and 16 or -8)
     local y = sel.y + 3
     if sel.vx > 0 then x = ceil(x) end
     if sel.vy > 0 then y = ceil(y) end
-    sspr(32, 8, 5, 8, x, y, 5, 8, true)
-    x -= 10
+    sspr(32, 8, 5, 8, x, y, 5, 8, not flip)
+    if flip then
+        x += 6
+    else
+        x -= 10
+    end
 
     -- Draw button
     local s = max(0, (t\2)%(GLISTEN_DELAY+11) - GLISTEN_DELAY)
