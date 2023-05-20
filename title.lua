@@ -36,15 +36,18 @@ function update_title()
     end
 
     -- Update letters
-    local dest_y = not z_age and 12 or OFFSCREEN_Y
     for i, l in pairs(letters) do
         if t >= (i-1)*2 then
-            l.y, l.v = spring(l.y, dest_y, l.v, {
-                stiffness = 200,
-                damping = 12,
-                mass = 3,
-                precision = 0.2,
-            })
+            if l.dest_y == OFFSCREEN_Y and l.y <= OFFSCREEN_Y then
+                -- avoid letter bouncing back out from the top
+            else
+                l.y, l.v = spring(l.y, l.dest_y, l.v, {
+                    stiffness = 180,
+                    damping = 14,
+                    mass = 3,
+                    precision = 0.1,
+                })
+            end
         end
     end
 end
