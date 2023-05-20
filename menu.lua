@@ -108,6 +108,7 @@ function init_menus()
 
     buy_menu.update = function(m)
         Menu.update(m)
+        m.items[1].disabled = gold < tower_cfg[m.sel_twr].buy
         m.carousel_x = lerp(
             m.carousel_sx,
             (m.sel_twr-1)*-CAROUSEL_GAP,
@@ -147,7 +148,7 @@ function init_menus()
     buy_menu.open = function(m)
         Menu.open(m)
         m.sel_twr = 1
-        -- Todo: update this dynamically
+        -- Note: updating this in open bc handle_button is called before update
         m.items[1].disabled = gold < tower_cfg[m.sel_twr].buy
     end
 
@@ -156,6 +157,13 @@ function init_menus()
     add(upg_menu.items, {text='upgrade', y=12+8*0, cb=do_upgrade})
     add(upg_menu.items, {text='sell',    y=12+8*1, cb=do_sell})
     add(upg_menu.items, {text='cancel',  y=12+8*2, cb=upg_menu.close})
+
+    upg_menu.update = function(m)
+        Menu.update(m)
+        if m.twr then
+            m.items[1].disabled = not m.twr.upg or gold < m.twr.upg
+        end
+    end
 
     upg_menu.draw = function(m)
         if m.y == OFFSCREEN then return end
@@ -172,6 +180,7 @@ function init_menus()
     upg_menu.open = function(m)
         Menu.open(m)
         m.twr = find_sel_tower()
+        -- Note: updating this in open bc handle_button is called before update
         m.items[1].disabled = not m.twr.upg or gold < m.twr.upg
     end
 
