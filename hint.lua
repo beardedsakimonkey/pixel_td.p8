@@ -1,4 +1,5 @@
--- TODO: add a black border around button
+-- TODO: add hint for z
+-- TODO: dont show hint for x until player has bought a tower
 
 show_hint = true
 
@@ -32,7 +33,9 @@ end
 function draw_hint()
     local x = 27
     -- Draw arrow
-    spr(20, x, y)
+    pal(C.green, C.black)
+    spr(20, x-1, y-1)
+    pal(0)
     x += 6
     -- Draw button
     local glisten_delay = 300 -- 10 sec
