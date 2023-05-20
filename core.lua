@@ -198,24 +198,8 @@ function _draw()
     bonus_menu:draw()
 
     draw_hint()
-    -- things drawn below will not be affected by screen shake
-    camera()
-
-    -- Draw stats
-    do
-        local lives = tostr(lives)
-        local x = 127 - #lives*4
-        local y = 2
-        print(lives, x, y, C.light_gray)
-        x -= 9
-        spr(18, x, y)
-
-        local gold = tostr(gold)
-        x -= 3 + #gold*4
-        print(gold, x, y, C.light_gray)
-        x -= 7
-        spr(17, x, y)
-    end
+    camera() -- things drawn below will not be affected by screen shake
+    draw_stats()
 
     -- Draw debug messages
     color(C.light_gray)
@@ -257,6 +241,33 @@ function draw_path()
             sspr(spr_x, 8, 12, 12, left, top, 12, 12, flip_x, flip_y)
         end
     end
+
+end
+
+function draw_stats()
+    local c = t<=4 and C.dark_blue or t<=8 and C.dark_gray or nil
+    if c then
+        pal({
+            [2]=c, -- dark purple
+            [6]=c, -- light gray
+            [8]=c, -- red
+            [9]=c, -- orange
+            [10]=c, -- yellow
+        })
+    end
+    local lives = tostr(lives)
+    local x = 127 - #lives*4
+    local y = 2
+    print(lives, x, y, C.light_gray)
+    x -= 9
+    spr(18, x, y)
+
+    local gold = tostr(gold)
+    x -= 3 + #gold*4
+    print(gold, x, y, C.light_gray)
+    x -= 7
+    spr(17, x, y)
+    pal(0)
 
 end
 
