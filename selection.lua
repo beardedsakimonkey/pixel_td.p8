@@ -80,13 +80,19 @@ function update_selection()
 end
 
 function draw_selection()
-    local top   = sel.y + 1
-    local left  = sel.x + 1
+    if     t <= 2  then off = 5
+    elseif t <= 4  then off = 4
+    elseif t <= 6  then off = 3
+    elseif t <= 8  then off = 2
+    elseif t <= 10 then off = 1
+    else                off = 0 end
+    local top   = sel.y + 1 - off
+    local left  = sel.x + 1 - off
     -- snap to upper pixel when moving right/down
     if sel.vy > 0 then top = ceil(top) end
     if sel.vx > 0 then left = ceil(left) end
-    local bot   = top + 10
-    local right = left + 10
+    local bot   = top + 10 + off*2
+    local right = left + 10 + off*2
     local color = C.light_gray
     -- top left corner
     line(left, top, left+2, top, color)
