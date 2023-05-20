@@ -24,6 +24,12 @@ function update_title()
     if btnp(B.z) then
         z_age = 0
     end
+    if btnp(B.left) then
+        sel_map = wrap(1, sel_map-1, #maps)
+    end
+    if btnp(B.right) then
+        sel_map = wrap(1, sel_map+1, #maps)
+    end
 
     -- Send letters up
     if z_age then
@@ -71,9 +77,9 @@ function draw_title()
         sspr(96, 32, 9, 8, 80, y-1)
         pal(0)
 
-        local str = 'easy'
-        local x = 56
-        rectfill(x-1, y-1, x-1+(#str*4-1)+1, y-1+6, C.black)
-        print(str, x, y, C.light_gray)
+        local str = sel_map == 1 and 'easy' or sel_map == 2 and 'medium' or 'hard'
+        local left, right = hcenter(str)
+        rectfill(left-1, y-1, right+1, y+5, C.black)
+        print(str, left, y, C.light_gray)
     end
 end

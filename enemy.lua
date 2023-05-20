@@ -4,6 +4,7 @@ enemies = {}
 local path_points = {}
 
 function init_enemy_aux()
+    local map = get_map()
     for i = 1, #map do
         local p = g2p(map[i])
         add(path_points, {
@@ -38,6 +39,7 @@ function spawn_enemy()
         if t % frames == 0 then
             sending -= 1
             local dx, dy = 0, 0
+            local map = get_map()
             if     map[1].c == CRNR.top   then dy = w.speed
             elseif map[1].c == CRNR.left  then dx = w.speed
             elseif map[1].c == CRNR.right then dx = -w.speed

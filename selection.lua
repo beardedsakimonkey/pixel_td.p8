@@ -13,6 +13,7 @@ function init_selection_aux()
     for _=0, 10 do
         add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
     end
+    local map = get_map()
     for i=2, #map do
         local ca, cb = map[i-1], map[i]
         if ca.x == cb.x then

@@ -1,4 +1,4 @@
-map = {
+_map = {
     {x=1,  y=0,  c=CRNR.top},
     {x=1,  y=3,  c=CRNR.bl},
     {x=3,  y=3,  c=CRNR.br},
@@ -18,6 +18,50 @@ map = {
     {x=9,  y=9,  c=CRNR.tr},
     {x=9,  y=10, c=CRNR.bot},
 }
+_map2 = {
+    {x=2,  y=0,  c=CRNR.top},
+    {x=2,  y=3,  c=CRNR.bl},
+    {x=3,  y=3,  c=CRNR.br},
+    {x=3,  y=1,  c=CRNR.tl},
+    {x=7,  y=1,  c=CRNR.tr},
+    {x=7,  y=3,  c=CRNR.bl},
+    {x=9,  y=3,  c=CRNR.tr},
+    {x=9,  y=5,  c=CRNR.br},
+    {x=8,  y=5,  c=CRNR.tl},
+    {x=8,  y=7,  c=CRNR.br},
+    {x=5,  y=7,  c=CRNR.bl},
+    {x=5,  y=5,  c=CRNR.tr},
+    {x=2,  y=5,  c=CRNR.tl},
+    {x=2,  y=7,  c=CRNR.br},
+    {x=1,  y=7,  c=CRNR.tl},
+    {x=1,  y=9,  c=CRNR.bl},
+    {x=9,  y=9,  c=CRNR.tr},
+    {x=9,  y=10, c=CRNR.bot},
+}
+_map3 = {
+    {x=0,  y=0,  c=CRNR.top},
+    {x=0,  y=3,  c=CRNR.bl},
+    {x=3,  y=3,  c=CRNR.br},
+    {x=3,  y=1,  c=CRNR.tl},
+    {x=7,  y=1,  c=CRNR.tr},
+    {x=7,  y=3,  c=CRNR.bl},
+    {x=9,  y=3,  c=CRNR.tr},
+    {x=9,  y=5,  c=CRNR.br},
+    {x=8,  y=5,  c=CRNR.tl},
+    {x=8,  y=7,  c=CRNR.br},
+    {x=5,  y=7,  c=CRNR.bl},
+    {x=5,  y=5,  c=CRNR.tr},
+    {x=2,  y=5,  c=CRNR.tl},
+    {x=2,  y=7,  c=CRNR.br},
+    {x=1,  y=7,  c=CRNR.tl},
+    {x=1,  y=9,  c=CRNR.bl},
+    {x=9,  y=9,  c=CRNR.tr},
+    {x=9,  y=10, c=CRNR.bot},
+}
+maps = {_map, _map2, _map3}
+function get_map()
+    return maps[sel_map]
+end
 -- Note: bosses must be on every 5th wave
 waves = {
     {hp=6,  speed=0.25, gold=4, type=ENMY.square},
@@ -65,6 +109,7 @@ tower_cfg = {
     {dmg=5,   range=39, atkspd=50, max_bullets=4, sell=160}, -- yellow
 }
 
+sel_map = 1
 wave = 0
 gold = 100
 lives = 20
@@ -91,10 +136,6 @@ function _init()
     poke(0x5f5c, 9) -- button repeat delay
     poke(0x5f5d, 3) -- button repeat interval
 
-    -- Set up auxiliary data structures
-    init_selection_aux()
-    init_enemy_aux()
-
     init_menus()
     init_towers()
 end
@@ -106,6 +147,11 @@ function _update60()
     if screen == 'title' then
         update_title()
         return
+    end
+    -- Initialize once we know the map
+    if t == 0 then
+        init_selection_aux()
+        init_enemy_aux()
     end
 
     debug_msgs = {}
@@ -155,6 +201,15 @@ function _update60()
     end
 end
 
+-- Horizontally center text
+function hcenter(str)
+    local mid = 128/2 - 1  -- sub one because its zero-indexed
+    local pxlen = #str*4 - 1 -- don't count seperator of 1st char
+    local left = mid - pxlen\2
+    local right = mid + pxlen\2
+    return left, right
+end
+
 --------------------------------------------------------------------------------
 -- DRAW
 --------------------------------------------------------------------------------
@@ -172,10 +227,7 @@ function _draw()
     -- Draw wave count
     do
         local str = wave .. '/' .. #waves
-        local mid = 128/2 - 1  -- sub one because its zero-indexed
-        local pxlen = #str*4 - 1 -- don't count seperator of 1st char
-        local left = mid - pxlen\2
-        local right = mid + pxlen\2
+        local left, right = hcenter(str)
         local top = 123
         rectfill(left-1, top-1, right+1, top+5, C.black)
         print(str, left, top, C.dark_blue)
@@ -213,6 +265,7 @@ function _draw()
 end
 
 function draw_path()
+    local map = get_map()
     for i = 2, #map do
         local cell_a, cell_b = map[i-1], map[i]
         local ca = get_cell_corner(g2p(cell_a), cell_a.c)
