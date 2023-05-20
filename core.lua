@@ -76,6 +76,7 @@ bonus_rng = 1
 t = 0
 shake = 0
 screen = 'title'
+has_opened_shop = false
 has_bought_tower = false
 
 function remove_life()
@@ -107,12 +108,13 @@ function _update60()
         return
     end
 
-    debug = {}
+    debug_msgs = {}
     t += 1
     update_selection()
 
     -- Handle button press
     if buy_menu.is_open then
+        has_opened_shop = true
         buy_menu:handle_btn()
     elseif upg_menu.is_open then
         upg_menu:handle_btn()
@@ -205,7 +207,7 @@ function _draw()
     -- Draw debug messages
     color(C.light_gray)
     cursor(2, 2)
-    for msg in all(debug) do
+    for msg in all(debug_msgs) do
         print(msg)
     end
 end
@@ -280,4 +282,8 @@ function get_cell_corner(cell, c)
     if c == CRNR.bl    then return {x = cell.right, y = cell.bot} end
     if c == CRNR.br    then return {x = cell.right, y = cell.top} end
     if c == CRNR.tr    then return {x = cell.left,  y = cell.top} end
+end
+
+function debug(msg)
+    add(debug_msgs, msg)
 end

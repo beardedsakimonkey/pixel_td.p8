@@ -64,7 +64,7 @@ function draw_title()
     pal(0)
 
     -- Draw difficulty
-    do
+    if z_age == nil then
         local y = 62
         pal(C.green, C.black)
         sspr(96, 32, 9, 8, 38, y-1, 9, 8, true)

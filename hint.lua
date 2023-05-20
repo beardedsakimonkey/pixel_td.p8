@@ -7,20 +7,20 @@ local t = 0
 local GLISTEN_DELAY = 300 -- 10 sec
 
 local function show_hint_z()
-    return not has_bought_tower and can_send_wave()
+    return not has_opened_shop and can_send_wave()
 end
 
 function update_hint()
-    local show = can_send_wave() and not bonus_menu.is_open and has_bought_tower
+    local show_x = can_send_wave() and not bonus_menu.is_open and has_bought_tower
 
-    local dismissing = show_hint_x and not show
+    local dismissing_x = show_hint_x and not show_x
 
-    show_hint_x = show_hint_x or show
- 
+    show_hint_x = show_x
+
     if show_hint_x or show_hint_z() then
         t += 1
     end
-    if dismissing then
+    if dismissing_x then
         t = 0
         v = 200
     end
