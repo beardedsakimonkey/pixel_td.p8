@@ -30,7 +30,8 @@ function Menu.draw(m)
     end
 
     for i, item in ipairs(m.items) do
-        local c = item.disabled and C.dark_gray
+        local disabled = item.is_disabled and item.is_disabled(m)
+        local c = disabled and C.dark_gray
                 or (i == m.cur_idx) and C.white
                 or C.light_gray
         print(item.text, m.x+9, m.y+item.y, c)
@@ -53,7 +54,8 @@ function Menu.handle_btn(m)
     if btnp(B.down) then m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
     if btnp(B.z) then
         local item = m.items[m.cur_idx]
-        if not item.disabled then
+        local disabled = item.is_disabled and item.is_disabled(m)
+        if not disabled then
             item.cb(m)
             m:close()
         end
@@ -75,7 +77,8 @@ end
 function init_menus()
     -- Buy menu ----------------------------------------------------------------
     buy_menu = Menu.new({x=35, dst_y=98, w=59, h=27})
-    add(buy_menu.items, {text='buy',    y=11+8*0, cb=do_buy})
+    add(buy_menu.items, {text='buy',    y=11+8*0, cb=do_buy,
+        is_disabled=function(m) return gold < tower_cfg[m.sel_twr].buy end})
     add(buy_menu.items, {text='cancel', y=11+8*1, cb=buy_menu.close})
 
     buy_menu.sel_twr = 1
@@ -108,7 +111,6 @@ function init_menus()
 
     buy_menu.update = function(m)
         Menu.update(m)
-        m.items[1].disabled = gold < tower_cfg[m.sel_twr].buy
         m.carousel_x = lerp(
             m.carousel_sx,
             (m.sel_twr-1)*-CAROUSEL_GAP,
@@ -148,21 +150,17 @@ function init_menus()
     buy_menu.open = function(m)
         Menu.open(m)
         m.sel_twr = 1
-        -- Note: updating this in open bc handle_button is called before update
-        m.items[1].disabled = gold < tower_cfg[m.sel_twr].buy
     end
 
     -- Upgrade menu ------------------------------------------------------------
     upg_menu = Menu.new({x=35, dst_y=89, w=59, h=36})
-    add(upg_menu.items, {text='upgrade', y=12+8*0, cb=do_upgrade})
+    add(upg_menu.items, {text='upgrade', y=12+8*0, cb=do_upgrade,
+        is_disabled=function(m) return not m.twr.upg or gold < m.twr.upg end})
     add(upg_menu.items, {text='sell',    y=12+8*1, cb=do_sell})
     add(upg_menu.items, {text='cancel',  y=12+8*2, cb=upg_menu.close})
 
     upg_menu.update = function(m)
         Menu.update(m)
-        if m.twr then
-            m.items[1].disabled = not m.twr.upg or gold < m.twr.upg
-        end
     end
 
     upg_menu.draw = function(m)
@@ -180,8 +178,6 @@ function init_menus()
     upg_menu.open = function(m)
         Menu.open(m)
         m.twr = find_sel_tower()
-        -- Note: updating this in open bc handle_button is called before update
-        m.items[1].disabled = not m.twr.upg or gold < m.twr.upg
     end
 
     -- Bonus menu --------------------------------------------------------------
