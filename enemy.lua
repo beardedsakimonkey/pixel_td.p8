@@ -1,9 +1,13 @@
-sending = 0
-enemies = {}
 -- Helps impl of enemy movement
-local path_points = {}
+local path_points
 
-function init_enemy_aux()
+function init_enemy()
+    sending = 0
+    enemies = {}
+end
+
+function init_path_points()
+    path_points = {}
     local map = get_map()
     for i = 1, #map do
         local p = g2p(map[i])

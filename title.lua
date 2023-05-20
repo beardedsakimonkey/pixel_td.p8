@@ -1,16 +1,23 @@
 local LETTER_HEIGHT = 19
 local OFFSCREEN_Y = -LETTER_HEIGHT
-local z_age = nil
-local t = 0
-local letters = {
-    {x=0,  w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- P
-    {x=13, w=7,  y=OFFSCREEN_Y, v=0, dest_y=12}, -- I
-    {x=21, w=17, y=OFFSCREEN_Y, v=0, dest_y=12}, -- X
-    {x=38, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- E
-    {x=51, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- L
-    {x=64, w=14, y=OFFSCREEN_Y, v=0, dest_y=12}, -- T
-    {x=78, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- D
-}
+
+local z_age
+local t
+local letters
+
+function init_title()
+    z_age = nil
+    t = 0
+    letters = {
+        {x=0,  w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- P
+        {x=13, w=7,  y=OFFSCREEN_Y, v=0, dest_y=12}, -- I
+        {x=21, w=17, y=OFFSCREEN_Y, v=0, dest_y=12}, -- X
+        {x=38, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- E
+        {x=51, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- L
+        {x=64, w=14, y=OFFSCREEN_Y, v=0, dest_y=12}, -- T
+        {x=78, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- D
+    }
+end
 
 function update_title()
     t += 1

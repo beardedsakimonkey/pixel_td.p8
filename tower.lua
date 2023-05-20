@@ -1,5 +1,3 @@
-towers = {}
-
 MAX_TWR = 3 -- how many types of towers are there
 
 function is_green_twr(type)  return type % MAX_TWR == 1 end
@@ -15,13 +13,8 @@ function find_sel_tower()
     end)
 end
 
-function init_towers()
-    local GREEN, RED, YELLOW = 1, 2, 3
-    -- make_tower(RED, 2, 4)
-    -- make_tower(GREEN, 3, 4)
-    -- make_tower(GREEN, 4, 4)
-    -- make_tower(YELLOW, 4, 2)
-    foreach(towers, function(twr) twr.age = nil end) -- don't animate
+function init_tower()
+    towers = {}
 end
 
 function make_tower(type, gx, gy)

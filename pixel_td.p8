@@ -34,6 +34,10 @@ do
 end
 
 do
+#include game_over.lua
+end
+
+do
 #include core.lua
 end
 __gfx__

@@ -109,20 +109,6 @@ tower_cfg = {
     {dmg=5,   range=39, atkspd=50, max_bullets=4, sell=160}, -- yellow
 }
 
-sel_map = 1
-wave = 0
-gold = 100
-lives = 20
-bonuses = {}
--- TODO: handle interest
-interest = 3
-bonus_dmg = 1
-bonus_rng = 1
-t = 0
-shake = 0
-screen = 'title'
-has_opened_shop = false
-has_bought_tower = false
 
 function remove_life()
     lives -= 1
@@ -132,29 +118,55 @@ end
 --------------------------------------------------------------------------------
 -- INIT
 --------------------------------------------------------------------------------
+function reinit()
+    sel_map = 1
+    wave = 0
+    gold = 100
+    lives = 20
+    bonuses = {}
+    -- TODO: handle interest
+    interest = 3
+    bonus_dmg = 1
+    bonus_rng = 1
+    t = 0
+    shake = 0
+    screen = 'title'
+    has_opened_shop = false
+    has_bought_tower = false
+
+    init_enemy()
+    init_hint()
+    init_menus()
+    init_selection()
+    init_tower()
+    init_title()
+end
+
 function _init()
     poke(0x5f5c, 9) -- button repeat delay
     poke(0x5f5d, 3) -- button repeat interval
-
-    init_menus()
-    init_towers()
+    reinit()
 end
 
 --------------------------------------------------------------------------------
 -- UPDATE
 --------------------------------------------------------------------------------
 function _update60()
+    debug_msgs = {}
     if screen == 'title' then
         update_title()
         return
     end
+    if screen == 'game_over' then
+        update_game_over()
+        return
+    end
     -- Initialize once we know the map
     if t == 0 then
-        init_selection_aux()
-        init_enemy_aux()
+        init_grid_bitmap()
+        init_path_points()
     end
 
-    debug_msgs = {}
     t += 1
     update_selection()
 
@@ -199,6 +211,12 @@ function _update60()
         shake *= 0.9
         if shake < 0.3 then shake = 0 end
     end
+
+    -- should go after spawning enemies
+    if sending == 0 and #enemies == 0 and wave == #waves then
+        screen = 'game_over'
+        return
+    end
 end
 
 -- Horizontally center text
@@ -221,6 +239,11 @@ function _draw()
 
     if screen == 'title' then
         draw_title()
+        return
+    end
+
+    if screen == 'game_over' then
+        draw_game_over()
         return
     end
 

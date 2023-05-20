@@ -1,15 +1,19 @@
-local _init_pos = {x=5, y=4}
-local _p = g2p(_init_pos)
-sel = {
-    dst_x=_p.left,      dst_y=_p.top,
-    dst_gx=_init_pos.x, dst_gy=_init_pos.y,
-    x=_p.left,          y=_p.top,
-    vx=0, vy=0,
-}
--- Helps impl of selection movement
-local grid_bitmap = {}
+function init_selection()
+    local init_pos = {x=5, y=4}
+    local p = g2p(init_pos)
+    sel = {
+        dst_x=p.left,      dst_y=p.top,
+        dst_gx=init_pos.x, dst_gy=init_pos.y,
+        x=p.left,          y=p.top,
+        vx=0, vy=0,
+    }
+end
 
-function init_selection_aux()
+-- Helps impl of selection movement
+local grid_bitmap
+
+function init_grid_bitmap()
+    grid_bitmap = {}
     for _=0, 10 do
         add(grid_bitmap, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
     end

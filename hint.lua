@@ -1,10 +1,16 @@
-show_hint_x = false
 local OFFSCREEN_Y = -8
-local y = OFFSCREEN_Y
-local v = 0
-local t = 0
+local y
+local v
+local t
 
 local GLISTEN_DELAY = 300 -- 10 sec
+
+function init_hint()
+    show_hint_x = false
+    y = OFFSCREEN_Y
+    v = 0
+    t = 0
+end
 
 local function show_hint_z()
     return not has_opened_shop and can_send_wave()
