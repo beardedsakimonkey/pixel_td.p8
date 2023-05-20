@@ -1,25 +1,51 @@
--- TODO: animate each letter seperately, staggered
-
-local TITLE_HEIGHT = 19
-local OFFSCREEN_TY = -TITLE_HEIGHT
-local ty = OFFSCREEN_TY
-local tv = 0
-local started = false
+local LETTER_HEIGHT = 19
+local OFFSCREEN_Y = -LETTER_HEIGHT
+local z_age = nil
+local t = 0
+local letters = {
+    {x=0,  w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- P
+    {x=13, w=7,  y=OFFSCREEN_Y, v=0, dest_y=12}, -- I
+    {x=21, w=17, y=OFFSCREEN_Y, v=0, dest_y=12}, -- X
+    {x=38, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- E
+    {x=51, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- L
+    {x=64, w=14, y=OFFSCREEN_Y, v=0, dest_y=12}, -- T
+    {x=78, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- D
+}
 
 function update_title()
-    if btnp(B.z) then
-        started = true
-        tv = 200
+    t += 1
+    if z_age then
+        z_age += 1
+        if z_age >= 50 then
+            screen = 'game'
+            return
+        end
     end
-    local dest_ty = not started and 12 or OFFSCREEN_TY
-    ty, tv = spring(ty, dest_ty, tv, {
-        stiffness = 200,
-        damping = 12,
-        mass = 2,
-        precision = 0.2,
-    })
-    if ty <= OFFSCREEN_TY then
-        screen = 'game'
+    if btnp(B.z) then
+        z_age = 0
+    end
+
+    -- Send letters up
+    if z_age then
+        for i, l in pairs(letters) do
+            if l.dest_y ~= OFFSCREEN_Y and z_age >= (i-1)*2 then
+                l.dest_y = OFFSCREEN_Y
+                l.v = 300
+            end
+        end
+    end
+
+    -- Update letters
+    local dest_y = not z_age and 12 or OFFSCREEN_Y
+    for i, l in pairs(letters) do
+        if t >= (i-1)*2 then
+            l.y, l.v = spring(l.y, dest_y, l.v, {
+                stiffness = 200,
+                damping = 12,
+                mass = 3,
+                precision = 0.2,
+            })
+        end
     end
 end
 
@@ -52,7 +78,10 @@ end
 function draw_title()
     -- Draw title
     pal(C.pink, C.black)
-    sspr(0, 32, 90, TITLE_HEIGHT, 19, ty)
+    -- sspr(0, 32, 90, LETTER_HEIGHT, 19, y)
+    for l in all(letters) do
+        sspr(l.x, 32, l.w, LETTER_HEIGHT, 19+l.x, l.y)
+    end
     pal(0)
 
     -- Draw map (33x33)
