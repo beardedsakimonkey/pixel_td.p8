@@ -187,30 +187,31 @@ function draw_enemies()
             circ(enmy.x, enmy.y, enmy.death_age+1, C.pink)
             return
         end
+        pal(C.green, C.black)
+        local top  = enmy.y - enmy.height\2
+        local left = enmy.x - enmy.width\2
         if enmy.type == ENMY.circ then
-            circ(enmy.x, enmy.y, 1, C.light_gray)
+            spr(112, left, top)
         elseif enmy.type == ENMY.square then
-            rect(enmy.x-1, enmy.y-1, enmy.x+1, enmy.y+1, C.light_gray)
-        elseif enmy.type == ENMY.rect then
-            rect(enmy.x-2, enmy.y-1, enmy.x+2, enmy.y+1, C.light_gray)
+            spr(113, left, top)
         elseif enmy.type == ENMY.diamond then
-            line(enmy.x, enmy.y-2, enmy.x-2, enmy.y, C.light_gray) -- top left
-            line(enmy.x, enmy.y+2) -- bot left
-            line(enmy.x+2, enmy.y) -- bot right
-            line(enmy.x, enmy.y-2) -- top right
+            spr(114, left, top)
+        elseif enmy.type == ENMY.rect then
+            spr(115, left, top)
+        elseif enmy.type == ENMY.boss then
+            spr(116, left, top)
         elseif enmy.type == ENMY.arrow then
             if enmy.dx ~= 0 then
                 line(enmy.x, enmy.y-2,
-                     enmy.x+(enmy.dx > 0 and 2 or -2), enmy.y, C.light_gray)
+                enmy.x+(enmy.dx > 0 and 2 or -2), enmy.y, C.light_gray)
                 line(enmy.x, enmy.y+2)
             else
                 line(enmy.x-2, enmy.y,
-                     enmy.x, enmy.y+(enmy.dy > 0 and 2 or -2), C.light_gray)
+                enmy.x, enmy.y+(enmy.dy > 0 and 2 or -2), C.light_gray)
                 line(enmy.x+2, enmy.y)
             end
-        elseif enmy.type == ENMY.boss then
-            circ(enmy.x, enmy.y, 2, C.yellow)
         end
+        pal()
         -- Draw hp
         local hp_y = enmy.y - 4
         rect(enmy.x-1, hp_y, enmy.x+1, hp_y, C.dark_green)

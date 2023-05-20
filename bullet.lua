@@ -119,7 +119,6 @@ local function draw_bullets_green(twr)
         line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
         -- don't cover up center pixel
         pset(twr.x, twr.y, C.black)
-        pset(blt.enemy.x, blt.enemy.y, C.black)
     end
 end
 
@@ -195,7 +194,6 @@ local function draw_bullets_yellow(twr)
             line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
             -- don't cover up center pixel
             pset(twr.x, twr.y, C.black)
-            pset(blt.enemy.x, blt.enemy.y, C.black)
         end
     end
 end
