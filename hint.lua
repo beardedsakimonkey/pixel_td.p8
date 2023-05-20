@@ -41,4 +41,10 @@ function draw_hint()
     local glisten_delay = 300 -- 10 sec
     local s = 48 + max(0, (t\2)%(glisten_delay+11) - glisten_delay)
     spr(s, x, y)
+    -- draw 'x'
+    pset(x+2, y+1, C.dark_blue)
+    pset(x+4, y+1, C.dark_blue)
+    pset(x+2, y+3, C.dark_blue)
+    pset(x+4, y+3, C.dark_blue)
+    pset(x+3, y+2, C.dark_blue)
 end
