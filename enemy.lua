@@ -150,6 +150,7 @@ local function move_enemy(e)
 end
 
 function update_enemies()
+    local num_enemies = #enemies
     foreach(enemies, function(enmy)
         -- update death animation
         if enmy.death_age then
@@ -178,6 +179,10 @@ function update_enemies()
             del(enemies, enmy)
         end
     end)
+    if #enemies == 0 and num_enemies > 0 then
+        -- apply interest
+        gold += gold * interest/100
+    end
 end
 
 function draw_enemies()

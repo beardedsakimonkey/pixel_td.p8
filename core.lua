@@ -122,9 +122,8 @@ function reinit()
     sel_map = 1
     wave = 0
     gold = 100
-    lives = 20
+    lives = 10
     bonuses = {}
-    -- TODO: handle interest
     interest = 3
     bonus_dmg = 1
     bonus_rng = 1
@@ -341,7 +340,7 @@ function draw_stats()
     x -= 9
     spr(18, x, y)
 
-    local gold = tostr(gold)
+    local gold = tostr(flr(gold))
     x -= 3 + #gold*4
     print(gold, x, y, C.light_gray)
     x -= 7
