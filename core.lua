@@ -166,7 +166,7 @@ function _update60()
         init_path_points()
     end
 
-    t += 1
+    t = max(1, t+1)
     if start_age < 10 then start_age +=1 end
 
     update_selection()

@@ -5,6 +5,7 @@ local t
 
 local GLISTEN_DELAY = 300 -- 10 sec
 local FLIP_Y = 20
+local FADE_DURATION = 9
 
 function init_hint()
     show_hint_x = false
@@ -28,6 +29,7 @@ function update_hint()
 
     if show_hint_x or show_hint_z() then
         t += 1
+        if t < 0 then t = FADE_DURATION+1 end
     end
     if dismissing_x then
         t = 0
@@ -81,7 +83,7 @@ local function draw_hint_z()
 
     -- Draw button
     local s = max(0, (t\2)%(GLISTEN_DELAY+11) - GLISTEN_DELAY)
-    if t < 10 then -- fade in
+    if t <= FADE_DURATION then -- fade in
         local c = t < 4 and C.dark_blue or C.dark_gray
         pal({
             [1]=C.black,  -- dark blue

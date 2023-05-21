@@ -3,12 +3,14 @@ local OFFSCREEN_Y = -LETTER_HEIGHT
 
 local z_age
 local t
+local title_t -- non-wrapping `t`
 local letters
 local pressing_l, pressing_r, pressing_z
 
 function init_title()
     z_age = nil
     t = 0
+    title_t = 0
     letters = {
         {x=0,  w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- P
         {x=13, w=7,  y=OFFSCREEN_Y, v=0, dest_y=12}, -- I
@@ -21,6 +23,7 @@ function init_title()
 end
 
 function update_title()
+    if title_t < 100 then title_t += 1 end
     t += 1
     if z_age then
         z_age += 1
@@ -57,7 +60,7 @@ function update_title()
 
     -- Update letters
     for i, l in pairs(letters) do
-        if t >= (i-1)*2 then
+        if title_t >= (i-1)*2 then -- staggering
             if l.dest_y == OFFSCREEN_Y and l.y <= OFFSCREEN_Y then
                 -- avoid letter bouncing back out from the top
             else

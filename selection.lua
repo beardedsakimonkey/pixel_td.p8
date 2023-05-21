@@ -1,3 +1,6 @@
+local t -- non-wrapping `t`
+local ENTER_DURATION = 11 -- duration of the entrance animation
+
 function init_selection()
     local init_pos = {x=5, y=3}
     local p = g2p(init_pos)
@@ -7,6 +10,7 @@ function init_selection()
         x=p.left,          y=p.top,
         vx=0, vy=0,
     }
+    t = 0
 end
 
 -- Helps impl of selection movement
@@ -65,6 +69,9 @@ local function handle_btn(btn)
 end
 
 function update_selection()
+    if t <= ENTER_DURATION then
+        t += 1
+    end
     if not buy_menu.is_open and not upg_menu.is_open
         and not bonus_menu.is_open then
         if btnp(B.left)  then handle_btn(B.left) end
@@ -84,12 +91,14 @@ function update_selection()
 end
 
 function draw_selection()
-    if     t <= 2  then off = 5
-    elseif t <= 4  then off = 4
-    elseif t <= 6  then off = 3
-    elseif t <= 8  then off = 2
-    elseif t <= 10 then off = 1
-    else                off = 0 end
+    local off = 0
+    if t <= ENTER_DURATION then
+        if     t <= 2  then off = 5
+        elseif t <= 4  then off = 4
+        elseif t <= 6  then off = 3
+        elseif t <= 8  then off = 2
+        elseif t <= 10 then off = 1 end
+    end
     local top   = sel.y + 1 - off
     local left  = sel.x + 1 - off
     -- snap to upper pixel when moving right/down
