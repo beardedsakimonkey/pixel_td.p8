@@ -34,12 +34,11 @@ function init_grid_bitmap()
     end
 end
 
--- Todo: this doesn't actually do the moving
-local function move_selection(dir)
+local function handle_btn(btn)
     -- Find destination cell
     local dst_x, dst_y = sel.dst_gx, sel.dst_gy
-    local cell_dx = dir == B.right and 1 or dir == B.left and -1 or 0
-    local cell_dy = dir == B.down and  1 or dir == B.up   and -1 or 0
+    local cell_dx = btn == B.right and 1 or btn == B.left and -1 or 0
+    local cell_dy = btn == B.down and  1 or btn == B.up   and -1 or 0
     while true do
         -- move 0 or 1 cells in both directions
         dst_x += cell_dx
@@ -68,10 +67,10 @@ end
 function update_selection()
     if not buy_menu.is_open and not upg_menu.is_open
         and not bonus_menu.is_open then
-        if btnp(B.left)  then move_selection(B.left) end
-        if btnp(B.right) then move_selection(B.right) end
-        if btnp(B.up)    then move_selection(B.up) end
-        if btnp(B.down)  then move_selection(B.down) end
+        if btnp(B.left)  then handle_btn(B.left) end
+        if btnp(B.right) then handle_btn(B.right) end
+        if btnp(B.up)    then handle_btn(B.up) end
+        if btnp(B.down)  then handle_btn(B.down) end
     end
 
     local cfg = {

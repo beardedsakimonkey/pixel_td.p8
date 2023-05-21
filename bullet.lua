@@ -1,4 +1,3 @@
--- Todo: perf
 local function is_in_range(enmy, twr)
     return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < get_twr_range(twr)^2
 end
