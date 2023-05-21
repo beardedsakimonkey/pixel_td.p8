@@ -1,3 +1,4 @@
+-- TODO: create maps
 _map = {
     {x=1,  y=0,  c=CRNR.top},
     {x=1,  y=3,  c=CRNR.bl},

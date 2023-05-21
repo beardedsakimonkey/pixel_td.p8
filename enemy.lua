@@ -25,7 +25,7 @@ local function make_enemy(type, max_hp, gold, dx, dy)
     if type == ENMY.circ then
         width, height = 3, 3
     elseif type == ENMY.square then
-        width, height = 3, 3
+        width, height = 4, 4
     elseif type == ENMY.diamond then
         width, height = 5, 5
     elseif type == ENMY.arrow then
@@ -217,11 +217,13 @@ function draw_enemies()
             end
         end
         pal()
-        -- Draw hp
+        -- Draw health bar
         local hp_y = enmy.y - 4
-        rect(enmy.x-1, hp_y, enmy.x+1, hp_y, C.dark_green)
-        local hp_rem = ceil(enmy.hp / enmy.max_hp*3)
-        rect(enmy.x-1, hp_y, (enmy.x-1)+hp_rem-1, hp_y, C.green)
+        local hp_width = enmy.type == ENMY.arrow and 5 or enmy.width
+        local left = enmy.x - enmy.width\2
+        rect(left, hp_y, left+hp_width-1, hp_y, C.dark_green)
+        local hp_rem = ceil(enmy.hp / enmy.max_hp*hp_width)
+        rect(left, hp_y, left+hp_rem-1, hp_y, C.green)
     end)
 end
 
