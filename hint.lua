@@ -1,14 +1,17 @@
 local OFFSCREEN_Y = -8
-local y
-local v
+local x_y, x_v
+local z_y, z_vy, z_x, z_vx
 local t
 
 local GLISTEN_DELAY = 300 -- 10 sec
+local FLIP_Y = 20
 
 function init_hint()
     show_hint_x = false
-    y = OFFSCREEN_Y
-    v = 0
+    x_y = OFFSCREEN_Y
+    x_v = 0
+    z_vy, z_vx = 0, 0
+    z_y, z_x = sel.dst_y, sel.dst_x-18
     t = 0
 end
 
@@ -28,44 +31,53 @@ function update_hint()
     end
     if dismissing_x then
         t = 0
-        v = 200
+        x_v = 200
     end
     local dest_y = show_hint_x and 1 or OFFSCREEN_Y
-    y, v = spring(y, dest_y, v, {
+    x_y, x_v = spring(x_y, dest_y, x_v, {
         stiffness = 200,
         damping = 32,
         mass = 2,
         precision = 0.2,
     })
+    if show_hint_z() then
+        local flip = sel.dst_x < FLIP_Y
+        local dest_x = sel.dst_x + (flip and 21 or -18)
+        local dest_y = sel.dst_y + 3
+        if sel.vx > 0 then dest_x = ceil(dest_x) end
+        if sel.vy > 0 then dest_y = ceil(dest_y) end
+        local cfg = {
+            stiffness = 140,
+            damping = 20,
+            mass = 2,
+            precision = 0.1,
+        }
+        z_x, z_vx = spring(z_x, dest_x, z_vx, cfg)
+        z_y, z_vy = spring(z_y, dest_y, z_vy, cfg)
+    end
 end
 
 local function draw_hint_x()
     local x = 26
     -- Draw arrow
-    spr(20, x, y)
+    spr(20, x, x_y)
     x += 6
     -- Draw button
     local s = max(0, (t\2)%(GLISTEN_DELAY+11) - GLISTEN_DELAY)
-    sspr(s*9, 24, 9, 8, x, y)
+    sspr(s*9, 24, 9, 8, x, x_y)
 
     -- draw 'x'
-    pset(x+3, y+2, C.dark_blue)
-    pset(x+5, y+2, C.dark_blue)
-    pset(x+3, y+4, C.dark_blue)
-    pset(x+5, y+4, C.dark_blue)
-    pset(x+4, y+3, C.dark_blue)
+    pset(x+3, x_y+2, C.dark_blue)
+    pset(x+5, x_y+2, C.dark_blue)
+    pset(x+3, x_y+4, C.dark_blue)
+    pset(x+5, x_y+4, C.dark_blue)
+    pset(x+4, x_y+3, C.dark_blue)
 end
 
--- TODO: lag behind selection?
 local function draw_hint_z()
     -- Draw arrow
-    local flip = sel.x < 20
-    local x = sel.x + (flip and 16 or -8)
-    local y = sel.y + 3
-    if sel.vx > 0 then x = ceil(x) end
-    if sel.vy > 0 then y = ceil(y) end
-    sspr(32, 8, 5, 8, x, y, 5, 8, not flip)
-    x += flip and 6 or -10
+    local flip = sel.dst_x < FLIP_Y
+    sspr(32, 8, 5, 8, z_x+(flip and -6 or 10), z_y, 5, 8, not flip)
 
     -- Draw button
     local s = max(0, (t\2)%(GLISTEN_DELAY+11) - GLISTEN_DELAY)
@@ -78,9 +90,9 @@ local function draw_hint_z()
             [13]=C.black, -- indigo
         })
     end
-    sspr(s*9, 24, 9, 8, x, y)
+    sspr(s*9, 24, 9, 8, z_x, z_y)
     -- draw 'o'
-    rect(x+3, y+2, x+5, y+4, C.dark_blue)
+    rect(z_x+3, z_y+2, z_x+5, z_y+4, C.dark_blue)
 end
 
 function draw_hint()
