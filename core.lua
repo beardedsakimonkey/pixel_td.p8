@@ -298,41 +298,26 @@ function draw_path(t)
         end
 
         -- draw path decoration
-        -- TODO: tidy
         if sel_map == 3 then pal(C.dark_blue, C.dark_purple) end
         for j = 1, #map, #map-1 do
             local c = map[j].c
             local p = g2p(map[j])
             local sx, sy, w, h, dx, dy
             local flip_x, flip_y = false, false
-            if c == CRNR.top then
+            if c == CRNR.top or c == CRNR.bot then
                 w = 11; h = 6
-                sx = 80 + (t\7)%4
+                flip_y = c == CRNR.bot
+                sx = c == CRNR.bot and (80+4 - (t\7)%4) or (80 + (t\7)%4)
                 sy = 8
-                dy = 0
+                dy = c == CRNR.bot and 128-h or 0
                 dx = mid(0, p.left, 117)
                 if dx > 0 then dx += 1 end -- account for cell border
-            elseif c == CRNR.bot then
-                flip_y = true
-                w = 11; h = 6
-                sx = 80 + 4 - (t\7)%4
-                sy = 8
-                dy = 128-h
-                dx = mid(0, p.left, 117)
-                if dx > 0 then dx += 1 end -- account for cell border
-            elseif c == CRNR.left then
+            else
                 w = 6; h = 11
+                flip_x = c == CRNR.right
                 sx = 96
-                sy = 8 + (t\7)%4
-                dx = 0
-                dy = mid(0, p.top, 116)
-                if dy > 0 then dy += 1 end -- account for cell border
-            elseif c == CRNR.right then
-                flip_x = true
-                w = 6; h = 11
-                sx = 96
-                sy = 8 + 4 - (t\7)%4
-                dx = 128-w
+                sy = c == CRNR.right and (8+4 - (t\7)%4) or (8 + (t\7)%4)
+                dx = c == CRNR.right and 128-w or 0
                 dy = mid(0, p.top, 116)
                 if dy > 0 then dy += 1 end -- account for cell border
             end
@@ -340,7 +325,6 @@ function draw_path(t)
         end
         pal(0)
     end
-
 end
 
 function draw_stats()
@@ -368,7 +352,6 @@ function draw_stats()
     x -= 7
     spr(17, x, y)
     pal(0)
-
 end
 
 function get_cell_corner(cell, c)
