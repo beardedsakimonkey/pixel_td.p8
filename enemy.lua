@@ -198,7 +198,8 @@ function draw_enemies()
     foreach(enemies, function(enmy)
         -- Draw enemy
         if enmy.death_age then
-            circ(enmy.x, enmy.y, enmy.death_age+1, C.pink)
+            circ(enmy.x, enmy.y, enmy.death_age+1,
+                 enmy.death_age%2 == 0 and C.pink or C.red)
             return
         end
         pal(C.white, C.black)

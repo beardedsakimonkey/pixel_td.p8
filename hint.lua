@@ -11,7 +11,7 @@ function init_hint()
     x_y = OFFSCREEN_Y
     x_v = 0
     z_vy, z_vx = 0, 0
-    z_y, z_x = sel.dst_y, sel.dst_x-18
+    z_y, z_x = sel.dst_y, sel.dst_x-28
     t = 0
 end
 
@@ -47,7 +47,7 @@ function update_hint()
         if sel.vx > 0 then dest_x = ceil(dest_x) end
         if sel.vy > 0 then dest_y = ceil(dest_y) end
         local cfg = {
-            stiffness = 140,
+            stiffness = 100,
             damping = 20,
             mass = 2,
             precision = 0.1,

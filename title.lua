@@ -74,9 +74,7 @@ end
 
 function draw_title()
     -- Draw map
-    if sel_map == 3 then pal(C.dark_blue, C.dark_purple) end
     draw_path(t)
-    pal(0)
 
     -- Draw title
     pal(C.pink, C.black)
@@ -103,7 +101,8 @@ function draw_title()
         sspr(pressing_r and 112 or 96, 32, 9, 8, 80, y-1)
 
         local str = sel_map == 1 and 'easy' or sel_map == 2 and 'medium' or 'hard'
-        print_outlined(str, center_horz(str), y, C.yellow, C.black)
+        local c = sel_map == 3 and C.red or C.yellow
+        print_outlined(str, center_horz(str), y, c, C.black)
 
         local str2 = 'start'
         local y2 = 73

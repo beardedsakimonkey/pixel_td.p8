@@ -63,7 +63,7 @@ function get_map()
 end
 -- Note: bosses must be on every 5th wave
 waves = {
-    {hp=6,  speed=0.25, gold=4, type=ENMY.square},
+    {hp=6,  speed=0.25, gold=4, type=ENMY.rect},
     {hp=9,  speed=0.25, gold=4, type=ENMY.diamond},
     {hp=12, speed=0.2,  gold=4, type=ENMY.rect},
     {hp=7,  speed=0.5,  gold=4, type=ENMY.arrow},
@@ -93,17 +93,17 @@ tower_cfg = {
     -- level 1
     {dmg=0.2, range=30,                           buy=40, upg=30, sell=40}, -- green
     {dmg=2,   range=30, atkspd=40,                buy=40, upg=30, sell=40}, -- red
-    {dmg=2,   range=30, atkspd=80,                buy=40, upg=30, sell=40}, -- yellow
+    {dmg=2,   range=30, atkspd=80,                buy=30, upg=30, sell=30}, -- yellow
     -- level 2
-    {dmg=0.25,range=33,                           upg=40, sell=70}, -- green
+    {dmg=0.4, range=33,                           upg=40, sell=70}, -- green
     {dmg=2,   range=33, atkspd=40, max_bullets=2, upg=40, sell=70}, -- red
     {dmg=3,   range=33, atkspd=70, max_bullets=2, upg=40, sell=70}, -- yellow
     -- level 3
-    {dmg=0.3, range=36,                           upg=50, sell=110}, -- green
+    {dmg=0.6, range=36,                           upg=50, sell=110}, -- green
     {dmg=2,   range=36, atkspd=40, max_bullets=3, upg=50, sell=110}, -- red
     {dmg=4,   range=36, atkspd=60, max_bullets=3, upg=50, sell=110}, -- yellow
     -- level 4
-    {dmg=0.35,range=39,                           sell=160}, -- green
+    {dmg=0.8, range=39,                           sell=160}, -- green
     {dmg=2,   range=39, atkspd=40, max_bullets=4, sell=160}, -- red
     {dmg=5,   range=39, atkspd=50, max_bullets=4, sell=160}, -- yellow
 }
@@ -134,9 +134,9 @@ function reinit()
     has_bought_tower = false
 
     init_enemy()
-    init_hint()
     init_menus()
     init_selection()
+    init_hint() -- should go after init_selection()
     init_tower()
     init_title()
 end
@@ -299,6 +299,7 @@ function draw_path(t)
 
         -- draw path decoration
         -- TODO: tidy
+        if sel_map == 3 then pal(C.dark_blue, C.dark_purple) end
         for j = 1, #map, #map-1 do
             local c = map[j].c
             local p = g2p(map[j])
@@ -337,6 +338,7 @@ function draw_path(t)
             end
             sspr(sx, sy, w, h, dx, dy, w, h, flip_x, flip_y)
         end
+        pal(0)
     end
 
 end
