@@ -56,7 +56,7 @@ local function draw_hint_x()
     pset(x+4, y+3, C.dark_blue)
 end
 
--- TODO: fade in
+-- TODO: lag behind selection?
 local function draw_hint_z()
     -- Draw arrow
     local flip = sel.x < 20
@@ -65,14 +65,19 @@ local function draw_hint_z()
     if sel.vx > 0 then x = ceil(x) end
     if sel.vy > 0 then y = ceil(y) end
     sspr(32, 8, 5, 8, x, y, 5, 8, not flip)
-    if flip then
-        x += 6
-    else
-        x -= 10
-    end
+    x += flip and 6 or -10
 
     -- Draw button
     local s = max(0, (t\2)%(GLISTEN_DELAY+11) - GLISTEN_DELAY)
+    if t < 10 then -- fade in
+        local c = t < 4 and C.dark_blue or C.dark_gray
+        pal({
+            [1]=C.black,  -- dark blue
+            [6]=c,        -- light gray
+            [10]=c,       -- yellow
+            [13]=C.black, -- indigo
+        })
+    end
     sspr(s*9, 24, 9, 8, x, y)
     -- draw 'o'
     rect(x+3, y+2, x+5, y+4, C.dark_blue)
