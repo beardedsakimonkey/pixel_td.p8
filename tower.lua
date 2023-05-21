@@ -84,4 +84,8 @@ function draw_towers()
             circ(twr.x, twr.y, get_twr_range(twr), C.light_gray)
         end
     end
+    if buy_menu.is_open then
+        local range = get_twr_range({range = tower_cfg[buy_menu.sel_twr].range})
+        circ(sel.x+6, sel.y+6, range, C.light_gray)
+    end
 end
