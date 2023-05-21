@@ -188,8 +188,8 @@ function update_enemies()
             del(enemies, enmy)
         end
     end)
+    -- apply interest
     if #enemies == 0 and num_enemies > 0 then
-        -- apply interest
         gold += gold * interest/100
     end
 end

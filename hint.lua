@@ -56,6 +56,7 @@ local function draw_hint_x()
     pset(x+4, y+3, C.dark_blue)
 end
 
+-- TODO: fade in
 local function draw_hint_z()
     -- Draw arrow
     local flip = sel.x < 20

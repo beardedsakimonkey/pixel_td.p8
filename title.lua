@@ -83,13 +83,18 @@ function draw_title()
 
     -- Draw difficulty
     if z_age == nil then
-        local y = 62
+        local y = 54
         pal(C.green, C.black)
         sspr(96, 32, 9, 8, 38, y-1, 9, 8, true)
         sspr(96, 32, 9, 8, 80, y-1)
-        pal(0)
 
         local str = sel_map == 1 and 'easy' or sel_map == 2 and 'medium' or 'hard'
-        print_outlined(str, center_horz(str), y, C.light_gray, C.black)
+        print_outlined(str, center_horz(str), y, C.yellow, C.black)
+
+        local str2 = 'start'
+        local y2 = 73
+        print_outlined(str2, center_horz(str2)+2, y2, C.light_gray, C.black)
+        sspr(96, 40, 9, 8, 43, y2-1)
+        pal(0)
     end
 end
