@@ -68,3 +68,16 @@ function spring(cur_pos, dst_pos, cur_vel, cfg)
     end
     return new_pos, new_vel
 end
+
+function center_horz(str)
+    local mid = 64
+    local width = print(str, 0, -20) - 1
+    local left = mid - width\2
+    return left
+end
+
+function print_outlined(str, x, y, color, outline_color)
+    local w = print(str, 0, -20)
+    rectfill(x-1, y-1, x-1+w, y+5, C.black)
+    print(str, x, y, color)
+end

@@ -88,8 +88,6 @@ function draw_title()
         pal(0)
 
         local str = sel_map == 1 and 'easy' or sel_map == 2 and 'medium' or 'hard'
-        local left, right = hcenter(str)
-        rectfill(left-1, y-1, right+1, y+5, C.black)
-        print(str, left, y, C.light_gray)
+        print_outlined(str, center_horz(str), y, C.light_gray, C.black)
     end
 end

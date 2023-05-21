@@ -221,15 +221,6 @@ function _update60()
     end
 end
 
--- Horizontally center text
-function hcenter(str)
-    local mid = 128/2 - 1  -- sub one because its zero-indexed
-    local pxlen = #str*4 - 1 -- don't count seperator of 1st char
-    local left = mid - pxlen\2
-    local right = mid + pxlen\2
-    return left, right
-end
-
 --------------------------------------------------------------------------------
 -- DRAW
 --------------------------------------------------------------------------------
@@ -252,10 +243,7 @@ function _draw()
     -- Draw wave count
     do
         local str = wave .. '/' .. #waves
-        local left, right = hcenter(str)
-        local top = 123
-        rectfill(left-1, top-1, right+1, top+5, C.black)
-        print(str, left, top, C.dark_blue)
+        print_outlined(str, center_horz(str), 122, C.dark_blue, C.black)
     end
 
     draw_path()
