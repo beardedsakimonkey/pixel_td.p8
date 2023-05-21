@@ -54,7 +54,8 @@ function spawn_enemy()
         -- Send out enemies with a 10px gap
         -- speed (px/frame) * X frames = 10px
         --  => X = 10px / speed
-        local frames = flr(10/w.speed)
+        local gap = w.type == ENMY.arrow and 15 or 10
+        local frames = flr(gap / w.speed)
         if t % frames == 0 then
             sending -= 1
             local dx, dy = 0, 0
