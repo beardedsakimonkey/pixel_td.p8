@@ -238,7 +238,7 @@ function draw_enemies()
         end
         pal(0)
         -- Draw health bar
-        local hp_y = enmy.y - 4
+        local hp_y = top-2
         local hp_width = enmy.type == ENMY.arrow and 5 or enmy.width
         local left = enmy.x - enmy.width\2
         rect(left, hp_y, left+hp_width-1, hp_y, C.dark_green)
