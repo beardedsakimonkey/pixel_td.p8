@@ -40,6 +40,7 @@ local function update_bullet_red(twr, blt)
     -- handle collision
     if collide(blt, enmy) then
         enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
+        if enmy.dmg_age == nil then enmy.dmg_age = 0 end
         if enmy.hp == 0 then
             gold += enmy.gold
             enmy.death_age = 0
@@ -88,6 +89,7 @@ local function update_bullet_green(twr, blt)
         blt.age += 1
         if blt.age%3 == 0 then -- don't trigger damage every frame
             enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
+            if enmy.dmg_age == nil then enmy.dmg_age = 0 end
             if enmy.hp == 0 then
                 gold += enmy.gold
                 enmy.death_age = 0
@@ -151,6 +153,7 @@ local function update_bullets_yellow(twr)
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy
                 enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
+                if enmy.dmg_age == nil then enmy.dmg_age = 0 end
                 if enmy.hp == 0 then
                     gold += enmy.gold
                     enmy.death_age = 0

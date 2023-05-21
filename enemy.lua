@@ -45,6 +45,7 @@ local function make_enemy(type, max_hp, gold, dx, dy)
         gold=gold,
         death_age=nil,
         width=width, height=height, -- for collision detection
+        dmg_age=nil,
     })
 end
 
@@ -153,6 +154,13 @@ end
 function update_enemies()
     local num_enemies = #enemies
     foreach(enemies, function(enmy)
+        if enmy.dmg_age then
+            if enmy.dmg_age > 8 then
+                enmy.dmg_age = nil
+            else
+                enmy.dmg_age += 1
+            end
+        end
         -- update death animation
         if enmy.death_age then
             enmy.death_age += 1
@@ -196,17 +204,30 @@ function draw_enemies()
         pal(C.white, C.black)
         local top  = enmy.y - enmy.height\2
         local left = enmy.x - enmy.width\2
+        local flash = enmy.dmg_age and (enmy.dmg_age\3)%2 == 0
         if enmy.type == ENMY.circ then
+            -- Circle
+            if flash then pal(C.light_gray, C.white) end
             spr(112, left, top)
         elseif enmy.type == ENMY.square then
+            -- Square
+            if flash then pal(C.pink, C.peach) end
             spr(113, left, top)
         elseif enmy.type == ENMY.diamond then
+            -- Diamond
+            if flash then pal(C.red, C.pink) end
             spr(114, left, top)
         elseif enmy.type == ENMY.rect then
+            -- Rectangle
+            if flash then pal(C.blue, C.white) end
             spr(115, left, top)
         elseif enmy.type == ENMY.boss then
+            -- Boss
+            if enmy.dmg_age and enmy.dmg_age%2 == 0 then pal(C.yellow, C.red) end
             spr(116, left, top)
         elseif enmy.type == ENMY.arrow then
+            -- Arrow
+            if flash then pal(C.orange, C.white) end
             if enmy.dx ~= 0 then
                 -- left/right
                 sspr(40, 56, 5, 5, left, top, 5, 5, enmy.dx<0)
