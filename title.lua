@@ -70,7 +70,9 @@ end
 
 function draw_title()
     -- Draw map
-    draw_path()
+    if sel_map == 3 then pal(C.dark_blue, C.dark_purple) end
+    draw_path(t)
+    pal(0)
 
     -- Draw title
     pal(C.pink, C.black)

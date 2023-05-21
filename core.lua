@@ -20,8 +20,7 @@ _map = {
     {x=9,  y=10, c=CRNR.bot},
 }
 _map2 = {
-    {x=2,  y=0,  c=CRNR.top},
-    {x=2,  y=3,  c=CRNR.bl},
+    {x=0,  y=3,  c=CRNR.left},
     {x=3,  y=3,  c=CRNR.br},
     {x=3,  y=1,  c=CRNR.tl},
     {x=7,  y=1,  c=CRNR.tr},
@@ -36,12 +35,11 @@ _map2 = {
     {x=2,  y=7,  c=CRNR.br},
     {x=1,  y=7,  c=CRNR.tl},
     {x=1,  y=9,  c=CRNR.bl},
-    {x=9,  y=9,  c=CRNR.tr},
-    {x=9,  y=10, c=CRNR.bot},
+    {x=10,  y=9, c=CRNR.right},
 }
 _map3 = {
-    {x=0,  y=0,  c=CRNR.top},
-    {x=0,  y=3,  c=CRNR.bl},
+    {x=1,  y=0,  c=CRNR.top},
+    {x=1,  y=3,  c=CRNR.bl},
     {x=3,  y=3,  c=CRNR.br},
     {x=3,  y=1,  c=CRNR.tl},
     {x=7,  y=1,  c=CRNR.tr},
@@ -247,7 +245,7 @@ function _draw()
         print_outlined(str, center_horz(str), 122, C.dark_blue, C.black)
     end
 
-    draw_path()
+    draw_path(0)
     draw_towers()
     draw_bullets()
     draw_enemies()
@@ -278,7 +276,7 @@ function _draw()
     end
 end
 
-function draw_path()
+function draw_path(t)
     local map = get_map()
     for i = 2, #map do
         local cell_a, cell_b = map[i-1], map[i]
@@ -300,15 +298,44 @@ function draw_path()
         end
 
         -- draw path decoration
+        -- TODO: tidy
         for j = 1, #map, #map-1 do
             local c = map[j].c
-            local spr_x = (c == CRNR.top or c == CRNR.bot) and 80 or 96
-            local flip_x = c == CRNR.right
-            local flip_y = c == CRNR.bot
             local p = g2p(map[j])
-            local top = mid(0, p.top, 116)
-            local left = mid(0, p.left, 117)
-            sspr(spr_x, 8, 12, 12, left, top, 12, 12, flip_x, flip_y)
+            local sx, sy, w, h, dx, dy
+            local flip_x, flip_y = false, false
+            if c == CRNR.top then
+                w = 11; h = 6
+                sx = 80 + (t\7)%4
+                sy = 8
+                dy = 0
+                dx = mid(0, p.left, 117)
+                if dx > 0 then dx += 1 end -- account for cell border
+            elseif c == CRNR.bot then
+                flip_y = true
+                w = 11; h = 6
+                sx = 80 + 4 - (t\7)%4
+                sy = 8
+                dy = 128-h
+                dx = mid(0, p.left, 117)
+                if dx > 0 then dx += 1 end -- account for cell border
+            elseif c == CRNR.left then
+                w = 6; h = 11
+                sx = 96
+                sy = 8 + (t\7)%4
+                dx = 0
+                dy = mid(0, p.top, 116)
+                if dy > 0 then dy += 1 end -- account for cell border
+            elseif c == CRNR.right then
+                flip_x = true
+                w = 6; h = 11
+                sx = 96
+                sy = 8 + 4 - (t\7)%4
+                dx = 128-w
+                dy = mid(0, p.top, 116)
+                if dy > 0 then dy += 1 end -- account for cell border
+            end
+            sspr(sx, sy, w, h, dx, dy, w, h, flip_x, flip_y)
         end
     end
 
@@ -345,6 +372,7 @@ end
 function get_cell_corner(cell, c)
     if c == CRNR.top   then return {x = cell.left,  y = cell.top} end
     if c == CRNR.right then return {x = cell.right, y = cell.top} end
+    if c == CRNR.left  then return {x = cell.left,  y = cell.bot} end
     if c == CRNR.bot   then return {x = cell.right, y = cell.bot} end
     if c == CRNR.tl    then return {x = cell.left,  y = cell.bot} end
     if c == CRNR.bl    then return {x = cell.right, y = cell.bot} end
