@@ -4,6 +4,7 @@ local OFFSCREEN_Y = -LETTER_HEIGHT
 local z_age
 local t
 local letters
+local pressing_l, pressing_r, pressing_z
 
 function init_title()
     z_age = nil
@@ -40,6 +41,9 @@ function update_title()
             sel_map = wrap(1, sel_map+1, #maps)
         end
     end
+    pressing_l = btn(B.left)
+    pressing_r = btn(B.right)
+    pressing_z = btn(B.z)
 
     -- Send letters up
     if z_age then
@@ -82,11 +86,21 @@ function draw_title()
     pal(0)
 
     -- Draw difficulty
-    if z_age == nil then
+    if z_age == nil or z_age < 27 then
         local y = 54
         pal(C.green, C.black)
-        sspr(96, 32, 9, 8, 38, y-1, 9, 8, true)
-        sspr(96, 32, 9, 8, 80, y-1)
+        if z_age and z_age > 14 then -- fade out
+            local c = z_age < 22 and C.dark_gray or C.dark_blue
+            pal({
+                [1]=C.black,  -- dark blue
+                [6]=c,        -- light gray
+                [10]=c,       -- yellow
+                [13]=C.black, -- indigo
+            })
+        end
+        -- draw buttons
+        sspr(pressing_l and 112 or 96, 32, 9, 8, 38, y-1, 9, 8, true)
+        sspr(pressing_r and 112 or 96, 32, 9, 8, 80, y-1)
 
         local str = sel_map == 1 and 'easy' or sel_map == 2 and 'medium' or 'hard'
         print_outlined(str, center_horz(str), y, C.yellow, C.black)
@@ -94,7 +108,7 @@ function draw_title()
         local str2 = 'start'
         local y2 = 73
         print_outlined(str2, center_horz(str2)+2, y2, C.light_gray, C.black)
-        sspr(96, 40, 9, 8, 43, y2-1)
+        sspr(pressing_z and 112 or 96, 40, 9, 8, 43, y2-1)
         pal(0)
     end
 end
