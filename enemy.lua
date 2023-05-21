@@ -192,7 +192,7 @@ function draw_enemies()
             circ(enmy.x, enmy.y, enmy.death_age+1, C.pink)
             return
         end
-        pal(C.green, C.black)
+        pal(C.white, C.black)
         local top  = enmy.y - enmy.height\2
         local left = enmy.x - enmy.width\2
         if enmy.type == ENMY.circ then
@@ -207,16 +207,14 @@ function draw_enemies()
             spr(116, left, top)
         elseif enmy.type == ENMY.arrow then
             if enmy.dx ~= 0 then
-                line(enmy.x, enmy.y-2,
-                enmy.x+(enmy.dx > 0 and 2 or -2), enmy.y, C.light_gray)
-                line(enmy.x, enmy.y+2)
+                -- left/right
+                sspr(40, 56, 5, 5, left, top, 5, 5, enmy.dx<0)
             else
-                line(enmy.x-2, enmy.y,
-                enmy.x, enmy.y+(enmy.dy > 0 and 2 or -2), C.light_gray)
-                line(enmy.x+2, enmy.y)
+                -- up/down
+                sspr(48, 56, 5, 5, left, top, 5, 5, false, enmy.dy<0)
             end
         end
-        pal()
+        pal(0)
         -- Draw health bar
         local hp_y = enmy.y - 4
         local hp_width = enmy.type == ENMY.arrow and 5 or enmy.width
