@@ -128,6 +128,7 @@ function reinit()
     bonus_dmg = 1
     bonus_rng = 1
     t = 0
+    start_age = 0 -- cant use `t` bc it wraps to 0
     shake = 0
     screen = 'title'
     has_opened_shop = false
@@ -167,6 +168,8 @@ function _update60()
     end
 
     t += 1
+    if start_age < 10 then start_age +=1 end
+
     update_selection()
 
     -- Handle button press
@@ -323,7 +326,8 @@ function draw_path()
 end
 
 function draw_stats()
-    local c = t<=4 and C.dark_blue or t<=8 and C.dark_gray or nil
+    local c = start_age <= 4 and C.dark_blue
+           or start_age <= 8 and C.dark_gray or nil
     if c then
         pal({
             [2]=c, -- dark purple
