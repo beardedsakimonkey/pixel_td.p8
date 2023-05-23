@@ -34,19 +34,19 @@ function update_title()
     end
     -- Handle button press
     if z_age == nil then
-        if btnp(B.z) then
+        if btnp(🅾️) then
             z_age = 0
         end
-        if btnp(B.left) then
+        if btnp(⬅️) then
             cur_map = wrap(1, cur_map-1, #maps)
         end
-        if btnp(B.right) then
+        if btnp(➡️) then
             cur_map = wrap(1, cur_map+1, #maps)
         end
     end
-    pressing_l = btn(B.left)
-    pressing_r = btn(B.right)
-    pressing_z = btn(B.z)
+    pressing_l = btn(⬅️)
+    pressing_r = btn(➡️)
+    pressing_z = btn(🅾️)
 
     -- Send letters up
     if z_age then

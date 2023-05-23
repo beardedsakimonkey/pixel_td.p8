@@ -50,9 +50,9 @@ function Menu.update(m)
 end
 
 function Menu.handle_btn(m)
-    if btnp(B.up)   then m.cur_idx = wrap(1, m.cur_idx-1, #m.items) end
-    if btnp(B.down) then m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
-    if btnp(B.z) then
+    if btnp(⬆️)   then m.cur_idx = wrap(1, m.cur_idx-1, #m.items) end
+    if btnp(⬇️) then m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
+    if btnp(🅾️) then
         local item = m.items[m.cur_idx]
         local disabled = item.is_disabled and item.is_disabled(m)
         if not disabled then
@@ -60,7 +60,7 @@ function Menu.handle_btn(m)
             m:close()
         end
     end
-    if btnp(B.x) then
+    if btnp(❎) then
         m:close()
     end
 end
@@ -90,17 +90,17 @@ function init_menus()
         Menu.handle_btn(m)
         -- Don't nudge if btn pressed down while disabled
         if m.pressing_right or (not m.pressing_right and m.sel_twr ~= MAX_TWR) then
-            m.pressing_right = btn(B.right)
+            m.pressing_right = btn(➡️)
         end
         if m.pressing_left or (not m.pressing_left and m.sel_twr ~= 1) then
-            m.pressing_left = btn(B.left)
+            m.pressing_left = btn(⬅️)
         end
-        if btnp(B.left) and m.sel_twr > 1 then
+        if btnp(⬅️) and m.sel_twr > 1 then
             m.sel_twr -= 1
             m.carousel_sx = m.carousel_x
             m.carousel_st = time()
         end
-        if btnp(B.right) and m.sel_twr < MAX_TWR then
+        if btnp(➡️) and m.sel_twr < MAX_TWR then
             m.sel_twr += 1
             m.carousel_sx = m.carousel_x
             m.carousel_st = time()
@@ -213,7 +213,7 @@ function init_menus()
     end
 
     bonus_menu.handle_btn = function(m)
-        if btnp(B.x) then return end
+        if btnp(❎) then return end
         Menu.handle_btn(m)
     end
 end

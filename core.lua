@@ -180,7 +180,7 @@ function _update60()
     elseif bonus_menu.is_open then
         bonus_menu:handle_btn()
     else
-        if btnp(B.z) then
+        if btnp(🅾️) then
             local twr = find_sel_tower()
             if twr then
                 upg_menu:open()
@@ -188,7 +188,7 @@ function _update60()
                 buy_menu:open()
             end
         end
-        if btnp(B.x) then
+        if btnp(❎) then
             send_wave()
         end
     end

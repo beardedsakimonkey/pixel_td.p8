@@ -1,5 +1,5 @@
 function update_game_over()
-    if btnp(B.z) then
+    if btnp(🅾️) then
         reinit()
     end
 end

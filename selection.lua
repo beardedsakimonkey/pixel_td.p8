@@ -41,8 +41,8 @@ end
 local function handle_btn(btn)
     -- Find destination cell
     local dst_x, dst_y = sel.dst_gx, sel.dst_gy
-    local cell_dx = btn == B.right and 1 or btn == B.left and -1 or 0
-    local cell_dy = btn == B.down and  1 or btn == B.up   and -1 or 0
+    local cell_dx = btn == ➡️ and 1 or btn == ⬅️ and -1 or 0
+    local cell_dy = btn == ⬇️ and  1 or btn == ⬆️   and -1 or 0
     while true do
         -- move 0 or 1 cells in both directions
         dst_x += cell_dx
@@ -74,10 +74,10 @@ function update_selection()
     end
     if not buy_menu.is_open and not upg_menu.is_open
         and not bonus_menu.is_open then
-        if btnp(B.left)  then handle_btn(B.left) end
-        if btnp(B.right) then handle_btn(B.right) end
-        if btnp(B.up)    then handle_btn(B.up) end
-        if btnp(B.down)  then handle_btn(B.down) end
+        if btnp(⬅️)  then handle_btn(⬅️) end
+        if btnp(➡️) then handle_btn(➡️) end
+        if btnp(⬆️)    then handle_btn(⬆️) end
+        if btnp(⬇️)  then handle_btn(⬇️) end
     end
 
     local cfg = {
