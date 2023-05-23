@@ -8,16 +8,6 @@ C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
 -- corners
 CNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
 
-function tbl_filter(tbl, fn)
-    local res = {}
-    foreach(tbl, function(v)
-        if fn(v) then
-            add(res, v)
-        end
-    end)
-    return res
-end
-
 function tbl_find(tbl, fn)
     for v in all(tbl) do
         if fn(v) then
@@ -79,6 +69,7 @@ end
 
 function print_outlined(str, x, y, color, outline_color)
     local w = print(str, 0, -20)
-    rectfill(x-1, y-1, x-1+w, y+5, C.black)
+    rectfill(x-1, y-1, x-1+w, y+5, outline_color or C.black)
     print(str, x, y, color)
+    return x, w
 end

@@ -275,9 +275,12 @@ function _draw()
     camera() -- things drawn below will not be affected by screen shake
     draw_stats()
 
-    -- TODO: draw game over
     if game_over then
-        print('game over', 50, 50, C.light_gray)
+        if game_over == 'lost' then
+            draw_game_over('game over', C.red)
+        else
+            draw_game_over('you win', C.orange)
+        end
     end
 
     -- Draw debug messages
@@ -375,6 +378,28 @@ function get_cell_corner(cell, cnr)
     if cnr == CNR.bl    then return {x = cell.right, y = cell.bot} end
     if cnr == CNR.br    then return {x = cell.right, y = cell.top} end
     if cnr == CNR.tr    then return {x = cell.left,  y = cell.top} end
+end
+
+function draw_game_over(text, color)
+    do
+        local y = 50
+        local x, w = print_outlined(text, center_horz(text), y, color)
+        for x1 in all{x-7, x+w+2} do
+            local y1 = y+2
+            local x2 = x1+3
+            rectfill(x1-1, y1-1, x2+1, y1+1, C.black)
+            rectfill(x1, y1, x2, y1, color)
+        end
+    end
+    -- draw restart
+    do
+        local y = 68
+        local str = 'restart'
+        local x = print_outlined(str, center_horz(str)+4, y, C.light_gray)
+        pal(C.green, C.black)
+        spr(92, x-12, y-1)
+        pal(0)
+    end
 end
 
 function debug(msg)
