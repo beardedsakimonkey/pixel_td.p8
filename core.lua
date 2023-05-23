@@ -109,9 +109,17 @@ tower_cfg = {
     {dmg=5,   range=39, atkspd=50, max_bullets=4}, -- yellow
 }
 
+local function set_game_over(state)
+    game_over = state
+    buy_menu:close()
+    upg_menu:close()
+end
 
 function remove_life()
-    lives -= 1
+    lives = max(lives-1, 0)
+    if lives == 0 then
+        set_game_over('lost')
+    end
     shake = 3
 end
 
@@ -136,9 +144,10 @@ function reinit()
     t = 0
     start_age = 0 -- cant use `t` bc it wraps
     shake = 0
-    screen = 'title'
+    screen = 'title' -- 'title' | 'game'
     has_opened_shop = false
     has_bought_tower = false
+    game_over = nil -- nil | 'lost' | 'won'
 
     init_enemy()
     init_menus()
@@ -157,10 +166,6 @@ function _update60()
         update_title()
         return
     end
-    if screen == 'game_over' then
-        update_game_over()
-        return
-    end
     -- Initialize once we know the map
     if t == 0 then
         init_grid_bitmap()
@@ -173,24 +178,28 @@ function _update60()
     update_selection()
 
     -- Handle button press
-    if buy_menu.is_open then
-        has_opened_shop = true
-        buy_menu:handle_btn()
-    elseif upg_menu.is_open then
-        upg_menu:handle_btn()
-    elseif bonus_menu.is_open then
-        bonus_menu:handle_btn()
+    if game_over then
+        if btnp(🅾️) then reinit() end
     else
-        if btnp(🅾️) then
-            local twr = find_sel_tower()
-            if twr then
-                upg_menu:open()
-            else
-                buy_menu:open()
+        if buy_menu.is_open then
+            has_opened_shop = true
+            buy_menu:handle_btn()
+        elseif upg_menu.is_open then
+            upg_menu:handle_btn()
+        elseif bonus_menu.is_open then
+            bonus_menu:handle_btn()
+        else
+            if btnp(🅾️) then
+                local twr = find_sel_tower()
+                if twr then
+                    upg_menu:open()
+                else
+                    buy_menu:open()
+                end
             end
-        end
-        if btnp(❎) then
-            send_wave()
+            if btnp(❎) then
+                send_wave()
+            end
         end
     end
 
@@ -216,7 +225,7 @@ function _update60()
 
     -- should go after spawning enemies
     if sending == 0 and #enemies == 0 and wave == #waves then
-        screen = 'game_over'
+        set_game_over('won')
         return
     end
 end
@@ -232,11 +241,6 @@ function _draw()
 
     if screen == 'title' then
         draw_title()
-        return
-    end
-
-    if screen == 'game_over' then
-        draw_game_over()
         return
     end
 
@@ -265,9 +269,16 @@ function _draw()
     upg_menu:draw()
     bonus_menu:draw()
 
-    draw_hint()
+    if not game_over then
+        draw_hint()
+    end
     camera() -- things drawn below will not be affected by screen shake
     draw_stats()
+
+    -- TODO: draw game over
+    if game_over then
+        print('game over', 50, 50, C.light_gray)
+    end
 
     -- Draw debug messages
     color(C.light_gray)
