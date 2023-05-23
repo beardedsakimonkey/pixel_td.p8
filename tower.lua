@@ -15,6 +15,15 @@ end
 
 function init_tower()
     towers = {}
+    -- Compute sell prices
+    for i, cfg in pairs(tower_cfg) do
+        local prev = tower_cfg[i-MAX_TWR]
+        if prev then
+            cfg.sell = prev.upg + prev.sell
+        else
+            cfg.sell = cfg.buy
+        end
+    end
 end
 
 function make_tower(type, gx, gy)

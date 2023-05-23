@@ -89,23 +89,24 @@ waves = {
     {hp=43, speed=0.5,  gold=4, type='ARROW'},
     {hp=52, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
 }
+-- Note: `sell` prices computed in init()
 tower_cfg = {
     -- level 1
-    {dmg=0.2, range=30,                           buy=40, upg=30, sell=40}, -- green
-    {dmg=2,   range=30, atkspd=40,                buy=40, upg=30, sell=40}, -- red
-    {dmg=2,   range=30, atkspd=80,                buy=30, upg=30, sell=30}, -- yellow
+    {dmg=0.2, range=30,                           buy=40, upg=30}, -- green
+    {dmg=2,   range=30, atkspd=40, max_bullets=1, buy=40, upg=30}, -- red
+    {dmg=2,   range=30, atkspd=80, max_bullets=1, buy=30, upg=30}, -- yellow
     -- level 2
-    {dmg=0.4, range=33,                           upg=40, sell=70}, -- green
-    {dmg=2,   range=33, atkspd=40, max_bullets=2, upg=40, sell=70}, -- red
-    {dmg=3,   range=33, atkspd=70, max_bullets=2, upg=40, sell=70}, -- yellow
+    {dmg=0.4, range=33,                           upg=40}, -- green
+    {dmg=2,   range=33, atkspd=40, max_bullets=2, upg=40}, -- red
+    {dmg=3,   range=33, atkspd=70, max_bullets=2, upg=40}, -- yellow
     -- level 3
-    {dmg=0.6, range=36,                           upg=50, sell=110}, -- green
-    {dmg=2,   range=36, atkspd=40, max_bullets=3, upg=50, sell=110}, -- red
-    {dmg=4,   range=36, atkspd=60, max_bullets=3, upg=50, sell=110}, -- yellow
+    {dmg=0.6, range=36,                           upg=50}, -- green
+    {dmg=2,   range=36, atkspd=40, max_bullets=3, upg=50}, -- red
+    {dmg=4,   range=36, atkspd=60, max_bullets=3, upg=50}, -- yellow
     -- level 4
-    {dmg=0.8, range=39,                           sell=160}, -- green
-    {dmg=2,   range=39, atkspd=40, max_bullets=4, sell=160}, -- red
-    {dmg=5,   range=39, atkspd=50, max_bullets=4, sell=160}, -- yellow
+    {dmg=0.8, range=39},                           -- green
+    {dmg=2,   range=39, atkspd=40, max_bullets=4}, -- red
+    {dmg=5,   range=39, atkspd=50, max_bullets=4}, -- yellow
 }
 
 
@@ -117,6 +118,12 @@ end
 --------------------------------------------------------------------------------
 -- INIT
 --------------------------------------------------------------------------------
+function _init()
+    poke(0x5f5c, 9) -- button repeat delay
+    poke(0x5f5d, 3) -- button repeat interval
+    reinit()
+end
+
 function reinit()
     cur_map = 1
     wave = 0
@@ -127,7 +134,7 @@ function reinit()
     bonus_dmg = 1
     bonus_rng = 1
     t = 0
-    start_age = 0 -- cant use `t` bc it wraps to 0
+    start_age = 0 -- cant use `t` bc it wraps
     shake = 0
     screen = 'title'
     has_opened_shop = false
@@ -139,12 +146,6 @@ function reinit()
     init_hint() -- should go after init_selection()
     init_tower()
     init_title()
-end
-
-function _init()
-    poke(0x5f5c, 9) -- button repeat delay
-    poke(0x5f5d, 3) -- button repeat interval
-    reinit()
 end
 
 --------------------------------------------------------------------------------
