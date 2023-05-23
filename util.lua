@@ -1,6 +1,15 @@
-function tbl_filter(t, fn)
+B = {left=0, right=1, up=2, down=3, z=4, x=5}
+C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
+     dark_gray=5, light_gray=6, white=7,       red=8,        orange=9,
+     yellow=10,   green=11,     blue=12,       indigo=13,    pink=14,
+     peach=15}
+
+-- corners
+CNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
+
+function tbl_filter(tbl, fn)
     local res = {}
-    foreach(t, function(v)
+    foreach(tbl, function(v)
         if fn(v) then
             add(res, v)
         end
@@ -8,22 +17,13 @@ function tbl_filter(t, fn)
     return res
 end
 
-function tbl_find(t, fn)
-    for v in all(t) do
+function tbl_find(tbl, fn)
+    for v in all(tbl) do
         if fn(v) then
             return v
         end
     end
 end
-
-B = {left=0, right=1, up=2, down=3, z=4, x=5}
-C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
-     dark_gray=5, light_gray=6, white=7,       red=8,        orange=9,
-     yellow=10,   green=11,     blue=12,       indigo=13,    pink=14,
-     peach=15}
-CRNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
-ENMY = {circ=1, square=2, diamond=3, arrow=4, rect=5, boss=6}
-BNS = {int=1, dmg=2, rng=3}
 
 function lerp(a, b, t)
     return a + (b-a)*t

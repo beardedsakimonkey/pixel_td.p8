@@ -1,93 +1,93 @@
 -- TODO: create maps
 _map = {
-    {x=1,  y=0,  c=CRNR.top},
-    {x=1,  y=3,  c=CRNR.bl},
-    {x=3,  y=3,  c=CRNR.br},
-    {x=3,  y=1,  c=CRNR.tl},
-    {x=7,  y=1,  c=CRNR.tr},
-    {x=7,  y=3,  c=CRNR.bl},
-    {x=9,  y=3,  c=CRNR.tr},
-    {x=9,  y=5,  c=CRNR.br},
-    {x=8,  y=5,  c=CRNR.tl},
-    {x=8,  y=7,  c=CRNR.br},
-    {x=5,  y=7,  c=CRNR.bl},
-    {x=5,  y=5,  c=CRNR.tr},
-    {x=2,  y=5,  c=CRNR.tl},
-    {x=2,  y=7,  c=CRNR.br},
-    {x=1,  y=7,  c=CRNR.tl},
-    {x=1,  y=9,  c=CRNR.bl},
-    {x=9,  y=9,  c=CRNR.tr},
-    {x=9,  y=10, c=CRNR.bot},
+    {x=1,  y=0,  cnr=CNR.top},
+    {x=1,  y=3,  cnr=CNR.bl},
+    {x=3,  y=3,  cnr=CNR.br},
+    {x=3,  y=1,  cnr=CNR.tl},
+    {x=7,  y=1,  cnr=CNR.tr},
+    {x=7,  y=3,  cnr=CNR.bl},
+    {x=9,  y=3,  cnr=CNR.tr},
+    {x=9,  y=5,  cnr=CNR.br},
+    {x=8,  y=5,  cnr=CNR.tl},
+    {x=8,  y=7,  cnr=CNR.br},
+    {x=5,  y=7,  cnr=CNR.bl},
+    {x=5,  y=5,  cnr=CNR.tr},
+    {x=2,  y=5,  cnr=CNR.tl},
+    {x=2,  y=7,  cnr=CNR.br},
+    {x=1,  y=7,  cnr=CNR.tl},
+    {x=1,  y=9,  cnr=CNR.bl},
+    {x=9,  y=9,  cnr=CNR.tr},
+    {x=9,  y=10, cnr=CNR.bot},
 }
 _map2 = {
-    {x=0,  y=3,  c=CRNR.left},
-    {x=3,  y=3,  c=CRNR.br},
-    {x=3,  y=1,  c=CRNR.tl},
-    {x=7,  y=1,  c=CRNR.tr},
-    {x=7,  y=3,  c=CRNR.bl},
-    {x=9,  y=3,  c=CRNR.tr},
-    {x=9,  y=5,  c=CRNR.br},
-    {x=8,  y=5,  c=CRNR.tl},
-    {x=8,  y=7,  c=CRNR.br},
-    {x=5,  y=7,  c=CRNR.bl},
-    {x=5,  y=5,  c=CRNR.tr},
-    {x=2,  y=5,  c=CRNR.tl},
-    {x=2,  y=7,  c=CRNR.br},
-    {x=1,  y=7,  c=CRNR.tl},
-    {x=1,  y=9,  c=CRNR.bl},
-    {x=10,  y=9, c=CRNR.right},
+    {x=0,  y=3,  cnr=CNR.left},
+    {x=3,  y=3,  cnr=CNR.br},
+    {x=3,  y=1,  cnr=CNR.tl},
+    {x=7,  y=1,  cnr=CNR.tr},
+    {x=7,  y=3,  cnr=CNR.bl},
+    {x=9,  y=3,  cnr=CNR.tr},
+    {x=9,  y=5,  cnr=CNR.br},
+    {x=8,  y=5,  cnr=CNR.tl},
+    {x=8,  y=7,  cnr=CNR.br},
+    {x=5,  y=7,  cnr=CNR.bl},
+    {x=5,  y=5,  cnr=CNR.tr},
+    {x=2,  y=5,  cnr=CNR.tl},
+    {x=2,  y=7,  cnr=CNR.br},
+    {x=1,  y=7,  cnr=CNR.tl},
+    {x=1,  y=9,  cnr=CNR.bl},
+    {x=10,  y=9, cnr=CNR.right},
 }
 _map3 = {
-    {x=1,  y=0,  c=CRNR.top},
-    {x=1,  y=3,  c=CRNR.bl},
-    {x=3,  y=3,  c=CRNR.br},
-    {x=3,  y=1,  c=CRNR.tl},
-    {x=7,  y=1,  c=CRNR.tr},
-    {x=7,  y=3,  c=CRNR.bl},
-    {x=9,  y=3,  c=CRNR.tr},
-    {x=9,  y=5,  c=CRNR.br},
-    {x=8,  y=5,  c=CRNR.tl},
-    {x=8,  y=7,  c=CRNR.br},
-    {x=5,  y=7,  c=CRNR.bl},
-    {x=5,  y=5,  c=CRNR.tr},
-    {x=2,  y=5,  c=CRNR.tl},
-    {x=2,  y=7,  c=CRNR.br},
-    {x=1,  y=7,  c=CRNR.tl},
-    {x=1,  y=9,  c=CRNR.bl},
-    {x=9,  y=9,  c=CRNR.tr},
-    {x=9,  y=10, c=CRNR.bot},
+    {x=1,  y=0,  cnr=CNR.top},
+    {x=1,  y=3,  cnr=CNR.bl},
+    {x=3,  y=3,  cnr=CNR.br},
+    {x=3,  y=1,  cnr=CNR.tl},
+    {x=7,  y=1,  cnr=CNR.tr},
+    {x=7,  y=3,  cnr=CNR.bl},
+    {x=9,  y=3,  cnr=CNR.tr},
+    {x=9,  y=5,  cnr=CNR.br},
+    {x=8,  y=5,  cnr=CNR.tl},
+    {x=8,  y=7,  cnr=CNR.br},
+    {x=5,  y=7,  cnr=CNR.bl},
+    {x=5,  y=5,  cnr=CNR.tr},
+    {x=2,  y=5,  cnr=CNR.tl},
+    {x=2,  y=7,  cnr=CNR.br},
+    {x=1,  y=7,  cnr=CNR.tl},
+    {x=1,  y=9,  cnr=CNR.bl},
+    {x=9,  y=9,  cnr=CNR.tr},
+    {x=9,  y=10, cnr=CNR.bot},
 }
 maps = {_map, _map2, _map3}
 function get_map()
-    return maps[sel_map]
+    return maps[cur_map]
 end
 -- Note: bosses must be on every 5th wave
 waves = {
-    {hp=6,  speed=0.25, gold=4, type=ENMY.rect},
-    {hp=9,  speed=0.25, gold=4, type=ENMY.diamond},
-    {hp=12, speed=0.2,  gold=4, type=ENMY.rect},
-    {hp=7,  speed=0.5,  gold=4, type=ENMY.arrow},
-    {hp=15, speed=0.25, gold=4, type=ENMY.circ, boss_hp=10, boss_gold=10},
-    {hp=18, speed=0.25, gold=4, type=ENMY.square},
-    {hp=21, speed=0.25, gold=4, type=ENMY.diamond},
-    {hp=25, speed=0.2,  gold=4, type=ENMY.rect},
-    {hp=16, speed=0.5,  gold=4, type=ENMY.arrow},
-    {hp=24, speed=0.25, gold=4, type=ENMY.circ, boss_hp=10, boss_gold=10},
-    {hp=27, speed=0.25, gold=4, type=ENMY.square},
-    {hp=30, speed=0.25, gold=4, type=ENMY.diamond},
-    {hp=35, speed=0.2,  gold=4, type=ENMY.rect},
-    {hp=25, speed=0.5,  gold=4, type=ENMY.arrow},
-    {hp=33, speed=0.25, gold=4, type=ENMY.circ, boss_hp=10, boss_gold=10},
-    {hp=36, speed=0.25, gold=4, type=ENMY.square},
-    {hp=39, speed=0.25, gold=4, type=ENMY.diamond},
-    {hp=45, speed=0.2,  gold=4, type=ENMY.rect},
-    {hp=34, speed=0.5,  gold=4, type=ENMY.arrow},
-    {hp=42, speed=0.25, gold=4, type=ENMY.circ, boss_hp=10, boss_gold=10},
-    {hp=45, speed=0.25, gold=4, type=ENMY.square},
-    {hp=48, speed=0.25, gold=4, type=ENMY.diamond},
-    {hp=55, speed=0.2,  gold=4, type=ENMY.rect},
-    {hp=43, speed=0.5,  gold=4, type=ENMY.arrow},
-    {hp=52, speed=0.25, gold=4, type=ENMY.circ, boss_hp=10, boss_gold=10},
+    {hp=6,  speed=0.25, gold=4, type='RECTANGLE'},
+    {hp=9,  speed=0.25, gold=4, type='DIAMOND'},
+    {hp=12, speed=0.2,  gold=4, type='RECTANGLE'},
+    {hp=7,  speed=0.5,  gold=4, type='ARROW'},
+    {hp=15, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
+    {hp=18, speed=0.25, gold=4, type='SQUARE'},
+    {hp=21, speed=0.25, gold=4, type='DIAMOND'},
+    {hp=25, speed=0.2,  gold=4, type='RECTANGLE'},
+    {hp=16, speed=0.5,  gold=4, type='ARROW'},
+    {hp=24, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
+    {hp=27, speed=0.25, gold=4, type='SQUARE'},
+    {hp=30, speed=0.25, gold=4, type='DIAMOND'},
+    {hp=35, speed=0.2,  gold=4, type='RECTANGLE'},
+    {hp=25, speed=0.5,  gold=4, type='ARROW'},
+    {hp=33, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
+    {hp=36, speed=0.25, gold=4, type='SQUARE'},
+    {hp=39, speed=0.25, gold=4, type='DIAMOND'},
+    {hp=45, speed=0.2,  gold=4, type='RECTANGLE'},
+    {hp=34, speed=0.5,  gold=4, type='ARROW'},
+    {hp=42, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
+    {hp=45, speed=0.25, gold=4, type='SQUARE'},
+    {hp=48, speed=0.25, gold=4, type='DIAMOND'},
+    {hp=55, speed=0.2,  gold=4, type='RECTANGLE'},
+    {hp=43, speed=0.5,  gold=4, type='ARROW'},
+    {hp=52, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
 }
 tower_cfg = {
     -- level 1
@@ -118,7 +118,7 @@ end
 -- INIT
 --------------------------------------------------------------------------------
 function reinit()
-    sel_map = 1
+    cur_map = 1
     wave = 0
     gold = 100
     lives = 10
@@ -254,9 +254,9 @@ function _draw()
     -- Draw bonuses
     for i, bonus in ipairs(bonuses) do
         local s
-        if     bonus == BNS.int then s = 35
-        elseif bonus == BNS.dmg then s = 36
-        elseif bonus == BNS.rng then s = 37 end
+        if     bonus == 'INTEREST' then s = 35
+        elseif bonus == 'DAMAGE' then s = 36
+        elseif bonus == 'RANGE' then s = 37 end
         spr(s, 2+12*(i-1), 122)
     end
 
@@ -280,44 +280,44 @@ function draw_path(t)
     local map = get_map()
     for i = 2, #map do
         local cell_a, cell_b = map[i-1], map[i]
-        local ca = get_cell_corner(g2p(cell_a), cell_a.c)
-        local cb = get_cell_corner(g2p(cell_b), cell_b.c)
+        local ca = get_cell_corner(g2p(cell_a), cell_a.cnr)
+        local cb = get_cell_corner(g2p(cell_b), cell_b.cnr)
         rectfill(ca.x, ca.y, cb.x, cb.y, C.black)
         rect(ca.x, ca.y, cb.x, cb.y, C.indigo)
 
         -- cover up unwanted borders
         local a = g2p(cell_a)
-        if cell_a.c == CRNR.bl then
+        if cell_a.cnr == CNR.bl then
             line(a.right, a.bot-1, a.right, a.top+1, C.black)
-        elseif cell_a.c == CRNR.br then
+        elseif cell_a.cnr == CNR.br then
             line(a.left+1, a.top, a.right-1, a.top, C.black)
-        elseif cell_a.c == CRNR.tl then
+        elseif cell_a.cnr == CNR.tl then
             line(a.left+1, a.bot, a.right-1, a.bot, C.black)
-        elseif cell_a.c == CRNR.tr then
+        elseif cell_a.cnr == CNR.tr then
             line(a.left, a.bot-1, a.left, a.top+1, C.black)
         end
 
         -- draw path decoration
-        if sel_map == 3 then pal(C.dark_blue, C.dark_purple) end
+        if cur_map == 3 then pal(C.dark_blue, C.dark_purple) end
         for j = 1, #map, #map-1 do
-            local c = map[j].c
+            local cnr = map[j].cnr
             local p = g2p(map[j])
             local sx, sy, w, h, dx, dy
             local flip_x, flip_y = false, false
-            if c == CRNR.top or c == CRNR.bot then
+            if cnr == CNR.top or cnr == CNR.bot then
                 w = 11; h = 6
-                flip_y = c == CRNR.bot
-                sx = c == CRNR.bot and (80+4 - (t\7)%4) or (80 + (t\7)%4)
+                flip_y = cnr == CNR.bot
+                sx = cnr == CNR.bot and (80+4 - (t\7)%4) or (80 + (t\7)%4)
                 sy = 8
-                dy = c == CRNR.bot and 128-h or 0
+                dy = cnr == CNR.bot and 128-h or 0
                 dx = mid(0, p.left, 117)
                 if dx > 0 then dx += 1 end -- account for cell border
             else
                 w = 6; h = 11
-                flip_x = c == CRNR.right
+                flip_x = cnr == CNR.right
                 sx = 96
-                sy = c == CRNR.right and (8+4 - (t\7)%4) or (8 + (t\7)%4)
-                dx = c == CRNR.right and 128-w or 0
+                sy = cnr == CNR.right and (8+4 - (t\7)%4) or (8 + (t\7)%4)
+                dx = cnr == CNR.right and 128-w or 0
                 dy = mid(0, p.top, 116)
                 if dy > 0 then dy += 1 end -- account for cell border
             end
@@ -354,15 +354,15 @@ function draw_stats()
     pal(0)
 end
 
-function get_cell_corner(cell, c)
-    if c == CRNR.top   then return {x = cell.left,  y = cell.top} end
-    if c == CRNR.right then return {x = cell.right, y = cell.top} end
-    if c == CRNR.left  then return {x = cell.left,  y = cell.bot} end
-    if c == CRNR.bot   then return {x = cell.right, y = cell.bot} end
-    if c == CRNR.tl    then return {x = cell.left,  y = cell.bot} end
-    if c == CRNR.bl    then return {x = cell.right, y = cell.bot} end
-    if c == CRNR.br    then return {x = cell.right, y = cell.top} end
-    if c == CRNR.tr    then return {x = cell.left,  y = cell.top} end
+function get_cell_corner(cell, cnr)
+    if cnr == CNR.top   then return {x = cell.left,  y = cell.top} end
+    if cnr == CNR.right then return {x = cell.right, y = cell.top} end
+    if cnr == CNR.left  then return {x = cell.left,  y = cell.bot} end
+    if cnr == CNR.bot   then return {x = cell.right, y = cell.bot} end
+    if cnr == CNR.tl    then return {x = cell.left,  y = cell.bot} end
+    if cnr == CNR.bl    then return {x = cell.right, y = cell.bot} end
+    if cnr == CNR.br    then return {x = cell.right, y = cell.top} end
+    if cnr == CNR.tr    then return {x = cell.left,  y = cell.top} end
 end
 
 function debug(msg)

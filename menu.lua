@@ -237,6 +237,17 @@ function do_upgrade(menu)
     del(towers, twr)
 end
 
-function do_bonus_int(menu) add(bonuses, BNS.int); interest += 3 end
-function do_bonus_dmg(menu) add(bonuses, BNS.dmg); bonus_dmg += 0.05 end
-function do_bonus_rng(menu) add(bonuses, BNS.rng); bonus_rng += 0.1 end
+function do_bonus_int(menu)
+    add(bonuses, 'INTEREST')
+    interest += 3
+end
+
+function do_bonus_dmg(menu)
+    add(bonuses, 'DAMAGE')
+    bonus_dmg += 0.05
+end
+
+function do_bonus_rng(menu)
+    add(bonuses, 'RANGE')
+    bonus_rng += 0.1
+end

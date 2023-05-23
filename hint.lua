@@ -1,9 +1,9 @@
-local OFFSCREEN_Y = -8
 local x_y, x_v
 local z_y, z_vy, z_x, z_vx
 local t
 
-local GLISTEN_DELAY = 300 -- 10 sec
+local OFFSCREEN_Y = -8
+local SHINE_DELAY = 300 -- 10 sec
 local FLIP_Y = 20
 local FADE_DURATION = 9
 
@@ -65,15 +65,15 @@ local function draw_hint_x()
     spr(20, x, x_y)
     x += 6
     -- Draw button
-    local s = max(0, (t\2)%(GLISTEN_DELAY+11) - GLISTEN_DELAY)
+    local s = max(0, (t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
     sspr(s*9, 24, 9, 8, x, x_y)
 
     -- draw 'x'
     pset(x+3, x_y+2, C.dark_blue)
-    pset(x+5, x_y+2, C.dark_blue)
-    pset(x+3, x_y+4, C.dark_blue)
-    pset(x+5, x_y+4, C.dark_blue)
-    pset(x+4, x_y+3, C.dark_blue)
+    pset(x+5, x_y+2)
+    pset(x+3, x_y+4)
+    pset(x+5, x_y+4)
+    pset(x+4, x_y+3)
 end
 
 local function draw_hint_z()
@@ -82,7 +82,7 @@ local function draw_hint_z()
     sspr(32, 8, 5, 8, z_x+(flip and -6 or 10), z_y, 5, 8, not flip)
 
     -- Draw button
-    local s = max(0, (t\2)%(GLISTEN_DELAY+11) - GLISTEN_DELAY)
+    local s = max(0, (t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
     if t <= FADE_DURATION then -- fade in
         local c = t < 4 and C.dark_blue or C.dark_gray
         pal({

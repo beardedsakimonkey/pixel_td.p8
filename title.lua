@@ -38,10 +38,10 @@ function update_title()
             z_age = 0
         end
         if btnp(B.left) then
-            sel_map = wrap(1, sel_map-1, #maps)
+            cur_map = wrap(1, cur_map-1, #maps)
         end
         if btnp(B.right) then
-            sel_map = wrap(1, sel_map+1, #maps)
+            cur_map = wrap(1, cur_map+1, #maps)
         end
     end
     pressing_l = btn(B.left)
@@ -103,8 +103,10 @@ function draw_title()
         sspr(pressing_l and 112 or 96, 32, 9, 8, 38, y-1, 9, 8, true)
         sspr(pressing_r and 112 or 96, 32, 9, 8, 80, y-1)
 
-        local str = sel_map == 1 and 'easy' or sel_map == 2 and 'medium' or 'hard'
-        local c = sel_map == 3 and C.red or C.yellow
+        local str = cur_map == 1 and 'easy'
+                 or cur_map == 2 and 'medium'
+                 or 'hard'
+        local c = cur_map == 3 and C.red or C.yellow
         print_outlined(str, center_horz(str), y, c, C.black)
 
         local str2 = 'start'

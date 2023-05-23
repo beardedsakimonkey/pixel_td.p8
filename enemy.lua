@@ -22,17 +22,17 @@ local MAX_DEATH_AGE = 3
 
 local function make_enemy(type, max_hp, gold, dx, dy)
     local width, height
-    if type == ENMY.circ then
+    if type == 'CIRCLE' then
         width, height = 3, 3
-    elseif type == ENMY.square then
+    elseif type == 'SQUARE' then
         width, height = 4, 4
-    elseif type == ENMY.diamond then
+    elseif type == 'DIAMOND' then
         width, height = 5, 5
-    elseif type == ENMY.arrow then
+    elseif type == 'ARROW' then
         width, height = 5, 5
-    elseif type == ENMY.rect then
+    elseif type == 'RECTANGLE' then
         width, height = 5, 3
-    elseif type == ENMY.boss then
+    elseif type == 'BOSS' then
         width, height = 5, 5
     end
     add(enemies, {
@@ -55,18 +55,18 @@ function spawn_enemy()
         -- Send out enemies with a 10px gap
         -- speed (px/frame) * X frames = 10px
         --  => X = 10px / speed
-        local gap = w.type == ENMY.arrow and 15 or 10
+        local gap = w.type == 'ARROW' and 15 or 10
         local frames = flr(gap / w.speed)
         if t % frames == 0 then
             sending -= 1
             local dx, dy = 0, 0
             local map = get_map()
-            if     map[1].c == CRNR.top   then dy = w.speed
-            elseif map[1].c == CRNR.left  then dx = w.speed
-            elseif map[1].c == CRNR.right then dx = -w.speed
-            elseif map[1].c == CRNR.bot   then dy = -w.speed end
+            if     map[1].cnr == CNR.top   then dy = w.speed
+            elseif map[1].cnr == CNR.left  then dx = w.speed
+            elseif map[1].cnr == CNR.right then dx = -w.speed
+            elseif map[1].cnr == CNR.bot   then dy = -w.speed end
             if w.boss_hp and sending == 0 then
-                make_enemy(ENMY.boss, w.boss_hp, w.boss_gold, dx, dy)
+                make_enemy('BOSS', w.boss_hp, w.boss_gold, dx, dy)
             else
                 make_enemy(w.type, w.hp, w.gold, dx, dy)
             end
@@ -174,7 +174,7 @@ function update_enemies()
         -- update position
         move_enemy(enmy)
         -- update hitbox
-        if enmy.type == ENMY.arrow then
+        if enmy.type == 'ARROW' then
             if enmy.dx ~= 0 then
                 enmy.width, enmy.height = 3, 5
             else
@@ -206,28 +206,22 @@ function draw_enemies()
         local top  = enmy.y - enmy.height\2
         local left = enmy.x - enmy.width\2
         local flash = enmy.dmg_age and (enmy.dmg_age\3)%2 == 0
-        if enmy.type == ENMY.circ then
-            -- Circle
+        if enmy.type == 'CIRCLE' then
             if flash then pal(C.light_gray, C.white) end
             spr(112, left, top)
-        elseif enmy.type == ENMY.square then
-            -- Square
+        elseif enmy.type == 'SQUARE' then
             if flash then pal(C.pink, C.peach) end
             spr(113, left, top)
-        elseif enmy.type == ENMY.diamond then
-            -- Diamond
+        elseif enmy.type == 'DIAMOND' then
             if flash then pal(C.red, C.pink) end
             spr(114, left, top)
-        elseif enmy.type == ENMY.rect then
-            -- Rectangle
+        elseif enmy.type == 'RECTANGLE' then
             if flash then pal(C.blue, C.white) end
             spr(115, left, top)
-        elseif enmy.type == ENMY.boss then
-            -- Boss
+        elseif enmy.type == 'BOSS' then
             if enmy.dmg_age and enmy.dmg_age%2 == 0 then pal(C.yellow, C.red) end
             spr(116, left, top)
-        elseif enmy.type == ENMY.arrow then
-            -- Arrow
+        elseif enmy.type == 'ARROW' then
             if flash then pal(C.orange, C.white) end
             if enmy.dx ~= 0 then
                 -- left/right
@@ -240,7 +234,7 @@ function draw_enemies()
         pal(0)
         -- Draw health bar
         local hp_y = top-2
-        local hp_width = enmy.type == ENMY.arrow and 5 or enmy.width
+        local hp_width = enmy.type == 'ARROW' and 5 or enmy.width
         local left = enmy.x - enmy.width\2
         rect(left, hp_y, left+hp_width-1, hp_y, C.dark_green)
         local hp_rem = ceil(enmy.hp / enmy.max_hp*hp_width)
