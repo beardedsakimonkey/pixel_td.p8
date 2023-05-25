@@ -100,19 +100,19 @@ function draw_title()
             })
         end
         -- draw buttons
-        sspr(pressing_l and 112 or 96, 32, 9, 8, 38, y-1, 9, 8, true)
+        sspr(pressing_l and 112 or 96, 32, 9, 8, 40, y-1, 9, 8, true)
         sspr(pressing_r and 112 or 96, 32, 9, 8, 80, y-1)
 
         local str = cur_map == 1 and 'easy'
                  or cur_map == 2 and 'medium'
                  or 'hard'
         local c = cur_map == 3 and C.red or C.yellow
-        print_outlined(str, center_horz(str), y, c, C.black)
+        print_outlined(str, center_horz(str), y, c)
 
         local str2 = 'start'
         local y2 = 73
-        print_outlined(str2, center_horz(str2)+2, y2, C.light_gray, C.black)
-        sspr(pressing_z and 112 or 96, 40, 9, 8, 43, y2-1)
+        local x = print_outlined(str2, center_horz(str2)+3, y2, C.light_gray)
+        sspr(pressing_z and 112 or 96, 40, 9, 8, x-12, y2-1)
         pal(0)
     end
 end

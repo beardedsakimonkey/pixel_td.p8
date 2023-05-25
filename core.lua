@@ -247,7 +247,7 @@ function _draw()
     -- Draw wave count
     do
         local str = wave .. '/' .. #waves
-        print_outlined(str, center_horz(str), 122, C.dark_blue, C.black)
+        print_outlined(str, center_horz(str), 122, C.dark_blue)
     end
 
     draw_path(0)
