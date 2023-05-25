@@ -63,7 +63,7 @@ function get_map()
 end
 -- Note: bosses must be on every 5th wave
 waves = {
-    {hp=6,  speed=0.25, gold=4, type='RECTANGLE'},
+    {hp=6,  speed=0.25, gold=4, type='SQUARE'},
     {hp=9,  speed=0.25, gold=4, type='DIAMOND'},
     {hp=12, speed=0.2,  gold=4, type='RECTANGLE'},
     {hp=7,  speed=0.5,  gold=4, type='ARROW'},
@@ -269,9 +269,7 @@ function _draw()
     upg_menu:draw()
     bonus_menu:draw()
 
-    if not game_over then
-        draw_hint()
-    end
+    draw_hint()
     camera() -- things drawn below will not be affected by screen shake
     draw_stats()
 

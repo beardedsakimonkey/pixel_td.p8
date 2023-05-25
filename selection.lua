@@ -72,12 +72,13 @@ function update_selection()
     if t <= ENTER_DURATION then
         t += 1
     end
-    if not buy_menu.is_open and not upg_menu.is_open
-        and not bonus_menu.is_open and not game_over then
-        if btnp(⬅️)  then handle_btn(⬅️) end
+    if not buy_menu.is_open and
+        not upg_menu.is_open and
+        not bonus_menu.is_open then
+        if btnp(⬅️) then handle_btn(⬅️) end
         if btnp(➡️) then handle_btn(➡️) end
-        if btnp(⬆️)    then handle_btn(⬆️) end
-        if btnp(⬇️)  then handle_btn(⬇️) end
+        if btnp(⬆️) then handle_btn(⬆️) end
+        if btnp(⬇️) then handle_btn(⬇️) end
     end
 
     local cfg = {

@@ -198,6 +198,7 @@ function draw_enemies()
     foreach(enemies, function(enmy)
         -- Draw enemy
         if enmy.death_age then
+            -- TODO: better death animation
             circ(enmy.x, enmy.y, enmy.death_age+1,
                  enmy.death_age%2 == 0 and C.pink or C.red)
             return
@@ -243,7 +244,7 @@ function draw_enemies()
 end
 
 function can_send_wave()
-    return sending == 0 and #enemies == 0
+    return sending == 0 and #enemies == 0 and wave < #waves
 end
 
 function send_wave()
