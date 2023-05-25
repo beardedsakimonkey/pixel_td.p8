@@ -1,5 +1,4 @@
--- TODO: create maps
-_map = {
+_map_easy = {
     {x=1,  y=0,  cnr=CNR.top},
     {x=1,  y=3,  cnr=CNR.bl},
     {x=3,  y=3,  cnr=CNR.br},
@@ -19,7 +18,8 @@ _map = {
     {x=9,  y=9,  cnr=CNR.tr},
     {x=9,  y=10, cnr=CNR.bot},
 }
-_map2 = {
+-- TODO: create medium map
+_map_medium = {
     {x=0,  y=3,  cnr=CNR.left},
     {x=3,  y=3,  cnr=CNR.br},
     {x=3,  y=1,  cnr=CNR.tl},
@@ -37,27 +37,11 @@ _map2 = {
     {x=1,  y=9,  cnr=CNR.bl},
     {x=10,  y=9, cnr=CNR.right},
 }
-_map3 = {
-    {x=1,  y=0,  cnr=CNR.top},
-    {x=1,  y=3,  cnr=CNR.bl},
-    {x=3,  y=3,  cnr=CNR.br},
-    {x=3,  y=1,  cnr=CNR.tl},
-    {x=7,  y=1,  cnr=CNR.tr},
-    {x=7,  y=3,  cnr=CNR.bl},
-    {x=9,  y=3,  cnr=CNR.tr},
-    {x=9,  y=5,  cnr=CNR.br},
-    {x=8,  y=5,  cnr=CNR.tl},
-    {x=8,  y=7,  cnr=CNR.br},
-    {x=5,  y=7,  cnr=CNR.bl},
-    {x=5,  y=5,  cnr=CNR.tr},
-    {x=2,  y=5,  cnr=CNR.tl},
-    {x=2,  y=7,  cnr=CNR.br},
-    {x=1,  y=7,  cnr=CNR.tl},
-    {x=1,  y=9,  cnr=CNR.bl},
-    {x=9,  y=9,  cnr=CNR.tr},
-    {x=9,  y=10, cnr=CNR.bot},
+_map_hard = {
+    {x=0,  y=5,  cnr=CNR.left},
+    {x=10,  y=5, cnr=CNR.right},
 }
-maps = {_map, _map2, _map3}
+maps = {_map_easy, _map_medium, _map_hard}
 function get_map()
     return maps[cur_map]
 end

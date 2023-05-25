@@ -1,18 +1,18 @@
-local x_y, x_v
-local z_y, z_vy, z_x, z_vx
+local x_pos, x_v
+local z_x, z_y, z_vx, z_vy
 local t
 
-local OFFSCREEN_Y = -8
+local OFFSCREEN = -8
 local SHINE_DELAY = 300 -- 10 sec
 local FLIP_Y = 20
 local FADE_DURATION = 9
 
 function init_hint()
     show_hint_x = false
-    x_y = OFFSCREEN_Y
+    x_pos = OFFSCREEN
     x_v = 0
-    z_vy, z_vx = 0, 0
-    z_y, z_x = sel.dst_y, sel.dst_x-28
+    z_x, z_y = sel.dst_y, sel.dst_x-28
+    z_vx, z_vy = 0, 0
     t = 0
 end
 
@@ -35,8 +35,8 @@ function update_hint()
         t = 0
         x_v = 200
     end
-    local dest_y = show_hint_x and 1 or OFFSCREEN_Y
-    x_y, x_v = spring(x_y, dest_y, x_v, {
+    local dest_pos = show_hint_x and 1 or OFFSCREEN
+    x_pos, x_v = spring(x_pos, dest_pos, x_v, {
         stiffness = 200,
         damping = 32,
         mass = 2,
@@ -59,21 +59,29 @@ function update_hint()
     end
 end
 
-local function draw_hint_x()
-    local x = 26
-    -- Draw arrow
-    spr(20, x, x_y)
-    x += 6
-    -- Draw button
+local function draw_x_btn(x, y)
     local s = max(0, (t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
-    sspr(s*9, 24, 9, 8, x, x_y)
+    sspr(s*9, 24, 9, 8, x, y)
+    pset(x+3, y+2, C.dark_blue)
+    pset(x+5, y+2)
+    pset(x+3, y+4)
+    pset(x+5, y+4)
+    pset(x+4, y+3)
+end
 
-    -- draw 'x'
-    pset(x+3, x_y+2, C.dark_blue)
-    pset(x+5, x_y+2)
-    pset(x+3, x_y+4)
-    pset(x+5, x_y+4)
-    pset(x+4, x_y+3)
+local function draw_hint_x()
+    -- Draw arrow
+    if cur_map == 1 then
+        spr(20, 25, x_pos)
+    elseif cur_map == 3 then
+        spr(21, x_pos, 50)
+    end
+    -- Draw button
+    if cur_map == 1 then
+        draw_x_btn(30, x_pos)
+    elseif cur_map == 3 then
+        draw_x_btn(x_pos, 43)
+    end
 end
 
 local function draw_hint_z()
