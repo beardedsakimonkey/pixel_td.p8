@@ -18,23 +18,12 @@ _map_easy = {
     {x=9,  y=9,  cnr=CNR.tr},
     {x=9,  y=10, cnr=CNR.bot},
 }
--- TODO: create medium map
 _map_medium = {
-    {x=0,  y=3,  cnr=CNR.left},
-    {x=3,  y=3,  cnr=CNR.br},
-    {x=3,  y=1,  cnr=CNR.tl},
-    {x=7,  y=1,  cnr=CNR.tr},
-    {x=7,  y=3,  cnr=CNR.bl},
-    {x=9,  y=3,  cnr=CNR.tr},
-    {x=9,  y=5,  cnr=CNR.br},
-    {x=8,  y=5,  cnr=CNR.tl},
-    {x=8,  y=7,  cnr=CNR.br},
-    {x=5,  y=7,  cnr=CNR.bl},
-    {x=5,  y=5,  cnr=CNR.tr},
-    {x=2,  y=5,  cnr=CNR.tl},
-    {x=2,  y=7,  cnr=CNR.br},
-    {x=1,  y=7,  cnr=CNR.tl},
-    {x=1,  y=9,  cnr=CNR.bl},
+    {x=0,  y=1,  cnr=CNR.left},
+    {x=3,  y=1,  cnr=CNR.tr},
+    {x=3,  y=5,  cnr=CNR.bl},
+    {x=7,  y=5,  cnr=CNR.tr},
+    {x=7,  y=9,  cnr=CNR.bl},
     {x=10,  y=9, cnr=CNR.right},
 }
 _map_hard = {
@@ -135,8 +124,6 @@ function reinit()
 
     init_enemy()
     init_menus()
-    init_selection()
-    init_hint() -- should go after init_selection()
     init_tower()
     init_title()
 end
@@ -148,12 +135,18 @@ function _update60()
     debug_msgs = {}
     if screen == 'title' then
         update_title()
-        return
+        -- if screen changed to 'game', continue with the update function
+        -- *before* drawing
+        if screen == 'title' then
+            return
+        end
     end
     -- Initialize once we know the map
     if t == 0 then
         init_grid_bitmap()
         init_path_points()
+        init_selection()
+        init_hint() -- should go after init_selection()
     end
 
     t = max(1, t+1)

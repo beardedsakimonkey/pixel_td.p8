@@ -11,7 +11,7 @@ function init_hint()
     show_hint_x = false
     x_pos = OFFSCREEN
     x_v = 0
-    z_x, z_y = sel.dst_y, sel.dst_x-28
+    z_x, z_y = sel.dst_x-28, sel.dst_y
     z_vx, z_vy = 0, 0
     t = 0
 end
@@ -73,13 +73,17 @@ local function draw_hint_x()
     -- Draw arrow
     if cur_map == 1 then
         spr(20, 25, x_pos)
-    elseif cur_map == 3 then
+    elseif cur_map == 2 then
+        spr(22, x_pos, 23)
+    else
         spr(21, x_pos, 50)
     end
     -- Draw button
     if cur_map == 1 then
         draw_x_btn(30, x_pos)
-    elseif cur_map == 3 then
+    elseif cur_map == 2 then
+        draw_x_btn(x_pos, 30)
+    else
         draw_x_btn(x_pos, 43)
     end
 end
