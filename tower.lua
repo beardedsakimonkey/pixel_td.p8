@@ -18,11 +18,13 @@ function init_tower()
     -- Compute sell prices
     for i, cfg in pairs(tower_cfg) do
         local prev = tower_cfg[i-MAX_TWR]
+        local sell
         if prev then
-            cfg.sell = prev.upg + prev.sell
+            sell = prev.upg + prev.sell
         else
-            cfg.sell = cfg.buy
+            sell = cfg.buy
         end
+        cfg.sell = flr(sell*0.9)
     end
 end
 
