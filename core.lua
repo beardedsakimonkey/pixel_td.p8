@@ -36,31 +36,31 @@ function get_map()
 end
 -- Note: bosses must be on every 5th wave
 waves = {
-    {hp=6,  speed=0.25, gold=4, type='SQUARE'},
-    {hp=9,  speed=0.25, gold=4, type='DIAMOND'},
-    {hp=12, speed=0.2,  gold=4, type='RECTANGLE'},
-    {hp=7,  speed=0.5,  gold=4, type='ARROW'},
-    {hp=15, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
-    {hp=18, speed=0.25, gold=4, type='SQUARE'},
-    {hp=21, speed=0.25, gold=4, type='DIAMOND'},
-    {hp=25, speed=0.2,  gold=4, type='RECTANGLE'},
-    {hp=16, speed=0.5,  gold=4, type='ARROW'},
-    {hp=24, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
-    {hp=27, speed=0.25, gold=4, type='SQUARE'},
-    {hp=30, speed=0.25, gold=4, type='DIAMOND'},
-    {hp=35, speed=0.2,  gold=4, type='RECTANGLE'},
-    {hp=25, speed=0.5,  gold=4, type='ARROW'},
-    {hp=33, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
-    {hp=36, speed=0.25, gold=4, type='SQUARE'},
-    {hp=39, speed=0.25, gold=4, type='DIAMOND'},
-    {hp=45, speed=0.2,  gold=4, type='RECTANGLE'},
-    {hp=34, speed=0.5,  gold=4, type='ARROW'},
-    {hp=42, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
-    {hp=45, speed=0.25, gold=4, type='SQUARE'},
-    {hp=48, speed=0.25, gold=4, type='DIAMOND'},
-    {hp=55, speed=0.2,  gold=4, type='RECTANGLE'},
-    {hp=43, speed=0.5,  gold=4, type='ARROW'},
-    {hp=52, speed=0.25, gold=4, type='CIRCLE', boss_hp=10, boss_gold=10},
+    {hp=6,  speed=0.25, type='SQUARE'},
+    {hp=9,  speed=0.25, type='DIAMOND'},
+    {hp=12, speed=0.2,  type='RECTANGLE'},
+    {hp=7,  speed=0.5,  type='ARROW'},
+    {hp=15, speed=0.25, type='CIRCLE', boss_hp=10},
+    {hp=18, speed=0.25, type='SQUARE'},
+    {hp=21, speed=0.25, type='DIAMOND'},
+    {hp=25, speed=0.2,  type='RECTANGLE'},
+    {hp=16, speed=0.5,  type='ARROW'},
+    {hp=24, speed=0.25, type='CIRCLE', boss_hp=10},
+    {hp=27, speed=0.25, type='SQUARE'},
+    {hp=30, speed=0.25, type='DIAMOND'},
+    {hp=35, speed=0.2,  type='RECTANGLE'},
+    {hp=25, speed=0.5,  type='ARROW'},
+    {hp=33, speed=0.25, type='CIRCLE', boss_hp=10},
+    {hp=36, speed=0.25, type='SQUARE'},
+    {hp=39, speed=0.25, type='DIAMOND'},
+    {hp=45, speed=0.2,  type='RECTANGLE'},
+    {hp=34, speed=0.5,  type='ARROW'},
+    {hp=42, speed=0.25, type='CIRCLE', boss_hp=10},
+    {hp=45, speed=0.25, type='SQUARE'},
+    {hp=48, speed=0.25, type='DIAMOND'},
+    {hp=55, speed=0.2,  type='RECTANGLE'},
+    {hp=43, speed=0.5,  type='ARROW'},
+    {hp=52, speed=0.25, type='CIRCLE', boss_hp=10},
 }
 -- Note: `sell` prices computed in init()
 tower_cfg = {
@@ -132,7 +132,7 @@ end
 -- UPDATE
 --------------------------------------------------------------------------------
 function _update60()
-    debug_msgs = {}
+    -- debug_msgs = {}
     if screen == 'title' then
         update_title()
         -- if screen changed to 'game', continue with the update function
@@ -259,11 +259,11 @@ function _draw()
     end
 
     -- Draw debug messages
-    color(C.light_gray)
-    cursor(2, 2)
-    for msg in all(debug_msgs) do
-        print(msg)
-    end
+    -- color(C.light_gray)
+    -- cursor(2, 2)
+    -- for msg in all(debug_msgs) do
+    --     print(msg)
+    -- end
 end
 
 function draw_path(t)
@@ -377,6 +377,6 @@ function draw_game_over(text, color)
     end
 end
 
-function debug(msg)
-    add(debug_msgs, msg)
-end
+-- function debug(msg)
+--     add(debug_msgs, msg)
+-- end

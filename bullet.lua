@@ -1,4 +1,7 @@
 local function is_in_range(enmy, twr)
+    if enmy.hp == 0 then
+        return false
+    end
     return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < get_twr_range(twr)^2
 end
 
@@ -43,7 +46,7 @@ local function update_bullet_red(twr, blt)
         if enmy.dmg_age == nil then enmy.dmg_age = 0 end
         if enmy.hp == 0 then
             gold += enmy.gold
-            enmy.death_age = 0
+            kill_enemy(enmy)
         end
         del(twr.bullets, blt)
     else
@@ -83,7 +86,7 @@ end
 
 local function update_bullet_green(twr, blt)
     local enmy = blt.enemy
-    if enmy.hp == 0 or not is_in_range(enmy, twr) then
+    if not is_in_range(enmy, twr) then
         del(twr.bullets, blt)
     else
         blt.age += 1
@@ -92,7 +95,7 @@ local function update_bullet_green(twr, blt)
             if enmy.dmg_age == nil then enmy.dmg_age = 0 end
             if enmy.hp == 0 then
                 gold += enmy.gold
-                enmy.death_age = 0
+                kill_enemy(enmy)
             end
         end
     end
@@ -156,7 +159,7 @@ local function update_bullets_yellow(twr)
                 if enmy.dmg_age == nil then enmy.dmg_age = 0 end
                 if enmy.hp == 0 then
                     gold += enmy.gold
-                    enmy.death_age = 0
+                    kill_enemy(enmy)
                 end
                 enmy.slow = 0.3
                 enmy.slow_dur = 100

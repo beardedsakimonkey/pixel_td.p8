@@ -18,9 +18,9 @@ function init_path_points()
     end
 end
 
-local MAX_DEATH_AGE = 3
+local MAX_DEATH_AGE = 20
 
-local function make_enemy(type, max_hp, gold, dx, dy)
+local function make_enemy(type, max_hp, dx, dy)
     local width, height
     if type == 'CIRCLE' then
         width, height = 3, 3
@@ -42,8 +42,9 @@ local function make_enemy(type, max_hp, gold, dx, dy)
         dx=dx, dy=dy,
         hp=max_hp, max_hp=max_hp,
         slow=1, slow_dur=0,
-        gold=gold,
+        gold=type == 'BOSS' and 10 or 4,
         death_age=nil,
+        death_particles=nil,
         width=width, height=height, -- for collision detection
         dmg_age=nil,
     })
@@ -66,12 +67,26 @@ function spawn_enemy()
             elseif map[1].cnr == CNR.right then dx = -w.speed
             elseif map[1].cnr == CNR.bot   then dy = -w.speed end
             if w.boss_hp and sending == 0 then
-                make_enemy('BOSS', w.boss_hp, w.boss_gold, dx, dy)
+                make_enemy('BOSS', w.boss_hp, dx, dy)
             else
-                make_enemy(w.type, w.hp, w.gold, dx, dy)
+                make_enemy(w.type, w.hp, dx, dy)
             end
         end
     end
+end
+
+function kill_enemy(enmy)
+    enmy.death_age = 0
+    enmy.death_particles = {
+        {x=-1, y=-1},
+        {x=1,  y=-1},
+        {x=1,  y=1},
+        {x=-1, y=1},
+        {x=-1, y=-1},
+        {x=1,  y=-1},
+        {x=1,  y=1},
+        {x=-1, y=1},
+    }
 end
 
 local function line_contains_point(l1, l2, p)
@@ -152,8 +167,9 @@ local function move_enemy(e)
 end
 
 function update_enemies()
-    local num_enemies = #enemies
+    local had_enemies = #enemies > 0
     foreach(enemies, function(enmy)
+        -- update flashing
         if enmy.dmg_age then
             if enmy.dmg_age > 8 then
                 enmy.dmg_age = nil
@@ -164,6 +180,21 @@ function update_enemies()
         -- update death animation
         if enmy.death_age then
             enmy.death_age += 1
+            if enmy.death_age%2 == 0 then
+                for i=0,4,4 do
+                    enmy.death_particles[i+1].x += rand(-1, 0)
+                    enmy.death_particles[i+1].y += rand(-1, 0)
+
+                    enmy.death_particles[i+2].x += rand(0, 1)
+                    enmy.death_particles[i+2].y += rand(-1, 0)
+
+                    enmy.death_particles[i+3].x += rand(0, 1)
+                    enmy.death_particles[i+3].y += rand(0, 1)
+
+                    enmy.death_particles[i+4].x += rand(-1, 0)
+                    enmy.death_particles[i+4].y += rand(0, 1)
+                end
+            end
         end
         -- update slow
         if enmy.slow_dur == 0 then
@@ -188,8 +219,8 @@ function update_enemies()
             del(enemies, enmy)
         end
     end)
-    -- apply interest
-    if #enemies == 0 and num_enemies > 0 then
+    -- apply interest on wave complete
+    if had_enemies and #enemies == 0 then
         gold += gold * interest/100
     end
 end
@@ -198,11 +229,27 @@ function draw_enemies()
     foreach(enemies, function(enmy)
         -- Draw enemy
         if enmy.death_age then
-            -- TODO: better death animation
-            circ(enmy.x, enmy.y, enmy.death_age+1,
-                 enmy.death_age%2 == 0 and C.pink or C.red)
+            for part in all(enmy.death_particles) do
+                local c, c2 = C.pink, C.dark_purple
+                if enmy.type == 'RECTANGLE' then
+                    c, c2 = C.blue, C.dark_blue
+                elseif enmy.type == 'ARROW' then
+                    c, c2 = C.orange, C.brown
+                elseif enmy.type == 'CIRCLE' then
+                    c, c2 = C.light_gray, C.dark_gray
+                elseif enmy.type == 'BOSS' then
+                    c, c2 = C.yellow, C.brown
+                end
+                if enmy.death_age < MAX_DEATH_AGE*0.5 then
+                    circfill(enmy.x, enmy.y, enmy.death_age/2,
+                         enmy.death_age%2 == 0 and c2 or c)
+                end
+                pset(enmy.x+part.x, enmy.y+part.y,
+                    enmy.death_age > (MAX_DEATH_AGE*0.5) and c2 or c)
+            end
             return
         end
+        -- TODO: white -> green
         pal(C.white, C.black)
         local top  = enmy.y - enmy.height\2
         local left = enmy.x - enmy.width\2

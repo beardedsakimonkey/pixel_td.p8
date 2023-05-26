@@ -34,6 +34,11 @@ function round(v)
     return flr(v+0.5)
 end
 
+-- Random integer in a range (inclusive)
+function rand(low, hi)
+    return flr(rnd(hi+1-low)) + low
+end
+
 -- Convert grid coordinates to pixel coordinates
 function g2p(cell)
     local top  = (cell.y * 12) - 2
