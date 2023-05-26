@@ -17,11 +17,19 @@ local function collide(blt, enmy)
 end
 
 local function update_bullet_red(twr, blt)
-    local enmy = blt.enemy
-    if enmy.hp == 0 then
-        del(twr.bullets, blt)
+    if blt.enemy.hp == 0 then
+        -- enemy died, try to find new target
+        local new_target = tbl_find(enemies, function(enmy)
+            return enmy.hp > 0
+        end)
+        if new_target then
+            blt.enemy = new_target
+        else
+            del(twr.bullets, blt)
+        end
         return
     end
+    local enmy = blt.enemy
 
     -- update particles
     for p in all(blt.particles) do
