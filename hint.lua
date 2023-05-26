@@ -1,12 +1,13 @@
 local show_hint_X
 local X_pos
 local X_v
+local X_t
 
 local Z_x
 local Z_y
 local Z_vx
 local Z_vy
-local t
+local Z_t
 
 local OFFSCREEN = -8
 local SHINE_DELAY = 300 -- 10 sec
@@ -20,7 +21,7 @@ function init_hint()
     Z_x = sel.dst_x-28
     Z_y = sel.dst_y
     Z_vx, Z_vy = 0, 0
-    t = 0
+    Z_t, X_t = 0, 0
 end
 
 local function can_show_hint_X()
@@ -36,12 +37,14 @@ function update_hint()
     show_hint_X = can_show_hint_X()
     local show_hint_Z = can_show_hint_Z()
 
-    if show_hint_X or show_hint_Z then
-        t += 1
-        if t < 0 then t = FADE_DURATION+1 end
+    if show_hint_X then
+        X_t = max(0, X_t+1)
+    elseif show_hint_Z then
+        Z_t += 1
+        if Z_t < 0 then Z_t = FADE_DURATION+1 end
     end
     if dismissing_X then
-        t = 0
+        X_t = 0
         X_v = 200
     end
     local dest_pos = show_hint_X and 1 or OFFSCREEN
@@ -69,7 +72,7 @@ function update_hint()
 end
 
 local function draw_X_btn(x, y)
-    local s = max(0, (t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
+    local s = max(0, (X_t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
     sspr(s*9, 24, 9, 8, x, y)
     pset(x+3, y+2, C.dark_blue)
     pset(x+5, y+2)
@@ -103,9 +106,9 @@ local function draw_hint_Z()
     sspr(32, 8, 5, 8, Z_x+(flip and -6 or 10), Z_y, 5, 8, not flip)
 
     -- Draw button
-    local s = max(0, (t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
-    if t <= FADE_DURATION then -- fade in
-        local c = t < 4 and C.dark_blue or C.dark_gray
+    local s = max(0, (Z_t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
+    if Z_t <= FADE_DURATION then -- fade in
+        local c = Z_t < 4 and C.dark_blue or C.dark_gray
         pal({
             [1]=C.black,  -- dark blue
             [6]=c,        -- light gray
