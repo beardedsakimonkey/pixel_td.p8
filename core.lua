@@ -36,50 +36,50 @@ function get_map()
 end
 BOSS_FREQ = 5 -- boss on every 5th wave
 waves = {
-    {hp=6,  type='SQUARE'},
-    {hp=9,  type='DIAMOND'},
-    {hp=12, type='RECTANGLE'},
-    {hp=7,  type='ARROW'},
-    {hp=15, type='CIRCLE'},
-    {hp=18, type='SQUARE'},
-    {hp=21, type='DIAMOND'},
-    {hp=25, type='RECTANGLE'},
-    {hp=16, type='ARROW'},
-    {hp=24, type='CIRCLE'},
-    {hp=27, type='SQUARE'},
-    {hp=30, type='DIAMOND'},
-    {hp=35, type='RECTANGLE'},
-    {hp=25, type='ARROW'},
-    {hp=33, type='CIRCLE'},
-    {hp=36, type='SQUARE'},
-    {hp=39, type='DIAMOND'},
-    {hp=45, type='RECTANGLE'},
-    {hp=34, type='ARROW'},
-    {hp=42, type='CIRCLE'},
-    {hp=45, type='SQUARE'},
-    {hp=48, type='DIAMOND'},
-    {hp=55, type='RECTANGLE'},
-    {hp=43, type='ARROW'},
-    {hp=52, type='CIRCLE'},
+    {hp=6,   type='SQUARE'},
+    {hp=10,  type='DIAMOND'},
+    {hp=15,  type='RECTANGLE'},
+    {hp=10,  type='ARROW'},
+    {hp=17,  type='CIRCLE'},
+    {hp=22,  type='SQUARE'},
+    {hp=26,  type='DIAMOND'},
+    {hp=34,  type='RECTANGLE'},
+    {hp=26,  type='ARROW'},
+    {hp=36,  type='CIRCLE'},
+    {hp=40,  type='SQUARE'},
+    {hp=48,  type='DIAMOND'},
+    {hp=58,  type='RECTANGLE'},
+    {hp=50,  type='ARROW'},
+    {hp=60,  type='CIRCLE'},
+    {hp=64,  type='SQUARE'},
+    {hp=70,  type='DIAMOND'},
+    {hp=82,  type='RECTANGLE'},
+    {hp=72,  type='ARROW'},
+    {hp=84,  type='CIRCLE'},
+    {hp=90,  type='SQUARE'},
+    {hp=96,  type='DIAMOND'},
+    {hp=110, type='RECTANGLE'},
+    {hp=100, type='ARROW'},
+    {hp=118, type='CIRCLE'},
 }
 -- Note: `sell` prices computed in init()
 tower_cfg = {
     -- level 1
-    {dmg=0.2, range=30,                           buy=40, upg=30}, -- green
-    {dmg=2,   range=30, atkspd=40, max_bullets=1, buy=40, upg=30}, -- red
-    {dmg=2,   range=30, atkspd=80, max_bullets=1, buy=30, upg=30}, -- blue
+    {dmg=0.2, range=30,                           buy=50, upg=30}, -- green
+    {dmg=2,   range=30, atkspd=40, max_bullets=1, buy=50, upg=30}, -- red
+    {dmg=1,   range=30, atkspd=80, max_bullets=1, buy=40, upg=30}, -- blue
     -- level 2
-    {dmg=0.4, range=33,                           upg=40}, -- green
-    {dmg=2,   range=33, atkspd=40, max_bullets=2, upg=40}, -- red
-    {dmg=3,   range=33, atkspd=70, max_bullets=2, upg=40}, -- blue
+    {dmg=0.4, range=32,                           upg=40}, -- green
+    {dmg=2,   range=32, atkspd=40, max_bullets=2, upg=40}, -- red
+    {dmg=2,   range=32, atkspd=70, max_bullets=2, upg=40}, -- blue
     -- level 3
-    {dmg=0.6, range=36,                           upg=50}, -- green
-    {dmg=2,   range=36, atkspd=40, max_bullets=3, upg=50}, -- red
-    {dmg=4,   range=36, atkspd=60, max_bullets=3, upg=50}, -- blue
+    {dmg=0.6, range=34,                           upg=50}, -- green
+    {dmg=2,   range=34, atkspd=40, max_bullets=3, upg=50}, -- red
+    {dmg=3,   range=34, atkspd=60, max_bullets=3, upg=50}, -- blue
     -- level 4
-    {dmg=0.8, range=39},                           -- green
-    {dmg=2,   range=39, atkspd=40, max_bullets=4}, -- red
-    {dmg=5,   range=39, atkspd=50, max_bullets=4}, -- blue
+    {dmg=0.8, range=36},                           -- green
+    {dmg=2,   range=36, atkspd=40, max_bullets=4}, -- red
+    {dmg=4,   range=36, atkspd=50, max_bullets=4}, -- blue
 }
 
 local function set_game_over(state)
@@ -109,7 +109,6 @@ function reinit()
     cur_map = 1
     wave = 0
     gold = 100
-    lives = 10
     bonuses = {}
     interest = 3
     bonus_dmg = 1
@@ -143,6 +142,7 @@ function _update60()
     end
     -- Initialize once we know the map
     if t == 0 then
+        lives = cur_map == 1 and 20 or cur_map == 2 and 10 or 5
         init_grid_bitmap()
         init_path_points()
         init_selection()

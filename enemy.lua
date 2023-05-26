@@ -42,7 +42,7 @@ local function make_enemy(type, max_hp, dx, dy)
         dx=dx, dy=dy,
         hp=max_hp, max_hp=max_hp,
         slow=1, slow_dur=0,
-        gold=type == 'BOSS' and 10 or 4,
+        gold=4,
         death_age=nil,
         death_particles=nil,
         width=width, height=height, -- for collision detection
@@ -70,7 +70,13 @@ function spawn_enemy()
             elseif map[1].cnr == CNR.right then dx = -speed
             elseif map[1].cnr == CNR.bot   then dy = -speed end
             if wave % BOSS_FREQ == 0 and sending == 0 then
-                make_enemy('BOSS', 10, dx, dy)
+                local boss_hp = 30
+                if wave / BOSS_FREQ == 2 then boss_hp = 50
+                elseif wave / BOSS_FREQ == 3 then boss_hp = 80
+                elseif wave / BOSS_FREQ == 4 then boss_hp = 130
+                elseif wave / BOSS_FREQ == 5 then boss_hp = 200
+                end
+                make_enemy('BOSS', boss_hp, dx, dy)
             else
                 make_enemy(w.type, w.hp, dx, dy)
             end
