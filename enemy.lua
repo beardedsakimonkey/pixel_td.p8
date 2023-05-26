@@ -53,21 +53,24 @@ end
 function spawn_enemy()
     if sending > 0 then
         local w = waves[wave]
-        -- Send out enemies with a 10px gap
-        -- speed (px/frame) * X frames = 10px
-        --  => X = 10px / speed
         local gap = w.type == 'ARROW' and 15 or 10
-        local frames = flr(gap / w.speed)
+        local speed = w.type == 'ARROW' and 0.5
+                    or w.type == 'RECTANGLE' and 0.2
+                    or 0.25
+        -- Send out enemies every X frames
+        -- speed (px/frame) * X = gap (px)
+        --  => X = gap / speed
+        local frames = flr(gap / speed)
         if t % frames == 0 then
             sending -= 1
             local dx, dy = 0, 0
             local map = get_map()
-            if     map[1].cnr == CNR.top   then dy = w.speed
-            elseif map[1].cnr == CNR.left  then dx = w.speed
-            elseif map[1].cnr == CNR.right then dx = -w.speed
-            elseif map[1].cnr == CNR.bot   then dy = -w.speed end
-            if w.boss_hp and sending == 0 then
-                make_enemy('BOSS', w.boss_hp, dx, dy)
+            if     map[1].cnr == CNR.top   then dy = speed
+            elseif map[1].cnr == CNR.left  then dx = speed
+            elseif map[1].cnr == CNR.right then dx = -speed
+            elseif map[1].cnr == CNR.bot   then dy = -speed end
+            if w.has_boss and sending == 0 then
+                make_enemy('BOSS', 10, dx, dy)
             else
                 make_enemy(w.type, w.hp, dx, dy)
             end
