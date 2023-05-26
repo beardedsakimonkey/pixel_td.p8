@@ -12,7 +12,7 @@ local Z_t
 local OFFSCREEN = -8
 local SHINE_DELAY = 300 -- 10 sec
 local FLIP_Y = 20
-local FADE_DURATION = 9
+local FADE_DURATION = 7
 
 function init_hint()
     show_hint_X = false
@@ -42,6 +42,9 @@ function update_hint()
     elseif show_hint_Z then
         Z_t += 1
         if Z_t < 0 then Z_t = FADE_DURATION+1 end
+    else
+        Z_t = min(FADE_DURATION+1, Z_t)
+        Z_t = max(0, Z_t-1)
     end
     if dismissing_X then
         X_t = 0
@@ -124,7 +127,7 @@ end
 function draw_hint()
     pal(C.green, C.black)
     draw_hint_X()
-    if can_show_hint_Z() then
+    if Z_t > 0 then
         draw_hint_Z()
     end
     pal(0)
