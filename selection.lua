@@ -1,4 +1,4 @@
-local t -- non-wrapping `t`
+local t -- non-overflowing `t`
 local ENTER_DURATION = 11 -- duration of the entrance animation
 
 function init_selection()

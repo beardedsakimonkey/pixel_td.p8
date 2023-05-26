@@ -1,5 +1,11 @@
-local x_pos, x_v
-local z_x, z_y, z_vx, z_vy
+local show_hint_X
+local X_pos
+local X_v
+
+local Z_x
+local Z_y
+local Z_vx
+local Z_vy
 local t
 
 local OFFSCREEN = -8
@@ -8,41 +14,44 @@ local FLIP_Y = 20
 local FADE_DURATION = 9
 
 function init_hint()
-    show_hint_x = false
-    x_pos = OFFSCREEN
-    x_v = 0
-    z_x, z_y = sel.dst_x-28, sel.dst_y
-    z_vx, z_vy = 0, 0
+    show_hint_X = false
+    X_pos = OFFSCREEN
+    X_v = 0
+    Z_x = sel.dst_x-28
+    Z_y = sel.dst_y
+    Z_vx, Z_vy = 0, 0
     t = 0
 end
 
-local function show_hint_z()
+local function can_show_hint_X()
+    return can_send_wave() and not bonus_menu.is_open and has_bought_tower
+end
+
+local function can_show_hint_Z()
     return not has_opened_shop and can_send_wave()
 end
 
 function update_hint()
-    local show_x = can_send_wave() and not bonus_menu.is_open and has_bought_tower
+    local dismissing_X = show_hint_X and not can_show_hint_X()
+    show_hint_X = can_show_hint_X()
+    local show_hint_Z = can_show_hint_Z()
 
-    local dismissing_x = show_hint_x and not show_x
-
-    show_hint_x = show_x
-
-    if show_hint_x or show_hint_z() then
+    if show_hint_X or show_hint_Z then
         t += 1
         if t < 0 then t = FADE_DURATION+1 end
     end
-    if dismissing_x then
+    if dismissing_X then
         t = 0
-        x_v = 200
+        X_v = 200
     end
-    local dest_pos = show_hint_x and 1 or OFFSCREEN
-    x_pos, x_v = spring(x_pos, dest_pos, x_v, {
+    local dest_pos = show_hint_X and 1 or OFFSCREEN
+    X_pos, X_v = spring(X_pos, dest_pos, X_v, {
         stiffness = 200,
         damping = 32,
         mass = 2,
         precision = 0.2,
     })
-    if show_hint_z() then
+    if show_hint_Z then
         local flip = sel.dst_x < FLIP_Y
         local dest_x = sel.dst_x + (flip and 21 or -18)
         local dest_y = sel.dst_y + 3
@@ -54,12 +63,12 @@ function update_hint()
             mass = 2,
             precision = 0.1,
         }
-        z_x, z_vx = spring(z_x, dest_x, z_vx, cfg)
-        z_y, z_vy = spring(z_y, dest_y, z_vy, cfg)
+        Z_x, Z_vx = spring(Z_x, dest_x, Z_vx, cfg)
+        Z_y, Z_vy = spring(Z_y, dest_y, Z_vy, cfg)
     end
 end
 
-local function draw_x_btn(x, y)
+local function draw_X_btn(x, y)
     local s = max(0, (t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
     sspr(s*9, 24, 9, 8, x, y)
     pset(x+3, y+2, C.dark_blue)
@@ -69,29 +78,29 @@ local function draw_x_btn(x, y)
     pset(x+4, y+3)
 end
 
-local function draw_hint_x()
+local function draw_hint_X()
     -- Draw arrow
     if cur_map == 1 then
-        spr(20, 25, x_pos)
+        spr(20, 25, X_pos)
     elseif cur_map == 2 then
-        spr(21, 1, x_pos)
+        spr(21, 1, X_pos)
     else
-        spr(21, x_pos, 50)
+        spr(21, X_pos, 50)
     end
     -- Draw button
     if cur_map == 1 then
-        draw_x_btn(30, x_pos)
+        draw_X_btn(30, X_pos)
     elseif cur_map == 2 then
-        draw_x_btn(10, x_pos)
+        draw_X_btn(10, X_pos)
     else
-        draw_x_btn(x_pos, 43)
+        draw_X_btn(X_pos, 43)
     end
 end
 
-local function draw_hint_z()
+local function draw_hint_Z()
     -- Draw arrow
     local flip = sel.dst_x < FLIP_Y
-    sspr(32, 8, 5, 8, z_x+(flip and -6 or 10), z_y, 5, 8, not flip)
+    sspr(32, 8, 5, 8, Z_x+(flip and -6 or 10), Z_y, 5, 8, not flip)
 
     -- Draw button
     local s = max(0, (t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
@@ -104,16 +113,16 @@ local function draw_hint_z()
             [13]=C.black, -- indigo
         })
     end
-    sspr(s*9, 24, 9, 8, z_x, z_y)
+    sspr(s*9, 24, 9, 8, Z_x, Z_y)
     -- draw 'o'
-    rect(z_x+3, z_y+2, z_x+5, z_y+4, C.dark_blue)
+    rect(Z_x+3, Z_y+2, Z_x+5, Z_y+4, C.dark_blue)
 end
 
 function draw_hint()
     pal(C.green, C.black)
-    draw_hint_x()
-    if show_hint_z() then
-        draw_hint_z()
+    draw_hint_X()
+    if can_show_hint_Z() then
+        draw_hint_Z()
     end
     pal(0)
 end

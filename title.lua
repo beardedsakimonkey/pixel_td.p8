@@ -3,7 +3,7 @@ local OFFSCREEN_Y = -LETTER_HEIGHT
 
 local z_age
 local t
-local title_t -- non-wrapping `t`
+local title_t -- non-overflowing `t`
 local letters
 local pressing_l, pressing_r, pressing_z
 

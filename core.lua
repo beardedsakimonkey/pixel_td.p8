@@ -115,7 +115,7 @@ function reinit()
     bonus_dmg = 1
     bonus_rng = 1
     t = 0
-    start_age = 0 -- cant use `t` bc it wraps
+    start_age = 0 -- cant use `t` bc it overflows
     shake = 0
     screen = 'title' -- 'title' | 'game'
     has_opened_shop = false
