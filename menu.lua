@@ -26,7 +26,7 @@ function Menu.draw(m)
         local x1, y1, x2, y2 = m.x, m.y, m.x+m.w-1, m.y+m.h-1
         rect(x1-2, y1-2, x2+2, y2+2, C.black)
         rect(x1-1, y1-1, x2+1, y2+1, C.light_gray)
-        rectfill(x1, y1, x2, y2, C.dark_blue)
+        rectfill(x1, y1, x2, y2, C.black)
     end
 
     for i, item in ipairs(m.items) do
@@ -139,9 +139,9 @@ function init_menus()
         end
         clip(m.x+21, m.y+2, 17, 7)
         for i=1,MAX_TWR do
-            if m.sel_twr <= MAX_TWR then pal(C.dark_blue, C.black) end
+            -- if m.sel_twr <= MAX_TWR then pal(C.dark_blue, C.black) end
             spr(i, m.x+26+((i-1)*CAROUSEL_GAP)+m.carousel_x, m.y+2)
-            pal(0)
+            -- pal(0)
         end
         clip()
         print(tower_cfg[m.sel_twr].buy, m.x+26, m.y+11+8*0, C.indigo)
@@ -170,9 +170,11 @@ function init_menus()
             print(m.twr.upg, m.x+44, m.y+12+8*0, C.indigo)
         end
         print(m.twr.sell, m.x+44, m.y+12+8*1, C.indigo)
-        if m.twr.type <= MAX_TWR then pal(C.dark_blue, C.black) end
-        spr(m.twr.type, m.x+26, m.y+2)
-        pal(0)
+        -- if m.twr.type <= MAX_TWR then pal(C.dark_blue, C.black) end
+        local x = m.x+26
+        local y = m.y+2
+        spr(m.twr.type, x, y)
+        -- pal(0)
     end
 
     upg_menu.open = function(m)

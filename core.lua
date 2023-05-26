@@ -212,6 +212,7 @@ end
 --------------------------------------------------------------------------------
 function _draw()
     cls(C.black)
+    pal(C.peach, 140, 1)
     -- Draw grid lines
     for y = 10, 127, 12 do line(0, y, 127, y, C.dark_blue) end
     for x = 10, 127, 12 do line(x, 0, x, 127, C.dark_blue) end

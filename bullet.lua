@@ -187,15 +187,12 @@ local function draw_bullets_yellow(twr)
         local color
         if blt.age >= 20 and blt.age <= 42 then
             if     blt.age <= 23 then color = C.dark_blue
-            elseif blt.age <= 26 then color = C.brown
-            elseif blt.age <= 28 then color = C.orange
-            elseif blt.age <= 30 then color = C.yellow
-            elseif blt.age <= 36 then color = C.peach
-            elseif blt.age <= 37 then color = C.white
-            elseif blt.age <= 39 then color = C.peach
-            elseif blt.age <= 40 then color = C.yellow
-            elseif blt.age <= 41 then color = C.orange
-            else                      color = C.brown end
+            elseif blt.age <= 26 then color = C.peach
+            elseif blt.age <= 28 then color = C.blue
+            elseif blt.age <= 31 then color = C.white
+            elseif blt.age <= 36 then color = C.blue
+            elseif blt.age <= 38 then color = C.peach
+            else                      color = C.dark_blue end
             line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
             -- don't cover up center pixel
             pset(twr.x, twr.y, C.black)

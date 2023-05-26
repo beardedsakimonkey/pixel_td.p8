@@ -260,7 +260,8 @@ function draw_enemies()
             if flash then pal(C.light_gray, C.white) end
             spr(112, left, top)
         elseif enmy.type == 'SQUARE' then
-            if flash then pal(C.pink, C.peach) end
+            -- if flash then pal(C.pink, C.peach) end
+            if flash then pal(C.pink, C.white) end
             spr(113, left, top)
         elseif enmy.type == 'DIAMOND' then
             if flash then pal(C.red, C.pink) end
