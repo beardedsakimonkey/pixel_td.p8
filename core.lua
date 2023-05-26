@@ -34,33 +34,33 @@ maps = {_map_easy, _map_medium, _map_hard}
 function get_map()
     return maps[cur_map]
 end
--- Note: bosses must be on every 5th wave
+BOSS_FREQ = 5 -- boss on every 5th wave
 waves = {
     {hp=6,  type='SQUARE'},
     {hp=9,  type='DIAMOND'},
     {hp=12, type='RECTANGLE'},
     {hp=7,  type='ARROW'},
-    {hp=15, type='CIRCLE', has_boss=true},
+    {hp=15, type='CIRCLE'},
     {hp=18, type='SQUARE'},
     {hp=21, type='DIAMOND'},
     {hp=25, type='RECTANGLE'},
     {hp=16, type='ARROW'},
-    {hp=24, type='CIRCLE', has_boss=true},
+    {hp=24, type='CIRCLE'},
     {hp=27, type='SQUARE'},
     {hp=30, type='DIAMOND'},
     {hp=35, type='RECTANGLE'},
     {hp=25, type='ARROW'},
-    {hp=33, type='CIRCLE', has_boss=true},
+    {hp=33, type='CIRCLE'},
     {hp=36, type='SQUARE'},
     {hp=39, type='DIAMOND'},
     {hp=45, type='RECTANGLE'},
     {hp=34, type='ARROW'},
-    {hp=42, type='CIRCLE', has_boss=true},
+    {hp=42, type='CIRCLE'},
     {hp=45, type='SQUARE'},
     {hp=48, type='DIAMOND'},
     {hp=55, type='RECTANGLE'},
     {hp=43, type='ARROW'},
-    {hp=52, type='CIRCLE', has_boss=true},
+    {hp=52, type='CIRCLE'},
 }
 -- Note: `sell` prices computed in init()
 tower_cfg = {

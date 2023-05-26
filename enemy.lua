@@ -69,7 +69,7 @@ function spawn_enemy()
             elseif map[1].cnr == CNR.left  then dx = speed
             elseif map[1].cnr == CNR.right then dx = -speed
             elseif map[1].cnr == CNR.bot   then dy = -speed end
-            if w.has_boss and sending == 0 then
+            if wave % BOSS_FREQ == 0 and sending == 0 then
                 make_enemy('BOSS', 10, dx, dy)
             else
                 make_enemy(w.type, w.hp, dx, dy)
