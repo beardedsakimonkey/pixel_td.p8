@@ -231,6 +231,7 @@ function _draw()
     draw_path(0)
     draw_towers()
     draw_bullets()
+    draw_tower_ranges()
     draw_enemies()
     draw_selection()
 

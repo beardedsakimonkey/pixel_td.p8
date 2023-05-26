@@ -85,16 +85,25 @@ function draw_towers()
         spr(twr.type, p.left+3, p.top+3)
         pal(0)
     end)
+end
 
-    -- draw tower range
+local function draw_range(x, y, range)
+    for x_off in all({-1, 0, 1}) do
+        for y_off in all({-1, 0, 1}) do
+            circ(x+x_off, y+y_off, range, C.black)
+        end
+    end
+    circ(x, y, range, C.dark_blue)
+end
+
+function draw_tower_ranges()
     if upg_menu.is_open then
         local twr = find_sel_tower()
         if twr then
-            circ(twr.x, twr.y, get_twr_range(twr), C.light_gray)
+            draw_range(twr.x, twr.y, get_twr_range(twr))
         end
-    end
-    if buy_menu.is_open then
+    elseif buy_menu.is_open then
         local range = get_twr_range({range = tower_cfg[buy_menu.sel_twr].range})
-        circ(sel.x+6, sel.y+6, range, C.light_gray)
+        draw_range(sel.x+6, sel.y+6, range)
     end
 end
