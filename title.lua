@@ -88,13 +88,14 @@ function draw_title()
 
     -- Draw difficulty
     if z_age == nil or z_age < 27 then
-        local y = 54
+        local y = 50
         pal(C.green, C.black)
         if z_age and z_age > 14 then -- fade out
             local c = z_age < 22 and C.dark_gray or C.dark_blue
             pal({
                 [1]=C.black,  -- dark blue
                 [6]=c,        -- light gray
+                [8]=c,        -- red
                 [10]=c,       -- yellow
                 [13]=C.black, -- indigo
             })
@@ -110,9 +111,9 @@ function draw_title()
         print_outlined(str, center_horz(str), y, c)
 
         local str2 = 'start'
-        local y2 = 73
+        local y2 = 74
         local x = print_outlined(str2, center_horz(str2)+3, y2, C.light_gray)
-        sspr(pressing_z and 112 or 96, 40, 9, 8, x-12, y2-1)
+        sspr(pressing_z and 112 or 96, 40, 9, 8, x-13, y2-1)
         pal(0)
     end
 end

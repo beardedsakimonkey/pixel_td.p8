@@ -2,7 +2,7 @@ local t -- non-wrapping `t`
 local ENTER_DURATION = 11 -- duration of the entrance animation
 
 function init_selection()
-    local init_pos = cur_map == 3 and {x=4, y=3} or {x=5, y=3}
+    local init_pos = cur_map == 3 and {x=5, y=4} or {x=5, y=3}
     local p = g2p(init_pos)
     sel = {
         dst_x=p.left,      dst_y=p.top,
