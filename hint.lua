@@ -74,7 +74,7 @@ local function draw_hint_x()
     if cur_map == 1 then
         spr(20, 25, x_pos)
     elseif cur_map == 2 then
-        spr(22, x_pos, 23)
+        spr(21, 1, x_pos)
     else
         spr(21, x_pos, 50)
     end
@@ -82,7 +82,7 @@ local function draw_hint_x()
     if cur_map == 1 then
         draw_x_btn(30, x_pos)
     elseif cur_map == 2 then
-        draw_x_btn(x_pos, 30)
+        draw_x_btn(10, x_pos)
     else
         draw_x_btn(x_pos, 43)
     end
