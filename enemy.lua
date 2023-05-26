@@ -249,8 +249,7 @@ function draw_enemies()
             end
             return
         end
-        -- TODO: white -> green
-        pal(C.white, C.black)
+        pal(C.green, C.black)
         local top  = enmy.y - enmy.height\2
         local left = enmy.x - enmy.width\2
         local flash = enmy.dmg_age and (enmy.dmg_age\3)%2 == 0
