@@ -67,19 +67,19 @@ tower_cfg = {
     -- level 1
     {dmg=0.2, range=30,                           buy=40, upg=30}, -- green
     {dmg=2,   range=30, atkspd=40, max_bullets=1, buy=40, upg=30}, -- red
-    {dmg=2,   range=30, atkspd=80, max_bullets=1, buy=30, upg=30}, -- yellow
+    {dmg=2,   range=30, atkspd=80, max_bullets=1, buy=30, upg=30}, -- blue
     -- level 2
     {dmg=0.4, range=33,                           upg=40}, -- green
     {dmg=2,   range=33, atkspd=40, max_bullets=2, upg=40}, -- red
-    {dmg=3,   range=33, atkspd=70, max_bullets=2, upg=40}, -- yellow
+    {dmg=3,   range=33, atkspd=70, max_bullets=2, upg=40}, -- blue
     -- level 3
     {dmg=0.6, range=36,                           upg=50}, -- green
     {dmg=2,   range=36, atkspd=40, max_bullets=3, upg=50}, -- red
-    {dmg=4,   range=36, atkspd=60, max_bullets=3, upg=50}, -- yellow
+    {dmg=4,   range=36, atkspd=60, max_bullets=3, upg=50}, -- blue
     -- level 4
     {dmg=0.8, range=39},                           -- green
     {dmg=2,   range=39, atkspd=40, max_bullets=4}, -- red
-    {dmg=5,   range=39, atkspd=50, max_bullets=4}, -- yellow
+    {dmg=5,   range=39, atkspd=50, max_bullets=4}, -- blue
 }
 
 local function set_game_over(state)

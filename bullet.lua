@@ -126,9 +126,9 @@ local function draw_bullets_green(twr)
     end
 end
 
--- Yellow ----------------------------------------------------------------------
+-- Blue ------------------------------------------------------------------------
 
-local function update_bullets_yellow(twr)
+local function update_bullets_blue(twr)
     local REGISTER_DMG = 30
     local num_bullets = #twr.bullets
     local misfires = 0 -- enemy died before bullet registered damage
@@ -168,7 +168,7 @@ local function update_bullets_yellow(twr)
     end
 end
 
-local function fire_bullet_yellow(twr)
+local function fire_bullet_blue(twr)
     twr.cd = max(0, twr.cd-1)
     if twr.cd > 0 or #twr.bullets > 0 then return end
     for enmy in all(enemies) do
@@ -182,7 +182,7 @@ local function fire_bullet_yellow(twr)
     end
 end
 
-local function draw_bullets_yellow(twr)
+local function draw_bullets_blue(twr)
     for blt in all(twr.bullets) do
         local color
         if blt.age >= 20 and blt.age <= 42 then
@@ -212,8 +212,8 @@ function update_bullets()
             foreach(twr.bullets, function(blt)
                 update_bullet_green(twr, blt)
             end)
-        elseif is_yellow_twr(twr.type) then
-            update_bullets_yellow(twr)
+        elseif is_blue_twr(twr.type) then
+            update_bullets_blue(twr)
         end
     end)
     foreach(towers, function(twr)
@@ -221,8 +221,8 @@ function update_bullets()
             fire_bullet_red(twr)
         elseif is_green_twr(twr.type) then
             fire_bullet_green(twr)
-        elseif is_yellow_twr(twr.type) then
-            fire_bullet_yellow(twr)
+        elseif is_blue_twr(twr.type) then
+            fire_bullet_blue(twr)
         end
     end)
 end
@@ -233,8 +233,8 @@ function draw_bullets()
             draw_bullets_red(twr)
         elseif is_green_twr(twr.type) then
             draw_bullets_green(twr)
-        elseif is_yellow_twr(twr.type) then
-            draw_bullets_yellow(twr)
+        elseif is_blue_twr(twr.type) then
+            draw_bullets_blue(twr)
         end
     end)
 end

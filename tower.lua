@@ -1,8 +1,8 @@
 MAX_TWR = 3 -- how many types of towers are there
 
-function is_green_twr(type)  return type % MAX_TWR == 1 end
-function is_red_twr(type)    return type % MAX_TWR == 2 end
-function is_yellow_twr(type) return type % MAX_TWR == 0 end
+function is_green_twr(type) return type % MAX_TWR == 1 end
+function is_red_twr(type)   return type % MAX_TWR == 2 end
+function is_blue_twr(type)  return type % MAX_TWR == 0 end
 
 function get_twr_range(twr)  return round(twr.range * bonus_rng) end
 function get_twr_damage(twr) return twr.dmg * bonus_dmg end
