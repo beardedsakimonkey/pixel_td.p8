@@ -184,9 +184,9 @@ function init_menus()
 
     -- Bonus menu --------------------------------------------------------------
     bonus_menu = Menu.new({x=31, dst_y=89, w=70, h=36})
-    add(bonus_menu.items, {text='+3% interest', y=12+8*0, cb=do_bonus_int})
-    add(bonus_menu.items, {text='+5% damage',   y=12+8*1, cb=do_bonus_dmg})
-    add(bonus_menu.items, {text='+10% range',   y=12+8*2, cb=do_bonus_rng})
+    add(bonus_menu.items, {text='+3% interest', y=12+8*0, cb=do_bonus_interest})
+    add(bonus_menu.items, {text='+5% damage',   y=12+8*1, cb=do_bonus_damage})
+    add(bonus_menu.items, {text='+10% range',   y=12+8*2, cb=do_bonus_range})
 
     bonus_menu.update = function(m)
         local has_boss = wave > 0 and wave % BOSS_FREQ == 0
@@ -239,17 +239,40 @@ function do_upgrade(menu)
     del(towers, twr)
 end
 
-function do_bonus_int(menu)
+function do_bonus_interest(menu)
     add(bonuses, 'INTEREST')
     interest += 3
 end
 
-function do_bonus_dmg(menu)
+function do_bonus_damage(menu)
     add(bonuses, 'DAMAGE')
     bonus_dmg += 0.05
 end
 
-function do_bonus_rng(menu)
+function do_bonus_range(menu)
     add(bonuses, 'RANGE')
     bonus_rng += 0.1
+end
+
+-- Tower range -----------------------------------------------------------------
+
+local function draw_range(x, y, range)
+    for x_off in all({-1, 0, 1}) do
+        for y_off in all({-1, 0, 1}) do
+            circ(x+x_off, y+y_off, range, C.black)
+        end
+    end
+    circ(x, y, range, C.dark_blue)
+end
+
+function draw_tower_ranges()
+    if upg_menu.is_open then
+        local twr = find_sel_tower()
+        if twr then
+            draw_range(twr.x, twr.y, get_twr_range(twr))
+        end
+    elseif buy_menu.is_open then
+        local range = get_twr_range({range = tower_cfg[buy_menu.sel_twr].range})
+        draw_range(sel.x+6, sel.y+6, range)
+    end
 end

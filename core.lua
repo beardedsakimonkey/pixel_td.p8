@@ -102,6 +102,7 @@ end
 function _init()
     poke(0x5f5c, 9) -- button repeat delay
     poke(0x5f5d, 3) -- button repeat interval
+    pal(C.peach, 140, 1) -- hidden palette
     reinit()
 end
 
@@ -212,7 +213,6 @@ end
 --------------------------------------------------------------------------------
 function _draw()
     cls(C.black)
-    pal(C.peach, 140, 1)
     -- Draw grid lines
     for y = 10, 127, 12 do line(0, y, 127, y, C.dark_blue) end
     for x = 10, 127, 12 do line(x, 0, x, 127, C.dark_blue) end
@@ -225,7 +225,7 @@ function _draw()
     -- Draw wave count
     do
         local str = wave .. '/' .. #waves
-        print_outlined(str, center_horz(str), 122, C.dark_blue)
+        print_outlined(str, hcenter(str), 122, C.dark_blue)
     end
 
     draw_path(0)
@@ -360,7 +360,7 @@ end
 function draw_game_over(text, color)
     do
         local y = 50
-        local x, w = print_outlined(text, center_horz(text), y, color)
+        local x, w = print_outlined(text, hcenter(text), y, color)
         for x1 in all{x-7, x+w+2} do
             local y1 = y+2
             local x2 = x1+3
@@ -372,7 +372,7 @@ function draw_game_over(text, color)
     do
         local y = 68
         local str = 'restart'
-        local x = print_outlined(str, center_horz(str)+4, y, C.light_gray)
+        local x = print_outlined(str, hcenter(str)+4, y, C.light_gray)
         pal(C.green, C.black)
         spr(92, x-12, y-1)
         pal(0)

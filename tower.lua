@@ -64,22 +64,22 @@ function draw_towers()
         -- draw flicker
         if twr.age and (twr.age\2)%2 == 0 then
             pal({
-                [0]=C.dark_gray,
-                [1]=C.light_gray,
-                [2]=C.light_gray,
-                [3]=C.light_gray,
-                [4]=C.light_gray,
-                [5]=C.light_gray,
-                [6]=C.white,
-                [7]=C.white,
-                [8]=C.light_gray,
-                [9]=C.light_gray,
-                [10]=C.light_gray,
-                [11]=C.white,
-                [12]=C.white,
-                [13]=C.light_gray,
-                [14]=C.white,
-                [15]=C.white
+                C.light_gray, -- 1 (dark blue)
+                C.light_gray, -- 2 (dark purple)
+                C.light_gray, -- 3 (dark green)
+                C.light_gray, -- 4 (brown)
+                C.light_gray, -- 5 (dark gray)
+                C.white,      -- 6 (light gray)
+                C.white,      -- 7 (white)
+                C.light_gray, -- 8 (red)
+                C.light_gray, -- 9 (orange)
+                C.light_gray, -- 10 (yellow)
+                C.white,      -- 11 (green)
+                C.white,      -- 12 (blue)
+                C.light_gray, -- 13 (indigo)
+                C.white,      -- 14 (pink)
+                C.white,      -- 15 (peach)
+                C.dark_gray,  -- 0 (black)
             }, 0)
         end
         -- draw tower
@@ -87,25 +87,4 @@ function draw_towers()
         spr(twr.type, p.left+3, p.top+3)
         pal(0)
     end)
-end
-
-local function draw_range(x, y, range)
-    for x_off in all({-1, 0, 1}) do
-        for y_off in all({-1, 0, 1}) do
-            circ(x+x_off, y+y_off, range, C.black)
-        end
-    end
-    circ(x, y, range, C.dark_blue)
-end
-
-function draw_tower_ranges()
-    if upg_menu.is_open then
-        local twr = find_sel_tower()
-        if twr then
-            draw_range(twr.x, twr.y, get_twr_range(twr))
-        end
-    elseif buy_menu.is_open then
-        local range = get_twr_range({range = tower_cfg[buy_menu.sel_twr].range})
-        draw_range(sel.x+6, sel.y+6, range)
-    end
 end

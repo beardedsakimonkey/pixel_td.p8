@@ -12,14 +12,20 @@ function init_title()
     t = 0
     title_t = 0
     letters = {
-        {x=0,  w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- P
-        {x=13, w=7,  y=OFFSCREEN_Y, v=0, dest_y=12}, -- I
-        {x=21, w=17, y=OFFSCREEN_Y, v=0, dest_y=12}, -- X
-        {x=38, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- E
-        {x=51, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- L
-        {x=64, w=14, y=OFFSCREEN_Y, v=0, dest_y=12}, -- T
-        {x=78, w=13, y=OFFSCREEN_Y, v=0, dest_y=12}, -- D
+        {x=0,  w=13}, -- P
+        {x=13, w=7},  -- I
+        {x=21, w=17}, -- X
+        {x=38, w=13}, -- E
+        {x=51, w=13}, -- L
+        {x=64, w=14}, -- T
+        {x=78, w=13}, -- D
     }
+    -- saving tokens..
+    for l in all(letters) do
+        l.y = OFFSCREEN_Y
+        l.v = 0
+        l.dest_y = 12
+    end
 end
 
 function update_title()
@@ -111,11 +117,11 @@ function draw_title()
                  or cur_map == 2 and 'medium'
                  or 'hard'
         local c = cur_map == 3 and C.red or C.yellow
-        print_outlined(str, center_horz(str), y, c)
+        print_outlined(str, hcenter(str), y, c)
 
         local str2 = 'start'
         local y2 = 74
-        local x = print_outlined(str2, center_horz(str2)+3, y2, C.light_gray)
+        local x = print_outlined(str2, hcenter(str2)+3, y2, C.light_gray)
         sspr(pressing_z and 112 or 96, 40, 9, 8, x-13, y2-1)
         pal(0)
     end

@@ -65,7 +65,7 @@ function spring(cur_pos, dst_pos, cur_vel, cfg)
     return new_pos, new_vel
 end
 
-function center_horz(str)
+function hcenter(str)
     local mid = 64
     local width = print(str, 0, -20) - 1
     local left = mid - width\2
