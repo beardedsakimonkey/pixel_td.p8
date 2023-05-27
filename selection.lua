@@ -107,7 +107,7 @@ function draw_selection()
     if sel.vx > 0 then left = ceil(left) end
     local bot   = top + 10 + off*2
     local right = left + 10 + off*2
-    local color = C.light_gray
+    local color = LightGray
     -- top left corner
     line(left, top, left+2, top, color)
     line(left, top, left, top+2, color)

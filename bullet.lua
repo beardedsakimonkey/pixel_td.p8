@@ -83,9 +83,9 @@ end
 
 local function draw_bullets_red(twr)
     for blt in all(twr.bullets) do
-        pset(blt.x, blt.y, C.red)
+        pset(blt.x, blt.y, Red)
         for part in all(blt.particles) do
-            pset(part.x, part.y, C.dark_purple)
+            pset(part.x, part.y, DarkPurple)
         end
     end
 end
@@ -125,12 +125,12 @@ end
 local function draw_bullets_green(twr)
     for blt in all(twr.bullets) do
         local v = cos((blt.age%61)/60)
-        local color = v > 0.95 and C.dark_blue
-                    or v > 0.6 and C.dark_green
-                    or C.green
+        local color = v > 0.95 and DarkBlue
+                    or v > 0.6 and DarkGreen
+                    or Green
         line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
         -- don't cover up center pixel
-        pset(twr.x, twr.y, C.black)
+        pset(twr.x, twr.y, Black)
     end
 end
 
@@ -194,16 +194,16 @@ local function draw_bullets_blue(twr)
     for blt in all(twr.bullets) do
         local color
         if blt.age >= 20 and blt.age <= 42 then
-            if     blt.age <= 23 then color = C.dark_blue
-            elseif blt.age <= 26 then color = C.peach
-            elseif blt.age <= 28 then color = C.blue
-            elseif blt.age <= 31 then color = C.white
-            elseif blt.age <= 36 then color = C.blue
-            elseif blt.age <= 38 then color = C.peach
-            else                      color = C.dark_blue end
+            if     blt.age <= 23 then color = DarkBlue
+            elseif blt.age <= 26 then color = Peach
+            elseif blt.age <= 28 then color = Blue
+            elseif blt.age <= 31 then color = White
+            elseif blt.age <= 36 then color = Blue
+            elseif blt.age <= 38 then color = Peach
+            else                      color = DarkBlue end
             line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
             -- don't cover up center pixel
-            pset(twr.x, twr.y, C.black)
+            pset(twr.x, twr.y, Black)
         end
     end
 end

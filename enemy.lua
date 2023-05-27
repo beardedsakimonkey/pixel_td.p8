@@ -239,15 +239,15 @@ function draw_enemies()
         -- Draw enemy
         if enmy.death_age then
             for part in all(enmy.death_particles) do
-                local c, c2 = C.pink, C.dark_purple
+                local c, c2 = Pink, DarkPurple
                 if enmy.type == 'RECTANGLE' then
-                    c, c2 = C.blue, C.dark_blue
+                    c, c2 = Blue, DarkBlue
                 elseif enmy.type == 'ARROW' then
-                    c, c2 = C.orange, C.brown
+                    c, c2 = Orange, Brown
                 elseif enmy.type == 'CIRCLE' then
-                    c, c2 = C.light_gray, C.dark_gray
+                    c, c2 = LightGray, DarkGray
                 elseif enmy.type == 'BOSS' then
-                    c, c2 = C.yellow, C.brown
+                    c, c2 = Yellow, Brown
                 end
                 if enmy.death_age < MAX_DEATH_AGE*0.5 then
                     circfill(enmy.x, enmy.y, enmy.death_age/2,
@@ -258,28 +258,28 @@ function draw_enemies()
             end
             return
         end
-        pal(C.green, C.black)
+        pal(Green, Black)
         local top  = enmy.y - enmy.height\2
         local left = enmy.x - enmy.width\2
         local flash = enmy.dmg_age and (enmy.dmg_age\3)%2 == 0
         if enmy.type == 'CIRCLE' then
-            if flash then pal(C.light_gray, C.white) end
+            if flash then pal(LightGray, White) end
             spr(112, left, top)
         elseif enmy.type == 'SQUARE' then
-            -- if flash then pal(C.pink, C.peach) end
-            if flash then pal(C.pink, C.white) end
+            -- if flash then pal(Pink, Peach) end
+            if flash then pal(Pink, White) end
             spr(113, left, top)
         elseif enmy.type == 'DIAMOND' then
-            if flash then pal(C.red, C.pink) end
+            if flash then pal(Red, Pink) end
             spr(114, left, top)
         elseif enmy.type == 'RECTANGLE' then
-            if flash then pal(C.blue, C.white) end
+            if flash then pal(Blue, White) end
             spr(115, left, top)
         elseif enmy.type == 'BOSS' then
-            if enmy.dmg_age and enmy.dmg_age%2 == 0 then pal(C.yellow, C.red) end
+            if enmy.dmg_age and enmy.dmg_age%2 == 0 then pal(Yellow, Red) end
             spr(116, left, top)
         elseif enmy.type == 'ARROW' then
-            if flash then pal(C.orange, C.white) end
+            if flash then pal(Orange, White) end
             if enmy.dx ~= 0 then
                 -- left/right
                 sspr(40, 56, 5, 5, left, top, 5, 5, enmy.dx<0)
@@ -293,9 +293,9 @@ function draw_enemies()
         local hp_y = top-2
         local hp_width = enmy.type == 'ARROW' and 5 or enmy.width
         local left = enmy.x - enmy.width\2
-        rect(left, hp_y, left+hp_width-1, hp_y, C.dark_green)
+        rect(left, hp_y, left+hp_width-1, hp_y, DarkGreen)
         local hp_rem = ceil(enmy.hp / enmy.max_hp*hp_width)
-        rect(left, hp_y, left+hp_rem-1, hp_y, C.green)
+        rect(left, hp_y, left+hp_rem-1, hp_y, Green)
     end)
 end
 

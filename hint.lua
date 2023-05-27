@@ -77,7 +77,7 @@ end
 local function draw_X_btn(x, y)
     local s = max(0, (X_t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
     sspr(s*9, 24, 9, 8, x, y)
-    pset(x+3, y+2, C.dark_blue)
+    pset(x+3, y+2, DarkBlue)
     pset(x+5, y+2)
     pset(x+3, y+4)
     pset(x+5, y+4)
@@ -111,21 +111,21 @@ local function draw_hint_Z()
     -- Draw button
     local s = max(0, (Z_t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
     if Z_t <= FADE_DURATION then -- fade in
-        local c = Z_t < 4 and C.dark_blue or C.dark_gray
+        local c = Z_t < 4 and DarkBlue or DarkGray
         pal({
-            [1]=C.black,  -- dark blue
+            [1]=Black,  -- dark blue
             [6]=c,        -- light gray
             [10]=c,       -- yellow
-            [13]=C.black, -- indigo
+            [13]=Black, -- indigo
         })
     end
     sspr(s*9, 24, 9, 8, Z_x, Z_y)
     -- draw 'o'
-    rect(Z_x+3, Z_y+2, Z_x+5, Z_y+4, C.dark_blue)
+    rect(Z_x+3, Z_y+2, Z_x+5, Z_y+4, DarkBlue)
 end
 
 function draw_hint()
-    pal(C.green, C.black)
+    pal(Green, Black)
     draw_hint_X()
     if Z_t > 0 then
         draw_hint_Z()

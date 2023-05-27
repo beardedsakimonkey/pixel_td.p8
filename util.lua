@@ -1,9 +1,21 @@
 -- buttons: ⬆️⬇️➡️⬅️❎🅾️
 
-C = {black=0,     dark_blue=1,  dark_purple=2, dark_green=3, brown=4,
-     dark_gray=5, light_gray=6, white=7,       red=8,        orange=9,
-     yellow=10,   green=11,     blue=12,       indigo=13,    pink=14,
-     peach=15}
+Black      = 0
+DarkBlue   = 1
+DarkPurple = 2
+DarkGreen  = 3
+Brown      = 4
+DarkGray   = 5
+LightGray  = 6
+White      = 7
+Red        = 8
+Orange     = 9
+Yellow     = 10
+Green      = 11
+Blue       = 12
+Indigo     = 13
+Pink       = 14
+Peach      = 15
 
 -- corners
 CNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
@@ -74,7 +86,7 @@ end
 
 function print_outlined(str, x, y, color, outline_color)
     local w = print(str, 0, -20)
-    rectfill(x-1, y-1, x-1+w, y+5, outline_color or C.black)
+    rectfill(x-1, y-1, x-1+w, y+5, outline_color or Black)
     print(str, x, y, color)
     return x, w
 end

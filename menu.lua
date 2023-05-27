@@ -24,16 +24,16 @@ function Menu.draw(m)
     if m.y == OFFSCREEN then return end
     do
         local x1, y1, x2, y2 = m.x, m.y, m.x+m.w-1, m.y+m.h-1
-        rect(x1-2, y1-2, x2+2, y2+2, C.black)
-        rect(x1-1, y1-1, x2+1, y2+1, C.light_gray)
-        rectfill(x1, y1, x2, y2, C.black)
+        rect(x1-2, y1-2, x2+2, y2+2, Black)
+        rect(x1-1, y1-1, x2+1, y2+1, LightGray)
+        rectfill(x1, y1, x2, y2, Black)
     end
 
     for i, item in ipairs(m.items) do
         local disabled = item.is_disabled and item.is_disabled(m)
-        local c = disabled and C.dark_gray
-                or (i == m.cur_idx) and C.white
-                or C.light_gray
+        local c = disabled and DarkGray
+                or (i == m.cur_idx) and White
+                or LightGray
         print(item.text, m.x+9, m.y+item.y, c)
     end
 
@@ -125,26 +125,26 @@ function init_menus()
         local can_right = m.sel_twr ~= MAX_TWR or m.pressing_right
         if can_left then
             local off_x = m.pressing_left and -1 or 0
-            rectfill(m.x+16+off_x, m.y+3, m.x+18+off_x, m.y+7, C.dark_gray)
-            print('⬅️', m.x+14+off_x, m.y+3, C.light_gray)
+            rectfill(m.x+16+off_x, m.y+3, m.x+18+off_x, m.y+7, DarkGray)
+            print('⬅️', m.x+14+off_x, m.y+3, LightGray)
         else
-            print('⬅️', m.x+14, m.y+3, C.dark_gray)
+            print('⬅️', m.x+14, m.y+3, DarkGray)
         end
         if can_right then
             local off_x = m.pressing_right and 1 or 0
-            rectfill(m.x+40+off_x, m.y+4, m.x+42+off_x, m.y+7, C.dark_gray)
-            print('➡️', m.x+38+off_x, m.y+3, C.light_gray)
+            rectfill(m.x+40+off_x, m.y+4, m.x+42+off_x, m.y+7, DarkGray)
+            print('➡️', m.x+38+off_x, m.y+3, LightGray)
         else
-            print('➡️', m.x+38, m.y+3, C.dark_gray)
+            print('➡️', m.x+38, m.y+3, DarkGray)
         end
         clip(m.x+21, m.y+2, 17, 7)
         for i=1,MAX_TWR do
-            -- if m.sel_twr <= MAX_TWR then pal(C.dark_blue, C.black) end
+            -- if m.sel_twr <= MAX_TWR then pal(DarkBlue, Black) end
             spr(i, m.x+26+((i-1)*CAROUSEL_GAP)+m.carousel_x, m.y+2)
             -- pal(0)
         end
         clip()
-        print(tower_cfg[m.sel_twr].buy, m.x+26, m.y+11+8*0, C.indigo)
+        print(tower_cfg[m.sel_twr].buy, m.x+26, m.y+11+8*0, Indigo)
     end
 
     buy_menu.open = function(m)
@@ -167,10 +167,10 @@ function init_menus()
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
         if m.twr.upg then
-            print(m.twr.upg, m.x+44, m.y+12+8*0, C.indigo)
+            print(m.twr.upg, m.x+44, m.y+12+8*0, Indigo)
         end
-        print(m.twr.sell, m.x+44, m.y+12+8*1, C.indigo)
-        -- if m.twr.type <= MAX_TWR then pal(C.dark_blue, C.black) end
+        print(m.twr.sell, m.x+44, m.y+12+8*1, Indigo)
+        -- if m.twr.type <= MAX_TWR then pal(DarkBlue, Black) end
         local x = m.x+26
         local y = m.y+2
         spr(m.twr.type, x, y)
@@ -202,14 +202,14 @@ function init_menus()
     bonus_menu.draw = function(m)
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
-        print('bonus', m.x+25, m.y+3, C.light_gray)
-        if m.cur_idx == 1 then pal(C.indigo, C.yellow) end
+        print('bonus', m.x+25, m.y+3, LightGray)
+        if m.cur_idx == 1 then pal(Indigo, Yellow) end
         spr(32, 91, m.y+11+8*0)
         pal(0)
-        if m.cur_idx == 2 then pal(C.indigo, C.red) end
+        if m.cur_idx == 2 then pal(Indigo, Red) end
         spr(33, 91, m.y+11+8*1)
         pal(0)
-        if m.cur_idx == 3 then pal(C.indigo, C.green) end
+        if m.cur_idx == 3 then pal(Indigo, Green) end
         spr(34, 91, m.y+11+8*2)
         pal(0)
     end
@@ -259,10 +259,10 @@ end
 local function draw_range(x, y, range)
     for x_off in all({-1, 0, 1}) do
         for y_off in all({-1, 0, 1}) do
-            circ(x+x_off, y+y_off, range, C.black)
+            circ(x+x_off, y+y_off, range, Black)
         end
     end
-    circ(x, y, range, C.dark_blue)
+    circ(x, y, range, DarkBlue)
 end
 
 function draw_tower_ranges()

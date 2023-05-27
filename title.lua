@@ -89,7 +89,7 @@ function draw_title()
     draw_path(t)
 
     -- Draw title
-    pal(C.pink, C.black)
+    pal(Pink, Black)
     for l in all(letters) do
         sspr(l.x, 32, l.w, LETTER_HEIGHT, 19+l.x, l.y)
     end
@@ -98,15 +98,15 @@ function draw_title()
     -- Draw difficulty
     if z_age == nil or z_age < 27 then
         local y = 50
-        pal(C.green, C.black)
+        pal(Green, Black)
         if z_age and z_age > 14 then -- fade out
-            local c = z_age < 22 and C.dark_gray or C.dark_blue
+            local c = z_age < 22 and DarkGray or DarkBlue
             pal({
-                [1]=C.black,  -- dark blue
+                [1]=Black,  -- dark blue
                 [6]=c,        -- light gray
                 [8]=c,        -- red
                 [10]=c,       -- yellow
-                [13]=C.black, -- indigo
+                [13]=Black, -- indigo
             })
         end
         -- draw buttons
@@ -116,12 +116,12 @@ function draw_title()
         local str = cur_map == 1 and 'easy'
                  or cur_map == 2 and 'medium'
                  or 'hard'
-        local c = cur_map == 3 and C.red or C.yellow
+        local c = cur_map == 3 and Red or Yellow
         print_outlined(str, hcenter(str), y, c)
 
         local str2 = 'start'
         local y2 = 74
-        local x = print_outlined(str2, hcenter(str2)+3, y2, C.light_gray)
+        local x = print_outlined(str2, hcenter(str2)+3, y2, LightGray)
         sspr(pressing_z and 112 or 96, 40, 9, 8, x-13, y2-1)
         pal(0)
     end

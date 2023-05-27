@@ -102,7 +102,7 @@ end
 function _init()
     poke(0x5f5c, 9) -- button repeat delay
     poke(0x5f5d, 3) -- button repeat interval
-    pal(C.peach, 140, 1) -- hidden palette
+    pal(Peach, 140, 1) -- hidden palette
     reinit()
 end
 
@@ -212,10 +212,10 @@ end
 -- DRAW
 --------------------------------------------------------------------------------
 function _draw()
-    cls(C.black)
+    cls(Black)
     -- Draw grid lines
-    for y = 10, 127, 12 do line(0, y, 127, y, C.dark_blue) end
-    for x = 10, 127, 12 do line(x, 0, x, 127, C.dark_blue) end
+    for y = 10, 127, 12 do line(0, y, 127, y, DarkBlue) end
+    for x = 10, 127, 12 do line(x, 0, x, 127, DarkBlue) end
 
     if screen == 'title' then
         draw_title()
@@ -225,7 +225,7 @@ function _draw()
     -- Draw wave count
     do
         local str = wave .. '/' .. #waves
-        print_outlined(str, hcenter(str), 122, C.dark_blue)
+        print_outlined(str, hcenter(str), 122, DarkBlue)
     end
 
     draw_path(0)
@@ -254,14 +254,14 @@ function _draw()
 
     if game_over then
         if game_over == 'lost' then
-            draw_game_over('game over', C.red)
+            draw_game_over('game over', Red)
         else
-            draw_game_over('you win', C.orange)
+            draw_game_over('you win', Orange)
         end
     end
 
     -- Draw debug messages
-    -- color(C.light_gray)
+    -- color(LightGray)
     -- cursor(2, 2)
     -- for msg in all(debug_msgs) do
     --     print(msg)
@@ -274,23 +274,23 @@ function draw_path(t)
         local cell_a, cell_b = map[i-1], map[i]
         local ca = get_cell_corner(g2p(cell_a), cell_a.cnr)
         local cb = get_cell_corner(g2p(cell_b), cell_b.cnr)
-        rectfill(ca.x, ca.y, cb.x, cb.y, C.black)
-        rect(ca.x, ca.y, cb.x, cb.y, C.indigo)
+        rectfill(ca.x, ca.y, cb.x, cb.y, Black)
+        rect(ca.x, ca.y, cb.x, cb.y, Indigo)
 
         -- cover up unwanted borders
         local a = g2p(cell_a)
         if cell_a.cnr == CNR.bl then
-            line(a.right, a.bot-1, a.right, a.top+1, C.black)
+            line(a.right, a.bot-1, a.right, a.top+1, Black)
         elseif cell_a.cnr == CNR.br then
-            line(a.left+1, a.top, a.right-1, a.top, C.black)
+            line(a.left+1, a.top, a.right-1, a.top, Black)
         elseif cell_a.cnr == CNR.tl then
-            line(a.left+1, a.bot, a.right-1, a.bot, C.black)
+            line(a.left+1, a.bot, a.right-1, a.bot, Black)
         elseif cell_a.cnr == CNR.tr then
-            line(a.left, a.bot-1, a.left, a.top+1, C.black)
+            line(a.left, a.bot-1, a.left, a.top+1, Black)
         end
 
         -- draw path decoration
-        if cur_map == 3 then pal(C.dark_blue, C.dark_purple) end
+        if cur_map == 3 then pal(DarkBlue, DarkPurple) end
         for j = 1, #map, #map-1 do
             local cnr = map[j].cnr
             local p = g2p(map[j])
@@ -320,8 +320,8 @@ function draw_path(t)
 end
 
 function draw_stats()
-    local c = start_age <= 4 and C.dark_blue
-           or start_age <= 8 and C.dark_gray or nil
+    local c = start_age <= 4 and DarkBlue
+           or start_age <= 8 and DarkGray or nil
     if c then
         pal({
             [2]=c, -- dark purple
@@ -334,13 +334,13 @@ function draw_stats()
     local lives = tostr(lives)
     local x = 127 - #lives*4
     local y = 2
-    print(lives, x, y, C.light_gray)
+    print(lives, x, y, LightGray)
     x -= 9
     spr(18, x, y)
 
     local gold = tostr(flr(gold))
     x -= 3 + #gold*4
-    print(gold, x, y, C.light_gray)
+    print(gold, x, y, LightGray)
     x -= 7
     spr(17, x, y)
     pal(0)
@@ -364,7 +364,7 @@ function draw_game_over(text, color)
         for x1 in all{x-7, x+w+2} do
             local y1 = y+2
             local x2 = x1+3
-            rectfill(x1-1, y1-1, x2+1, y1+1, C.black)
+            rectfill(x1-1, y1-1, x2+1, y1+1, Black)
             rectfill(x1, y1, x2, y1, color)
         end
     end
@@ -372,8 +372,8 @@ function draw_game_over(text, color)
     do
         local y = 68
         local str = 'restart'
-        local x = print_outlined(str, hcenter(str)+4, y, C.light_gray)
-        pal(C.green, C.black)
+        local x = print_outlined(str, hcenter(str)+4, y, LightGray)
+        pal(Green, Black)
         spr(92, x-12, y-1)
         pal(0)
     end
