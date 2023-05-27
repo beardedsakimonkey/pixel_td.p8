@@ -60,7 +60,7 @@ end
 
 -- Based on https://github.com/chenglou/react-motion/blob/master/src/stepper.js
 function spring(cur_pos, dst_pos, cur_vel, cfg)
-    local s = cfg.stiffness or 180 -- more stiffness = more bounce
+    local s = cfg.stiffness or 180 -- more stiffness = snappier, more bounce
     local d = cfg.damping or 12
     local m = cfg.mass or 1        -- more mass = more inertia
     local p = cfg.precision or 0.01
