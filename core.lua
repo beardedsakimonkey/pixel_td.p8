@@ -1,39 +1,40 @@
-_map_easy = {
-    {x=1,  y=0,  cnr=CNR.top},
-    {x=1,  y=3,  cnr=CNR.bl},
-    {x=3,  y=3,  cnr=CNR.br},
-    {x=3,  y=1,  cnr=CNR.tl},
-    {x=7,  y=1,  cnr=CNR.tr},
-    {x=7,  y=3,  cnr=CNR.bl},
-    {x=9,  y=3,  cnr=CNR.tr},
-    {x=9,  y=5,  cnr=CNR.br},
-    {x=8,  y=5,  cnr=CNR.tl},
-    {x=8,  y=7,  cnr=CNR.br},
-    {x=5,  y=7,  cnr=CNR.bl},
-    {x=5,  y=5,  cnr=CNR.tr},
-    {x=2,  y=5,  cnr=CNR.tl},
-    {x=2,  y=7,  cnr=CNR.br},
-    {x=1,  y=7,  cnr=CNR.tl},
-    {x=1,  y=9,  cnr=CNR.bl},
-    {x=9,  y=9,  cnr=CNR.tr},
-    {x=9,  y=10, cnr=CNR.bot},
+maps = {
+    -- easy
+    {
+        {x=1,  y=0,  cnr=CNR.top},
+        {x=1,  y=3,  cnr=CNR.bl},
+        {x=3,  y=3,  cnr=CNR.br},
+        {x=3,  y=1,  cnr=CNR.tl},
+        {x=7,  y=1,  cnr=CNR.tr},
+        {x=7,  y=3,  cnr=CNR.bl},
+        {x=9,  y=3,  cnr=CNR.tr},
+        {x=9,  y=5,  cnr=CNR.br},
+        {x=8,  y=5,  cnr=CNR.tl},
+        {x=8,  y=7,  cnr=CNR.br},
+        {x=5,  y=7,  cnr=CNR.bl},
+        {x=5,  y=5,  cnr=CNR.tr},
+        {x=2,  y=5,  cnr=CNR.tl},
+        {x=2,  y=7,  cnr=CNR.br},
+        {x=1,  y=7,  cnr=CNR.tl},
+        {x=1,  y=9,  cnr=CNR.bl},
+        {x=9,  y=9,  cnr=CNR.tr},
+        {x=9,  y=10, cnr=CNR.bot},
+    },
+    -- medium
+    {
+        {x=0,  y=1,  cnr=CNR.left},
+        {x=3,  y=1,  cnr=CNR.tr},
+        {x=3,  y=5,  cnr=CNR.bl},
+        {x=7,  y=5,  cnr=CNR.tr},
+        {x=7,  y=9,  cnr=CNR.bl},
+        {x=10,  y=9, cnr=CNR.right},
+    },
+    -- hard
+    {
+        {x=0,  y=5,  cnr=CNR.left},
+        {x=10,  y=5, cnr=CNR.right},
+    }
 }
-_map_medium = {
-    {x=0,  y=1,  cnr=CNR.left},
-    {x=3,  y=1,  cnr=CNR.tr},
-    {x=3,  y=5,  cnr=CNR.bl},
-    {x=7,  y=5,  cnr=CNR.tr},
-    {x=7,  y=9,  cnr=CNR.bl},
-    {x=10,  y=9, cnr=CNR.right},
-}
-_map_hard = {
-    {x=0,  y=5,  cnr=CNR.left},
-    {x=10,  y=5, cnr=CNR.right},
-}
-maps = {_map_easy, _map_medium, _map_hard}
-function get_map()
-    return maps[cur_map]
-end
 BOSS_FREQ = 5 -- boss on every 5th wave
 waves = {
     {hp=6,   type='SQUARE'},
@@ -82,7 +83,7 @@ tower_cfg = {
     {dmg=4,   range=36, atkspd=50, max_bullets=4}, -- blue
 }
 
-local function set_game_over(state)
+local function end_game(state)
     game_over = state
     buy_menu:close()
     upg_menu:close()
@@ -92,9 +93,13 @@ function remove_life()
     sfx(6)
     lives = max(lives-1, 0)
     if lives == 0 then
-        set_game_over('lost')
+        end_game('lost')
     end
     shake = 3
+end
+
+function get_map()
+    return maps[cur_map]
 end
 
 --------------------------------------------------------------------------------
@@ -209,7 +214,7 @@ function _update60()
 
     -- should go after spawning enemies
     if sending == 0 and #enemies == 0 and wave == #waves then
-        set_game_over('won')
+        end_game('won')
         return
     end
 end
