@@ -41,7 +41,7 @@ function update_title()
     -- Handle button press
     if z_age == nil then
         if btnp(🅾️) then
-            sfx(1)
+            sfx(3)
             z_age = 0
         end
         if btnp(⬅️) then

@@ -267,6 +267,7 @@ function init_menus()
 end
 
 function do_buy(menu)
+    sfx(1)
     local twr = make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
     gold -= twr.buy
     has_bought_tower = true
@@ -279,6 +280,7 @@ function do_sell(menu)
 end
 
 function do_upgrade(menu)
+    sfx(1)
     local twr = find_sel_tower()
     make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
     gold -= twr.upg

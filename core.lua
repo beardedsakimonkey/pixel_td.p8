@@ -89,6 +89,7 @@ local function set_game_over(state)
 end
 
 function remove_life()
+    sfx(2)
     lives = max(lives-1, 0)
     if lives == 0 then
         set_game_over('lost')
