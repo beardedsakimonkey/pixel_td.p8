@@ -9,7 +9,7 @@ local Z_vx
 local Z_vy
 local Z_t
 
-local OFFSCREEN = -8
+local OFFSCREEN = -10
 local SHINE_DELAY = 300 -- 10 sec
 local FLIP_Y = 20
 local FADE_DURATION = 7
@@ -26,10 +26,11 @@ end
 
 local function can_show_hint_X()
     return can_send_wave() and not bonus_menu.is_open and has_bought_tower
+        and not game_over
 end
 
 local function can_show_hint_Z()
-    return not has_opened_shop and can_send_wave()
+    return not has_opened_shop and can_send_wave() and not game_over
 end
 
 function update_hint()
