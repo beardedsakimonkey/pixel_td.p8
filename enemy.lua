@@ -85,7 +85,7 @@ function spawn_enemy()
 end
 
 function kill_enemy(enmy)
-    sfx(4)
+    sfx(8)
     enmy.death_age = 0
     enmy.death_particles = {
         {x=-1, y=-1},
@@ -305,9 +305,7 @@ function can_send_wave()
 end
 
 function send_wave()
-    if can_send_wave() then
-        wave += 1
-        sending = 10
-        show_hint = false
-    end
+    wave += 1
+    sending = 10
+    show_hint = false
 end

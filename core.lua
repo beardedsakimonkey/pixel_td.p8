@@ -89,7 +89,7 @@ local function set_game_over(state)
 end
 
 function remove_life()
-    sfx(2)
+    sfx(6)
     lives = max(lives-1, 0)
     if lives == 0 then
         set_game_over('lost')
@@ -158,7 +158,10 @@ function _update60()
 
     -- Handle button press
     if game_over then
-        if btnp(🅾️) then reinit() end
+        if btnp(🅾️) then
+            sfx(0)
+            reinit()
+        end
     else
         if buy_menu.is_open then
             has_opened_shop = true
@@ -169,6 +172,7 @@ function _update60()
             bonus_menu:handle_btn()
         else
             if btnp(🅾️) then
+                sfx(4)
                 local twr = find_sel_tower()
                 if twr then
                     upg_menu:open()
@@ -176,7 +180,8 @@ function _update60()
                     buy_menu:open()
                 end
             end
-            if btnp(❎) then
+            if btnp(❎) and can_send_wave() then
+                sfx(7)
                 send_wave()
             end
         end

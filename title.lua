@@ -41,15 +41,15 @@ function update_title()
     -- Handle button press
     if z_age == nil then
         if btnp(🅾️) then
-            sfx(3)
+            sfx(0)
             z_age = 0
         end
         if btnp(⬅️) then
-            sfx(0)
+            sfx(2)
             cur_map = wrap(1, cur_map-1, #maps)
         end
         if btnp(➡️) then
-            sfx(0)
+            sfx(2)
             cur_map = wrap(1, cur_map+1, #maps)
         end
     end

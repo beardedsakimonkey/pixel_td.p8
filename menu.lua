@@ -94,17 +94,20 @@ function Menu.update(m)
 end
 
 function Menu.handle_btn(m)
-    if btnp(⬆️)   then m.cur_idx = wrap(1, m.cur_idx-1, #m.items) end
-    if btnp(⬇️) then m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
+    if btnp(⬆️) then sfx(0); m.cur_idx = wrap(1, m.cur_idx-1, #m.items) end
+    if btnp(⬇️) then sfx(0); m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
     if btnp(🅾️) then
         local item = m.items[m.cur_idx]
         local disabled = item.is_disabled and item.is_disabled(m)
         if not disabled then
             item.cb(m)
             m:close()
+        else
+            sfx(3)
         end
     end
     if btnp(❎) then
+        sfx(1)
         m:close()
     end
 end
@@ -125,7 +128,7 @@ function init_menus()
     buy_menu = Menu.new({x=35, dst_y=98, w=59, h=27})
     add(buy_menu.items, {text='buy',    y=11+8*0, cb=do_buy,
         is_disabled=function(m) return gold < tower_cfg[m.sel_twr].buy end})
-    add(buy_menu.items, {text='cancel', y=11+8*1, cb=buy_menu.close})
+    add(buy_menu.items, {text='cancel', y=11+8*1, cb=do_close})
 
     buy_menu.sel_twr = 1
     buy_menu.carousel_x = 0
@@ -141,15 +144,25 @@ function init_menus()
         if m.pressing_left or (not m.pressing_left and m.sel_twr ~= 1) then
             m.pressing_left = btn(⬅️)
         end
-        if btnp(⬅️) and m.sel_twr > 1 then
-            m.sel_twr -= 1
-            m.carousel_sx = m.carousel_x
-            m.carousel_st = time()
+        if btnp(⬅️) then
+            if m.sel_twr > 1 then
+                sfx(2)
+                m.sel_twr -= 1
+                m.carousel_sx = m.carousel_x
+                m.carousel_st = time()
+            else
+                sfx(3)
+            end
         end
-        if btnp(➡️) and m.sel_twr < MAX_TWR then
-            m.sel_twr += 1
-            m.carousel_sx = m.carousel_x
-            m.carousel_st = time()
+        if btnp(➡️) then
+            if m.sel_twr < MAX_TWR then
+                sfx(2)
+                m.sel_twr += 1
+                m.carousel_sx = m.carousel_x
+                m.carousel_st = time()
+            else
+                sfx(3)
+            end
         end
     end
 
@@ -203,7 +216,7 @@ function init_menus()
     add(upg_menu.items, {text='upgrade', y=12+8*0, cb=do_upgrade,
         is_disabled=function(m) return not m.twr.upg or gold < m.twr.upg end})
     add(upg_menu.items, {text='sell',    y=12+8*1, cb=do_sell})
-    add(upg_menu.items, {text='cancel',  y=12+8*2, cb=upg_menu.close})
+    add(upg_menu.items, {text='cancel',  y=12+8*2, cb=do_close})
 
     upg_menu.update = function(m)
         Menu.update(m)
@@ -240,6 +253,7 @@ function init_menus()
             -- need this condition to avoid immediately opening bonus menu after
             -- choosing a bonus.
             and #bonuses < wave \ BOSS_FREQ then
+            sfx(4)
             Menu.open(m)
         end
         Menu.update(m)
@@ -261,43 +275,55 @@ function init_menus()
     end
 
     bonus_menu.handle_btn = function(m)
-        if btnp(❎) then return end
+        if btnp(❎) then
+            sfx(3)
+            return
+        end
         Menu.handle_btn(m)
     end
 end
 
-function do_buy(menu)
+function do_close(menu)
     sfx(1)
+    menu:close()
+end
+
+function do_buy(menu)
+    sfx(9)
     local twr = make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
     gold -= twr.buy
     has_bought_tower = true
 end
 
-function do_sell(menu)
+function do_sell()
+    sfx(5)
     local twr = find_sel_tower()
     gold += twr.sell
     del(towers, twr)
 end
 
-function do_upgrade(menu)
-    sfx(1)
+function do_upgrade()
+    sfx(9)
     local twr = find_sel_tower()
     make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
     gold -= twr.upg
     del(towers, twr)
 end
 
-function do_bonus_interest(menu)
+function do_bonus_interest()
+    sfx(5)
     add(bonuses, 'INTEREST')
     interest += 3
 end
 
-function do_bonus_damage(menu)
+function do_bonus_damage()
+    sfx(5)
     add(bonuses, 'DAMAGE')
     bonus_dmg += 0.05
 end
 
-function do_bonus_range(menu)
+function do_bonus_range()
+    sfx(5)
     add(bonuses, 'RANGE')
     bonus_rng += 0.1
 end
