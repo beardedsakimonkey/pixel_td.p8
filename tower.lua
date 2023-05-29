@@ -38,7 +38,7 @@ function make_tower(type, gx, gy)
         bullets={},
         max_bullets=cfg.max_bullets or 1,
         cd=0, -- in frames
-        atkspd=cfg.atkspd or 0,
+        start_cd=cfg.cd or 0,
         dmg=cfg.dmg,
         range=cfg.range,
         age=0, -- for flicker
@@ -69,16 +69,16 @@ function draw_towers()
                 LightGray, -- 3 (dark green)
                 LightGray, -- 4 (brown)
                 LightGray, -- 5 (dark gray)
-                White,      -- 6 (light gray)
-                White,      -- 7 (white)
+                White,     -- 6 (light gray)
+                White,     -- 7 (white)
                 LightGray, -- 8 (red)
                 LightGray, -- 9 (orange)
                 LightGray, -- 10 (yellow)
-                White,      -- 11 (green)
-                White,      -- 12 (blue)
+                White,     -- 11 (green)
+                White,     -- 12 (blue)
                 LightGray, -- 13 (indigo)
-                White,      -- 14 (pink)
-                White,      -- 15 (peach)
+                White,     -- 14 (pink)
+                White,     -- 15 (peach)
                 DarkGray,  -- 0 (black)
             }, 0)
         end

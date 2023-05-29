@@ -66,21 +66,21 @@ waves = {
 -- Note: `sell` prices computed in init()
 tower_cfg = {
     -- level 1
-    {dmg=0.2, range=30,                           buy=40, upg=40}, -- green
-    {dmg=2.2, range=30, atkspd=40, max_bullets=1, buy=40, upg=40}, -- red
-    {dmg=1,   range=30, atkspd=80, max_bullets=1, buy=30, upg=30}, -- blue
+    {dmg=0.2, range=30,                       buy=40, upg=40}, -- green
+    {dmg=2.2, range=30, cd=40, max_bullets=1, buy=40, upg=40}, -- red
+    {dmg=1,   range=30, cd=80, max_bullets=1, buy=30, upg=30}, -- blue
     -- level 2
-    {dmg=0.4, range=32,                           upg=40}, -- green
-    {dmg=2.4, range=32, atkspd=40, max_bullets=2, upg=40}, -- red
-    {dmg=2,   range=32, atkspd=70, max_bullets=2, upg=40}, -- blue
+    {dmg=0.4, range=32,                       upg=40}, -- green
+    {dmg=2.4, range=32, cd=40, max_bullets=2, upg=40}, -- red
+    {dmg=2,   range=32, cd=70, max_bullets=2, upg=40}, -- blue
     -- level 3
-    {dmg=0.6, range=34,                           upg=50}, -- green
-    {dmg=2.6, range=34, atkspd=40, max_bullets=3, upg=50}, -- red
-    {dmg=3,   range=34, atkspd=60, max_bullets=3, upg=50}, -- blue
+    {dmg=0.6, range=34,                       upg=50}, -- green
+    {dmg=2.6, range=34, cd=40, max_bullets=3, upg=50}, -- red
+    {dmg=3,   range=34, cd=60, max_bullets=3, upg=50}, -- blue
     -- level 4
-    {dmg=0.8, range=36},                           -- green
-    {dmg=2.8, range=36, atkspd=40, max_bullets=4}, -- red
-    {dmg=4,   range=36, atkspd=50, max_bullets=4}, -- blue
+    {dmg=0.8, range=36},                       -- green
+    {dmg=2.8, range=36, cd=40, max_bullets=4}, -- red
+    {dmg=4,   range=36, cd=50, max_bullets=4}, -- blue
 }
 
 local function end_game(state)

@@ -76,7 +76,7 @@ local function fire_bullet_red(twr)
                 enemy=enmy,
                 particles={},
             })
-            twr.cd = twr.atkspd
+            twr.cd = twr.start_cd
         end
     end
 end
@@ -185,7 +185,7 @@ local function fire_bullet_blue(twr)
                 age=0,
                 enemy=enmy,
             })
-            twr.cd = twr.atkspd
+            twr.cd = twr.start_cd
         end
     end
 end
