@@ -109,11 +109,11 @@ function _init()
     poke(0x5f5c, 9) -- button repeat delay
     poke(0x5f5d, 3) -- button repeat interval
     pal(Peach, 140, 1) -- hidden palette
+    cur_map = 1
     reinit()
 end
 
 function reinit()
-    cur_map = 1
     wave = 0
     gold = 100
     bonuses = {}
