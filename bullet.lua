@@ -180,13 +180,33 @@ end
 local function fire_bullet_blue(twr)
     twr.cd = max(0, twr.cd-1)
     if twr.cd > 0 or #twr.bullets > 0 then return end
-    for enmy in all(enemies) do
-        if #twr.bullets < twr.max_bullets and is_in_range(enmy, twr) then
+    -- Avoid targeting already-slowed enemies at first. If we have bullets
+    -- remaining, then we'll target the skipped enemies.
+    -- NOTE: we could choose to avoid multiple blue towers targeting the same
+    -- enemy on the same frame.
+    local skipped = {}
+    for i, enmy in ipairs(enemies) do
+        if is_in_range(enmy, twr) then
+            if enmy.slow_dur ~= 0 then
+                add(skipped, i)
+            else
+                add(twr.bullets, {
+                    age=0,
+                    enemy=enmy,
+                })
+            end
+            twr.cd = twr.start_cd
+        end
+        if #twr.bullets == twr.max_bullets then
+            return
+        end
+    end
+    for i in all(skipped) do
+        if #twr.bullets < twr.max_bullets then
             add(twr.bullets, {
                 age=0,
-                enemy=enmy,
+                enemy=enemies[i],
             })
-            twr.cd = twr.start_cd
         end
     end
 end
