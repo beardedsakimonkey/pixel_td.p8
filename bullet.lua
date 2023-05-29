@@ -98,7 +98,8 @@ local function update_bullet_green(twr, blt)
         del(twr.bullets, blt)
     else
         blt.age += 1
-        if blt.age%3 == 0 then -- don't trigger damage every frame
+        -- TODO: make this more consistent
+        if blt.age % twr.start_cd == 0 then -- don't trigger damage every frame
             enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
             if enmy.dmg_age == nil then enmy.dmg_age = 0 end
             if enmy.hp == 0 then
@@ -150,7 +151,7 @@ local function update_bullets_blue(twr)
             blt.age += 1
         end
     end
-    -- if all bullets were misfired, reset cd
+    -- if all bullets misfired, reset cd
     if misfires > 0 and misfires == num_bullets then
         twr.cd = 0
         return

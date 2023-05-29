@@ -39,48 +39,48 @@ BOSS_FREQ = 5 -- boss on every 5th wave
 waves = {
     {hp=6,   type='SQUARE'},
     {hp=10,  type='DIAMOND'},
-    {hp=15,  type='RECTANGLE'},
+    {hp=20,  type='RECTANGLE'},
     {hp=10,  type='ARROW'},
     {hp=17,  type='CIRCLE'},
     {hp=22,  type='SQUARE'},
     {hp=26,  type='DIAMOND'},
-    {hp=34,  type='RECTANGLE'},
+    {hp=40,  type='RECTANGLE'},
     {hp=26,  type='ARROW'},
     {hp=36,  type='CIRCLE'},
     {hp=40,  type='SQUARE'},
     {hp=48,  type='DIAMOND'},
-    {hp=58,  type='RECTANGLE'},
+    {hp=64,  type='RECTANGLE'},
     {hp=50,  type='ARROW'},
     {hp=60,  type='CIRCLE'},
     {hp=64,  type='SQUARE'},
     {hp=70,  type='DIAMOND'},
-    {hp=82,  type='RECTANGLE'},
+    {hp=90,  type='RECTANGLE'},
     {hp=72,  type='ARROW'},
     {hp=84,  type='CIRCLE'},
     {hp=90,  type='SQUARE'},
     {hp=96,  type='DIAMOND'},
-    {hp=110, type='RECTANGLE'},
+    {hp=130, type='RECTANGLE'},
     {hp=100, type='ARROW'},
     {hp=118, type='CIRCLE'},
 }
 -- Note: `sell` prices computed in init()
 tower_cfg = {
     -- level 1
-    {dmg=0.2, range=30,                       buy=40, upg=40}, -- green
-    {dmg=2.2, range=30, cd=40, max_bullets=1, buy=40, upg=40}, -- red
-    {dmg=1,   range=30, cd=80, max_bullets=1, buy=30, upg=30}, -- blue
+    {dmg=0.25, range=30, cd=5,                 buy=40, upg=40}, -- green
+    {dmg=2.3, range=30, cd=38, max_bullets=1, buy=40, upg=40}, -- red
+    {dmg=1,   range=30, cd=60, max_bullets=1, buy=30, upg=30}, -- blue
     -- level 2
-    {dmg=0.4, range=32,                       upg=40}, -- green
-    {dmg=2.4, range=32, cd=40, max_bullets=2, upg=40}, -- red
-    {dmg=2,   range=32, cd=70, max_bullets=2, upg=40}, -- blue
+    {dmg=0.6, range=32, cd=5,                 upg=40}, -- green
+    {dmg=2.8, range=32, cd=38, max_bullets=2, upg=40}, -- red
+    {dmg=2,   range=32, cd=55, max_bullets=2, upg=40}, -- blue
     -- level 3
-    {dmg=0.6, range=34,                       upg=50}, -- green
-    {dmg=2.6, range=34, cd=40, max_bullets=3, upg=50}, -- red
-    {dmg=3,   range=34, cd=60, max_bullets=3, upg=50}, -- blue
+    {dmg=0.9, range=34, cd=5,                 upg=50}, -- green
+    {dmg=2.8, range=34, cd=38, max_bullets=3, upg=50}, -- red
+    {dmg=3,   range=34, cd=50, max_bullets=3, upg=50}, -- blue
     -- level 4
-    {dmg=0.8, range=36},                       -- green
-    {dmg=2.8, range=36, cd=40, max_bullets=4}, -- red
-    {dmg=4,   range=36, cd=50, max_bullets=4}, -- blue
+    {dmg=1.3, range=36, cd=5},                 -- green
+    {dmg=3.0, range=36, cd=38, max_bullets=4}, -- red
+    {dmg=4,   range=36, cd=45, max_bullets=4}, -- blue
 }
 
 local function end_game(state)
