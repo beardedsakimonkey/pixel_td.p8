@@ -66,20 +66,20 @@ waves = {
 -- Note: `sell` prices computed in init()
 tower_cfg = {
     -- level 1
-    {dmg=0.2, range=30,                           buy=50, upg=30}, -- green
-    {dmg=2,   range=30, atkspd=40, max_bullets=1, buy=50, upg=30}, -- red
-    {dmg=1,   range=30, atkspd=80, max_bullets=1, buy=40, upg=30}, -- blue
+    {dmg=0.2, range=30,                           buy=40, upg=40}, -- green
+    {dmg=2.2, range=30, atkspd=40, max_bullets=1, buy=40, upg=40}, -- red
+    {dmg=1,   range=30, atkspd=80, max_bullets=1, buy=30, upg=30}, -- blue
     -- level 2
     {dmg=0.4, range=32,                           upg=40}, -- green
-    {dmg=2,   range=32, atkspd=40, max_bullets=2, upg=40}, -- red
+    {dmg=2.4, range=32, atkspd=40, max_bullets=2, upg=40}, -- red
     {dmg=2,   range=32, atkspd=70, max_bullets=2, upg=40}, -- blue
     -- level 3
     {dmg=0.6, range=34,                           upg=50}, -- green
-    {dmg=2,   range=34, atkspd=40, max_bullets=3, upg=50}, -- red
+    {dmg=2.6, range=34, atkspd=40, max_bullets=3, upg=50}, -- red
     {dmg=3,   range=34, atkspd=60, max_bullets=3, upg=50}, -- blue
     -- level 4
     {dmg=0.8, range=36},                           -- green
-    {dmg=2,   range=36, atkspd=40, max_bullets=4}, -- red
+    {dmg=2.8, range=36, atkspd=40, max_bullets=4}, -- red
     {dmg=4,   range=36, atkspd=50, max_bullets=4}, -- blue
 }
 
@@ -138,7 +138,6 @@ end
 -- UPDATE
 --------------------------------------------------------------------------------
 function _update60()
-    -- debug_msgs = {}
     if screen == 'title' then
         update_title()
         -- if screen changed to 'game', continue with the update function
@@ -234,10 +233,8 @@ function _draw()
     end
 
     -- Draw wave count
-    do
-        local str = wave .. '/' .. #waves
-        print_outlined(str, hcenter(str), 122, DarkBlue)
-    end
+    local wave_str = wave .. '/' .. #waves
+    print_outlined(wave_str, hcenter(wave_str), 122, DarkBlue)
 
     draw_path(0)
     draw_towers()
@@ -248,11 +245,8 @@ function _draw()
 
     -- Draw bonuses
     for i, bonus in ipairs(bonuses) do
-        local s
-        if     bonus == 'INTEREST' then s = 35
-        elseif bonus == 'DAMAGE' then s = 36
-        elseif bonus == 'RANGE' then s = 37 end
-        spr(s, 2+12*(i-1), 122)
+        spr(bonus == 'INTEREST' and 35 or bonus == 'DAMAGE' and 36 or 37,
+            2+12*(i-1), 122)
     end
 
     buy_menu:draw()
@@ -263,20 +257,11 @@ function _draw()
     camera() -- things drawn below will not be affected by screen shake
     draw_stats()
 
-    if game_over then
-        if game_over == 'lost' then
-            draw_game_over('game over', Red)
-        else
-            draw_game_over('you win', Orange)
-        end
+    if game_over == 'lost' then
+        draw_game_over('game over', Red)
+    elseif game_over == 'won' then
+        draw_game_over('you win', Orange)
     end
-
-    -- Draw debug messages
-    -- color(LightGray)
-    -- cursor(2, 2)
-    -- for msg in all(debug_msgs) do
-    --     print(msg)
-    -- end
 end
 
 function draw_path(t)
@@ -389,7 +374,3 @@ function draw_game_over(text, color)
         pal(0)
     end
 end
-
--- function debug(msg)
---     add(debug_msgs, msg)
--- end
