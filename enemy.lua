@@ -301,7 +301,7 @@ function draw_enemies()
 end
 
 function can_send_wave()
-    return sending == 0 and #enemies == 0 and wave < #waves
+    return sending == 0 and #enemies == 0 and wave < #waves and not game_over
 end
 
 function send_wave()
