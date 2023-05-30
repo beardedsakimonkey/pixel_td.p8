@@ -254,8 +254,8 @@ function _draw()
     bonus_menu:draw()
 
     draw_hint()
-    camera() -- things drawn below will not be affected by screen shake
     draw_stats()
+    camera() -- things drawn below will not be affected by screen shake
 
     if game_over == 'lost' then
         draw_game_over('game over', Red)
@@ -330,7 +330,7 @@ function draw_stats()
     local lives = tostr(lives)
     local x = 127 - #lives*4
     local y = 2
-    print(lives, x, y, LightGray)
+    print(lives, x, y, (shake > 0 and t%2 == 0) and Red or LightGray)
     x -= 9
     spr(18, x, y)
 
