@@ -8,8 +8,8 @@ range = nil
 range_v = 0
 
 local function draw_range(x, y, range)
-    for x_off in all({-1, 0, 1}) do
-        for y_off in all({-1, 0, 1}) do
+    for x_off in all{-1, 0, 1} do
+        for y_off in all{-1, 0, 1} do
             circ(x+x_off, y+y_off, range, Black)
         end
     end

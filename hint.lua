@@ -86,20 +86,14 @@ local function draw_X_btn(x, y)
 end
 
 local function draw_hint_X()
-    -- Draw arrow
     if cur_map == 1 then
         spr(20, 25, X_pos)
-    elseif cur_map == 2 then
-        spr(21, 1, X_pos)
-    else
-        spr(21, X_pos, 50)
-    end
-    -- Draw button
-    if cur_map == 1 then
         draw_X_btn(30, X_pos)
     elseif cur_map == 2 then
+        spr(21, 1, X_pos)
         draw_X_btn(10, X_pos)
     else
+        spr(21, X_pos, 50)
         draw_X_btn(X_pos, 43)
     end
 end

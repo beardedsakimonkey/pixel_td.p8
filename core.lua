@@ -108,7 +108,6 @@ end
 function _init()
     poke(0x5f5c, 9) -- button repeat delay
     poke(0x5f5d, 3) -- button repeat interval
-    pal(Peach, 140, 1) -- hidden palette
     cur_map = 1
     reinit()
 end
@@ -126,6 +125,8 @@ function reinit()
     has_opened_shop = false
     has_bought_tower = false
     game_over = nil -- nil | 'lost' | 'won'
+    fade_t = nil
+    pressing_l, pressing_r, pressing_z = false, false, false
 
     init_enemy()
     init_menus()
@@ -137,6 +138,10 @@ end
 -- UPDATE
 --------------------------------------------------------------------------------
 function _update60()
+    pressing_l = btn(⬅️)
+    pressing_r = btn(➡️)
+    pressing_z = btn(🅾️)
+
     if screen == 'title' then
         update_title()
         -- if screen changed to 'game', continue with the update function
@@ -160,10 +165,17 @@ function _update60()
 
     -- Handle button press
     if game_over then
-        -- TODO: fade out?
-        if btnp(🅾️) then
-            sfx(0)
-            reinit()
+        if fade_t then
+            if fade_t > 0 then
+                fade_t -= 1
+            elseif fade_t == 0 then
+                reinit()
+            end
+        else
+            if btnp(🅾️) then
+                sfx(0)
+                fade_t = 10
+            end
         end
     else
         if buy_menu.is_open then
@@ -222,6 +234,9 @@ end
 --------------------------------------------------------------------------------
 function _draw()
     cls(Black)
+    pal(1) -- reset display palette
+    pal(Peach, 140, 1) -- hidden palette
+
     -- Draw grid lines
     for y = 10, 127, 12 do line(0, y, 127, y, DarkBlue) end
     for x = 10, 127, 12 do line(x, 0, x, 127, DarkBlue) end
@@ -229,6 +244,29 @@ function _draw()
     if screen == 'title' then
         draw_title()
         return
+    end
+
+    -- Fade out of game over screen
+    if fade_t then
+        local color = fade_t >= 6 and DarkGray or fade_t >= 2 and DarkBlue or Black
+        pal({
+            DarkBlue, -- 1
+            DarkPurple, -- 2
+            color, -- 3
+            color, -- 4
+            color, -- 5
+            color, -- 6
+            color, -- 7
+            color, -- 8
+            color, -- 9
+            color, -- 10
+            color, -- 11
+            color, -- 12
+            color, -- 13
+            color, -- 14
+            color, -- 15
+            Black, -- 0
+        }, 1)
     end
 
     -- Draw wave count
@@ -369,7 +407,7 @@ function draw_game_over(text, color)
         local str = 'restart'
         local x = print_outlined(str, hcenter(str)+4, y, LightGray)
         pal(Green, Black)
-        spr(92, x-12, y-1)
+        spr(pressing_z and 94 or 92, x-12, y-1)
         pal(0)
     end
 end

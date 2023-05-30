@@ -30,7 +30,7 @@ end
 
 function make_tower(type, gx, gy)
     local cfg = tower_cfg[type]
-    local p = g2p({x=gx, y=gy})
+    local p = g2p{x=gx, y=gy}
     return add(towers, {
         type=type,
         gx=gx, gy=gy, -- in grid coordinates
@@ -83,7 +83,7 @@ function draw_towers()
             }, 0)
         end
         -- draw tower
-        local p = g2p({x=twr.gx, y=twr.gy})
+        local p = g2p{x=twr.gx, y=twr.gy}
         spr(twr.type, p.left+3, p.top+3)
         pal(0)
     end)

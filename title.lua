@@ -5,7 +5,6 @@ local z_age
 local t
 local title_t -- non-overflowing `t`
 local letters
-local pressing_l, pressing_r, pressing_z
 
 function init_title()
     z_age = nil
@@ -53,9 +52,6 @@ function update_title()
             cur_map = wrap(1, cur_map+1, #maps)
         end
     end
-    pressing_l = btn(⬅️)
-    pressing_r = btn(➡️)
-    pressing_z = btn(🅾️)
 
     -- Send letters up
     if z_age then
@@ -103,9 +99,9 @@ function draw_title()
             local c = z_age < 22 and DarkGray or DarkBlue
             pal({
                 [1]=Black,  -- dark blue
-                [6]=c,        -- light gray
-                [8]=c,        -- red
-                [10]=c,       -- yellow
+                [6]=c,      -- light gray
+                [8]=c,      -- red
+                [10]=c,     -- yellow
                 [13]=Black, -- indigo
             })
         end
