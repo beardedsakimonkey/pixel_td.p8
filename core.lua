@@ -89,9 +89,9 @@ local function end_game(state)
     upg_menu:close()
 end
 
-function remove_life()
+function remove_life(enmy)
     sfx(6)
-    lives = max(lives-1, 0)
+    lives = max(lives - (enmy.type == 'BOSS' and 5 or 1), 0)
     if lives == 0 then
         end_game('lost')
     end

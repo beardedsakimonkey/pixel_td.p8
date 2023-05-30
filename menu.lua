@@ -250,7 +250,6 @@ function init_menus()
             -- choosing a bonus.
             and #bonuses < wave \ BOSS_FREQ then
             sfx(4)
-            -- TODO: don't open if boss reached the end?
             Menu.open(m)
         end
         Menu.update(m)
