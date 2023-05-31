@@ -21,20 +21,7 @@ end
 local MAX_DEATH_AGE = 20
 
 local function make_enemy(type, max_hp, dx, dy)
-    local width, height
-    if type == 'CIRCLE' then
-        width, height = 3, 3
-    elseif type == 'SQUARE' then
-        width, height = 4, 4
-    elseif type == 'DIAMOND' then
-        width, height = 5, 5
-    elseif type == 'ARROW' then
-        width, height = 5, 5
-    elseif type == 'RECTANGLE' then
-        width, height = 5, 3
-    elseif type == 'BOSS' then
-        width, height = 5, 5
-    end
+    local size = type == 'CIRCLE' and 3 or type == 'SQUARE' and 4 or 5
     add(enemies, {
         type=type,
         x=path_points[1].x,
@@ -45,7 +32,7 @@ local function make_enemy(type, max_hp, dx, dy)
         gold=4,
         death_age=nil,
         death_particles=nil,
-        width=width, height=height, -- for collision detection
+        width=size, height=size, -- for collision detection
         dmg_age=nil,
     })
 end
@@ -65,17 +52,14 @@ function spawn_enemy()
             sending -= 1
             local dx, dy = 0, 0
             local map = get_map()
-            if     map[1].cnr == CNR.top   then dy = speed
-            elseif map[1].cnr == CNR.left  then dx = speed
-            elseif map[1].cnr == CNR.right then dx = -speed
-            elseif map[1].cnr == CNR.bot   then dy = -speed end
+            local cnr = map[1].cnr
+            if     cnr == CNR.top   then dy = speed
+            elseif cnr == CNR.left  then dx = speed
+            elseif cnr == CNR.right then dx = -speed
+            elseif cnr == CNR.bot   then dy = -speed end
             if wave % BOSS_FREQ == 0 and sending == 0 then
-                local boss_hp = 30
-                if wave / BOSS_FREQ == 2 then boss_hp = 50
-                elseif wave / BOSS_FREQ == 3 then boss_hp = 80
-                elseif wave / BOSS_FREQ == 4 then boss_hp = 130
-                elseif wave / BOSS_FREQ == 5 then boss_hp = 200
-                end
+                local boss_hps = {30, 50, 80, 130, 200}
+                local boss_hp = boss_hps[wave/BOSS_FREQ]
                 make_enemy('BOSS', boss_hp, dx, dy)
             else
                 make_enemy(w.type, w.hp, dx, dy)

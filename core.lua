@@ -331,10 +331,11 @@ function draw_path(t)
             local p = g2p(map[j])
             local sx, sy, w, h, dx, dy
             local flip_x, flip_y = false, false
+            local off = (t\7)%4
             if cnr == CNR.top or cnr == CNR.bot then
                 w = 11; h = 6
                 flip_y = cnr == CNR.bot
-                sx = cnr == CNR.bot and (80+4 - (t\7)%4) or (80 + (t\7)%4)
+                sx = cnr == CNR.bot and 84-off or 80+off
                 sy = 8
                 dy = cnr == CNR.bot and 128-h or 0
                 dx = mid(0, p.left, 117)
@@ -343,7 +344,7 @@ function draw_path(t)
                 w = 6; h = 11
                 flip_x = cnr == CNR.right
                 sx = 96
-                sy = cnr == CNR.right and (8+4 - (t\7)%4) or (8 + (t\7)%4)
+                sy = cnr == CNR.right and 12-off or 8+off
                 dx = cnr == CNR.right and 128-w or 0
                 dy = mid(0, p.top, 116)
                 if dy > 0 then dy += 1 end -- account for cell border
@@ -393,23 +394,13 @@ function get_cell_corner(cell, cnr)
 end
 
 function draw_game_over(text, color)
-    do
-        local y = 50
-        local x, w = print_outlined(text, hcenter(text), y, color)
-        for x1 in all{x-7, x+w+2} do
-            local y1 = y+2
-            local x2 = x1+3
-            rectfill(x1-1, y1-1, x2+1, y1+1, Black)
-            rectfill(x1, y1, x2, y1, color)
-        end
-    end
+    local text = '- ' .. text .. ' -'
+    local x, w = print_outlined(text, hcenter(text), 50, color)
     -- draw restart
-    do
-        local y = 68
-        local str = 'restart'
-        local x = print_outlined(str, hcenter(str)+4, y, LightGray)
-        pal(Green, Black)
-        spr(pressing_z and 94 or 92, x-12, y-1)
-        pal(0)
-    end
+    local y = 68
+    local str = 'restart'
+    local x = print_outlined(str, hcenter(str)+4, y, LightGray)
+    pal(Green, Black)
+    spr(pressing_z and 94 or 92, x-12, y-1)
+    pal(0)
 end
