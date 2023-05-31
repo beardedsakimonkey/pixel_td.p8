@@ -120,6 +120,7 @@ function reinit()
     bonus_dmg = 1
     bonus_rng = 1
     t = 0
+    start_age = 0 -- cant use `t` bc it overflows
     shake = 0
     screen = 'title' -- 'title' | 'game'
     has_opened_shop = false
@@ -160,6 +161,7 @@ function _update60()
     end
 
     t = max(1, t+1)
+    if start_age < 10 then start_age +=1 end
 
     update_selection()
 
@@ -353,8 +355,8 @@ function draw_path(t)
 end
 
 function draw_stats()
-    local c = t <= 4 and DarkBlue
-           or t <= 8 and DarkGray or nil
+    local c = start_age <= 4 and DarkBlue
+           or start_age <= 8 and DarkGray or nil
     if c then
         pal({
             [2]=c, -- dark purple
@@ -364,16 +366,16 @@ function draw_stats()
             [10]=c, -- yellow
         })
     end
-    local lives_str = tostr(lives)
-    local x = 127 - #lives_str*4
+    local lives = tostr(lives)
+    local x = 127 - #lives*4
     local y = 2
-    print(lives_str, x, y, (shake > 0 and t%2 == 0) and Red or LightGray)
+    print(lives, x, y, (shake > 0 and t%2 == 0) and Red or LightGray)
     x -= 9
     spr(18, x, y)
 
-    local gold_str = tostr(flr(gold))
-    x -= 3 + #gold_str*4
-    print(gold_str, x, y, LightGray)
+    local gold = tostr(flr(gold))
+    x -= 3 + #gold*4
+    print(gold, x, y, LightGray)
     x -= 7
     spr(17, x, y)
     pal(0)
