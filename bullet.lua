@@ -51,6 +51,7 @@ local function update_bullet_red(twr, blt)
     -- handle collision
     if collide(blt, enmy) then
         enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
+        sfx(10)
         if enmy.dmg_age == nil then enmy.dmg_age = 0 end
         if enmy.hp == 0 then
             gold += enmy.gold

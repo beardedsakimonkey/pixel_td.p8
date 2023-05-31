@@ -261,7 +261,7 @@ function draw_enemies()
             if flash then pal(Blue, White) end
             spr(115, left, top)
         elseif enmy.type == 'BOSS' then
-            if enmy.dmg_age and enmy.dmg_age%2 == 0 then pal(Yellow, Red) end
+            if flash then pal(Yellow, Pink) end
             spr(116, left, top)
         elseif enmy.type == 'ARROW' then
             if flash then pal(Orange, White) end
