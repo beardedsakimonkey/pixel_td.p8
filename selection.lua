@@ -42,7 +42,7 @@ local function handle_btn(btn)
     -- Find destination cell
     local dst_x, dst_y = sel.dst_gx, sel.dst_gy
     local cell_dx = btn == ➡️ and 1 or btn == ⬅️ and -1 or 0
-    local cell_dy = btn == ⬇️ and  1 or btn == ⬆️   and -1 or 0
+    local cell_dy = btn == ⬇️ and 1 or btn == ⬆️ and -1 or 0
     while true do
         -- move 0 or 1 cells in both directions
         dst_x += cell_dx
@@ -61,7 +61,7 @@ local function handle_btn(btn)
     end
 
     -- Update destination
-    local p = g2p({x=dst_x, y=dst_y})
+    local p = g2p{x=dst_x, y=dst_y}
     sel.dst_x = p.left
     sel.dst_y = p.top
     sel.dst_gx = dst_x
@@ -107,17 +107,16 @@ function draw_selection()
     if sel.vx > 0 then left = ceil(left) end
     local bot   = top + 10 + off*2
     local right = left + 10 + off*2
-    local color = LightGray
     -- top left corner
-    line(left, top, left+2, top, color)
-    line(left, top, left, top+2, color)
+    line(left+2, top, left, top, LightGray)
+    line(left, top+2)
     -- top right corner
-    line(right, top, right-2, top, color)
-    line(right, top, right, top+2, color)
+    line(right-2, top, right, top)
+    line(right, top+2)
     -- bottom left corner
-    line(left, bot, left+2, bot, color)
-    line(left, bot, left, bot-2, color)
+    line(left+2, bot, left, bot)
+    line(left, bot-2)
     -- bottom right corner
-    line(right, bot, right-2, bot, color)
-    line(right, bot, right, bot-2, color)
+    line(right-2, bot, right, bot)
+    line(right, bot-2)
 end

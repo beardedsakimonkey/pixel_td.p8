@@ -59,18 +59,15 @@ function g2p(cell)
 end
 
 -- Based on https://github.com/chenglou/react-motion/blob/master/src/stepper.js
+-- Note: more stiffness = snappier & bouncier, more mass = more inertia
 function spring(cur_pos, dst_pos, cur_vel, cfg)
-    local s = cfg.stiffness or 180 -- more stiffness = snappier, more bounce
-    local d = cfg.damping or 12
-    local m = cfg.mass or 1        -- more mass = more inertia
-    local p = cfg.precision or 0.01
-
-    local Fspring = -s * (cur_pos - dst_pos)
-    local Fdamper = -d * cur_vel
-    local acc = (Fspring + Fdamper) / m
+    local Fspring = -(cfg.stiffness or 180) * (cur_pos - dst_pos)
+    local Fdamper = -(cfg.damping or 12) * cur_vel
+    local acc = (Fspring + Fdamper) / (cfg.mass or 1)
     local new_vel = cur_vel + acc/60
     local new_pos = cur_pos + new_vel/60
 
+    local p = cfg.precision or 0.01
     if abs(cur_vel) < p and abs(new_pos - cur_pos) < p then
         return dst_pos, 0
     end
@@ -78,10 +75,8 @@ function spring(cur_pos, dst_pos, cur_vel, cfg)
 end
 
 function hcenter(str)
-    local mid = 64
     local width = print(str, 0, -20) - 1
-    local left = mid - width\2
-    return left
+    return 64 - width\2
 end
 
 function print_outlined(str, x, y, color, outline_color)

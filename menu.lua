@@ -8,8 +8,8 @@ range = nil
 range_v = 0
 
 local function draw_range(x, y, range)
-    for x_off in all{-1, 0, 1} do
-        for y_off in all{-1, 0, 1} do
+    for x_off in all(split'-1,0,1') do
+        for y_off in all(split'-1,0,1') do
             circ(x+x_off, y+y_off, range, Black)
         end
     end
@@ -32,7 +32,7 @@ function get_range()
     if twr then -- upgrade menu
         return get_twr_range(twr)
     else -- buy menu
-        return get_twr_range({range = tower_cfg[buy_menu.sel_twr].range})
+        return get_twr_range{range = tower_cfg[buy_menu.sel_twr].range}
     end
 end
 
@@ -58,19 +58,18 @@ end
 
 function Menu.draw(m)
     if m.y == OFFSCREEN then return end
-    do
-        local x1, y1, x2, y2 = m.x, m.y, m.x+m.w-1, m.y+m.h-1
-        rect(x1-2, y1-2, x2+2, y2+2, Black)
-        rect(x1-1, y1-1, x2+1, y2+1, LightGray)
-        rectfill(x1, y1, x2, y2, Black)
-    end
+    local x1, y1, x2, y2 = m.x, m.y, m.x+m.w-1, m.y+m.h-1
+    rect(x1-2, y1-2, x2+2, y2+2, Black)
+    rect(x1-1, y1-1, x2+1, y2+1, LightGray)
+    rectfill(x1, y1, x2, y2, Black)
 
     for i, item in ipairs(m.items) do
-        local disabled = item.is_disabled and item.is_disabled(m)
-        local c = disabled and DarkGray
-                or (i == m.cur_idx) and White
+        print(
+            item.text, m.x+9, m.y+item.y,
+            (item.is_disabled and item.is_disabled(m)) and DarkGray
+                or i == m.cur_idx and White
                 or LightGray
-        print(item.text, m.x+9, m.y+item.y, c)
+        )
     end
 
     spr(19, m.x+MAX_TWR, m.y+m.items[m.cur_idx].y)
@@ -98,8 +97,7 @@ function Menu.handle_btn(m)
     if btnp(⬇️) then sfx(0); m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
     if btnp(🅾️) then
         local item = m.items[m.cur_idx]
-        local disabled = item.is_disabled and item.is_disabled(m)
-        if not disabled then
+        if not (item.is_disabled and item.is_disabled(m)) then
             item.cb(m)
             m:close()
         else
@@ -125,7 +123,7 @@ end
 
 function init_menus()
     -- Buy menu ----------------------------------------------------------------
-    buy_menu = Menu.new({x=35, dst_y=98, w=59, h=27})
+    buy_menu = Menu.new{x=35, dst_y=98, w=59, h=27}
     add(buy_menu.items, {text='buy',    y=11+8*0, cb=do_buy,
         is_disabled=function(m) return gold < tower_cfg[m.sel_twr].buy end})
     add(buy_menu.items, {text='cancel', y=11+8*1, cb=do_close})
@@ -210,7 +208,7 @@ function init_menus()
     end
 
     -- Upgrade menu ------------------------------------------------------------
-    upg_menu = Menu.new({x=35, dst_y=89, w=59, h=36})
+    upg_menu = Menu.new{x=35, dst_y=89, w=59, h=36}
     add(upg_menu.items, {text='upgrade', y=12+8*0, cb=do_upgrade,
         is_disabled=function(m) return not m.twr.upg or gold < m.twr.upg end})
     add(upg_menu.items, {text='sell',    y=12+8*1, cb=do_sell})
@@ -238,7 +236,7 @@ function init_menus()
     end
 
     -- Bonus menu --------------------------------------------------------------
-    bonus_menu = Menu.new({x=31, dst_y=89, w=70, h=36})
+    bonus_menu = Menu.new{x=31, dst_y=89, w=70, h=36}
     add(bonus_menu.items, {text='+3% interest', y=12+8*0, cb=do_bonus_interest})
     add(bonus_menu.items, {text='+4% damage',   y=12+8*1, cb=do_bonus_damage})
     add(bonus_menu.items, {text='+10% range',   y=12+8*2, cb=do_bonus_range})

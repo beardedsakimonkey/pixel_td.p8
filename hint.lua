@@ -1,13 +1,14 @@
-local show_hint_X
-local X_pos
-local X_v
-local X_t
+local show_hint_X,
 
-local Z_x
-local Z_y
-local Z_vx
-local Z_vy
-local Z_t
+      X_pos,
+      X_v,
+      X_t,
+
+      Z_x,
+      Z_y,
+      Z_vx,
+      Z_vy,
+      Z_t
 
 local OFFSCREEN = -10
 local SHINE_DELAY = 300 -- 10 sec
@@ -17,11 +18,9 @@ local FADE_DURATION = 7
 function init_hint()
     show_hint_X = false
     X_pos = OFFSCREEN
-    X_v = 0
     Z_x = sel.dst_x-28
     Z_y = sel.dst_y
-    Z_vx, Z_vy = 0, 0
-    Z_t, X_t = 0, 0
+    Z_vx, Z_vy, Z_t, X_v, X_t = 0, 0, 0, 0, 0
 end
 
 local function can_show_hint_X()
@@ -109,8 +108,8 @@ local function draw_hint_Z()
         local c = Z_t < 4 and DarkBlue or DarkGray
         pal({
             [1]=Black,  -- dark blue
-            [6]=c,        -- light gray
-            [10]=c,       -- yellow
+            [6]=c,      -- light gray
+            [10]=c,     -- yellow
             [13]=Black, -- indigo
         })
     end

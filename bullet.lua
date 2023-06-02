@@ -125,11 +125,12 @@ end
 
 local function draw_bullets_green(twr)
     for blt in all(twr.bullets) do
-        local v = cos((blt.age%61)/60)
-        local color = v > 0.95 and DarkBlue
-                    or v > 0.6 and DarkGreen
-                    or Green
-        line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
+        local a = cos((blt.age%61)/60)
+        line(
+            twr.x, twr.y,
+            blt.enemy.x, blt.enemy.y,
+            a > 0.95 and DarkBlue or a > 0.6 and DarkGreen or Green
+        )
         -- don't cover up center pixel
         pset(twr.x, twr.y, Black)
     end
