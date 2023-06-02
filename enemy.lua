@@ -53,10 +53,10 @@ function spawn_enemy()
             local dx, dy = 0, 0
             local map = get_map()
             local cnr = map[1].cnr
-            if     cnr == CNR.top   then dy = speed
-            elseif cnr == CNR.left  then dx = speed
-            elseif cnr == CNR.right then dx = -speed
-            elseif cnr == CNR.bot   then dy = -speed end
+            if     cnr == 'top'   then dy = speed
+            elseif cnr == 'left'  then dx = speed
+            elseif cnr == 'right' then dx = -speed
+            elseif cnr == 'bot'   then dy = -speed end
             if wave % BOSS_FREQ == 0 and sending == 0 then
                 local boss_hps = {30, 50, 80, 130, 200}
                 local boss_hp = boss_hps[wave/BOSS_FREQ]

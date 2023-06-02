@@ -1,38 +1,38 @@
 maps = {
     -- easy
     {
-        {x=1,  y=0,  cnr=CNR.top},
-        {x=1,  y=3,  cnr=CNR.bl},
-        {x=3,  y=3,  cnr=CNR.br},
-        {x=3,  y=1,  cnr=CNR.tl},
-        {x=7,  y=1,  cnr=CNR.tr},
-        {x=7,  y=3,  cnr=CNR.bl},
-        {x=9,  y=3,  cnr=CNR.tr},
-        {x=9,  y=5,  cnr=CNR.br},
-        {x=8,  y=5,  cnr=CNR.tl},
-        {x=8,  y=7,  cnr=CNR.br},
-        {x=5,  y=7,  cnr=CNR.bl},
-        {x=5,  y=5,  cnr=CNR.tr},
-        {x=2,  y=5,  cnr=CNR.tl},
-        {x=2,  y=7,  cnr=CNR.br},
-        {x=1,  y=7,  cnr=CNR.tl},
-        {x=1,  y=9,  cnr=CNR.bl},
-        {x=9,  y=9,  cnr=CNR.tr},
-        {x=9,  y=10, cnr=CNR.bot},
+        {x=1,  y=0,  cnr='top'},
+        {x=1,  y=3,  cnr='bl'},
+        {x=3,  y=3,  cnr='br'},
+        {x=3,  y=1,  cnr='tl'},
+        {x=7,  y=1,  cnr='tr'},
+        {x=7,  y=3,  cnr='bl'},
+        {x=9,  y=3,  cnr='tr'},
+        {x=9,  y=5,  cnr='br'},
+        {x=8,  y=5,  cnr='tl'},
+        {x=8,  y=7,  cnr='br'},
+        {x=5,  y=7,  cnr='bl'},
+        {x=5,  y=5,  cnr='tr'},
+        {x=2,  y=5,  cnr='tl'},
+        {x=2,  y=7,  cnr='br'},
+        {x=1,  y=7,  cnr='tl'},
+        {x=1,  y=9,  cnr='bl'},
+        {x=9,  y=9,  cnr='tr'},
+        {x=9,  y=10, cnr='bot'},
     },
     -- medium
     {
-        {x=0,  y=1,  cnr=CNR.left},
-        {x=3,  y=1,  cnr=CNR.tr},
-        {x=3,  y=5,  cnr=CNR.bl},
-        {x=7,  y=5,  cnr=CNR.tr},
-        {x=7,  y=9,  cnr=CNR.bl},
-        {x=10,  y=9, cnr=CNR.right},
+        {x=0,  y=1,  cnr='left'},
+        {x=3,  y=1,  cnr='tr'},
+        {x=3,  y=5,  cnr='bl'},
+        {x=7,  y=5,  cnr='tr'},
+        {x=7,  y=9,  cnr='bl'},
+        {x=10,  y=9, cnr='right'},
     },
     -- hard
     {
-        {x=0,  y=5,  cnr=CNR.left},
-        {x=10,  y=5, cnr=CNR.right},
+        {x=0,  y=5,  cnr='left'},
+        {x=10,  y=5, cnr='right'},
     }
 }
 BOSS_FREQ = 5 -- boss on every 5th wave
@@ -315,13 +315,13 @@ function draw_path(t)
 
         -- cover up unwanted borders
         local a = g2p(cell_a)
-        if cell_a.cnr == CNR.bl then
+        if cell_a.cnr == 'bl' then
             line(a.right, a.bot-1, a.right, a.top+1, Black)
-        elseif cell_a.cnr == CNR.br then
+        elseif cell_a.cnr == 'br' then
             line(a.left+1, a.top, a.right-1, a.top, Black)
-        elseif cell_a.cnr == CNR.tl then
+        elseif cell_a.cnr == 'tl' then
             line(a.left+1, a.bot, a.right-1, a.bot, Black)
-        elseif cell_a.cnr == CNR.tr then
+        elseif cell_a.cnr == 'tr' then
             line(a.left, a.bot-1, a.left, a.top+1, Black)
         end
 
@@ -333,20 +333,20 @@ function draw_path(t)
             local sx, sy, w, h, dx, dy
             local flip_x, flip_y = false, false
             local off = (t\7)%4
-            if cnr == CNR.top or cnr == CNR.bot then
+            if cnr == 'top' or cnr == 'bot' then
                 w = 11; h = 6
-                flip_y = cnr == CNR.bot
-                sx = cnr == CNR.bot and 84-off or 80+off
+                flip_y = cnr == 'bot'
+                sx = cnr == 'bot' and 84-off or 80+off
                 sy = 8
-                dy = cnr == CNR.bot and 128-h or 0
+                dy = cnr == 'bot' and 128-h or 0
                 dx = mid(0, p.left, 117)
                 if dx > 0 then dx += 1 end -- account for cell border
             else
                 w = 6; h = 11
-                flip_x = cnr == CNR.right
+                flip_x = cnr == 'right'
                 sx = 96
-                sy = cnr == CNR.right and 12-off or 8+off
-                dx = cnr == CNR.right and 128-w or 0
+                sy = cnr == 'right' and 12-off or 8+off
+                dx = cnr == 'right' and 128-w or 0
                 dy = mid(0, p.top, 116)
                 if dy > 0 then dy += 1 end -- account for cell border
             end
@@ -384,14 +384,14 @@ function draw_stats()
 end
 
 function get_cell_corner(cell, cnr)
-    if cnr == CNR.top   then return {x = cell.left,  y = cell.top} end
-    if cnr == CNR.right then return {x = cell.right, y = cell.top} end
-    if cnr == CNR.left  then return {x = cell.left,  y = cell.bot} end
-    if cnr == CNR.bot   then return {x = cell.right, y = cell.bot} end
-    if cnr == CNR.tl    then return {x = cell.left,  y = cell.bot} end
-    if cnr == CNR.bl    then return {x = cell.right, y = cell.bot} end
-    if cnr == CNR.br    then return {x = cell.right, y = cell.top} end
-    if cnr == CNR.tr    then return {x = cell.left,  y = cell.top} end
+    if cnr == 'top'   then return {x = cell.left,  y = cell.top} end
+    if cnr == 'right' then return {x = cell.right, y = cell.top} end
+    if cnr == 'left'  then return {x = cell.left,  y = cell.bot} end
+    if cnr == 'bot'   then return {x = cell.right, y = cell.bot} end
+    if cnr == 'tl'    then return {x = cell.left,  y = cell.bot} end
+    if cnr == 'bl'    then return {x = cell.right, y = cell.bot} end
+    if cnr == 'br'    then return {x = cell.right, y = cell.top} end
+    if cnr == 'tr'    then return {x = cell.left,  y = cell.top} end
 end
 
 function draw_game_over(text, color)

@@ -17,9 +17,6 @@ Indigo     = 13
 Pink       = 14
 Peach      = 15
 
--- corners
-CNR = {tl=1, tr=2, bl=3, br=4, top=5, left=6, right=7, bot=8}
-
 function tbl_find(tbl, fn)
     for v in all(tbl) do
         if fn(v) then
