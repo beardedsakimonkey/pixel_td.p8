@@ -60,7 +60,7 @@ waves = {
     {hp=90,  type='SQUARE'},
     {hp=96,  type='DIAMOND'},
     {hp=130, type='RECTANGLE'},
-    {hp=100, type='ARROW'},
+    {hp=90,  type='ARROW'},
     {hp=118, type='CIRCLE'},
 }
 -- Note: `sell` prices computed in init()
@@ -110,6 +110,7 @@ function _init()
     poke(0x5f5d, 3) -- button repeat interval
     cur_map = 1
     reinit()
+    -- music(0, 200)
 end
 
 function reinit()

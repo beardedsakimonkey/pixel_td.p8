@@ -240,7 +240,7 @@ function init_menus()
     -- Bonus menu --------------------------------------------------------------
     bonus_menu = Menu.new({x=31, dst_y=89, w=70, h=36})
     add(bonus_menu.items, {text='+3% interest', y=12+8*0, cb=do_bonus_interest})
-    add(bonus_menu.items, {text='+5% damage',   y=12+8*1, cb=do_bonus_damage})
+    add(bonus_menu.items, {text='+4% damage',   y=12+8*1, cb=do_bonus_damage})
     add(bonus_menu.items, {text='+10% range',   y=12+8*2, cb=do_bonus_range})
 
     bonus_menu.update = function(m)
@@ -315,7 +315,7 @@ end
 function do_bonus_damage()
     sfx(5)
     add(bonuses, 'DAMAGE')
-    bonus_dmg += 0.05
+    bonus_dmg += 0.04
 end
 
 function do_bonus_range()

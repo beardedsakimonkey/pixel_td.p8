@@ -99,7 +99,6 @@ local function update_bullet_green(twr, blt)
         del(twr.bullets, blt)
     else
         blt.age += 1
-        -- TODO: make this more consistent
         if blt.age % twr.start_cd == 0 then -- don't trigger damage every frame
             enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
             if enmy.dmg_age == nil then enmy.dmg_age = 0 end
