@@ -104,7 +104,7 @@ tower_cfg = {
     {dmg=3,    range=36, cd=38, max_bullets=4}, -- red
     {dmg=2.5,  range=36, cd=45, max_bullets=4}, -- blue
 }
-local MAX_INTEREST_T = 28
+local MAX_INTEREST_T = 24
 
 local function end_game(state)
     game_over = state
@@ -414,15 +414,16 @@ function draw_stats()
 
     -- draw interest gained
     if interest_t > 0 then
-        local t = interest_t\(MAX_INTEREST_T/7) -- 1 <= t <= 7
+        -- `t` is between 1 and 7 (but hits 8 on the very last frame)
+        local t = interest_t\(MAX_INTEREST_T/7) + 1
         local str = '+' .. flr(interest_gained)
         local width = print(str, 0, -20)
         print_outlined(
             str,
-            right - width - 1,
-            14-t\2,
-            ({DarkGray, LightGray, Yellow, Yellow, Yellow, LightGray, DarkGray})[t],
-            ({Black, Black, DarkBlue, DarkBlue, DarkBlue, Black, Black})[t]
+            right - width + 3,
+            13-t,
+            (t==1 or t>=6) and DarkGray or t==2 and LightGray or Yellow,
+            (t==1 or t>=6) and Black or DarkBlue
         )
     end
 end
