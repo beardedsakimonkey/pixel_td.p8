@@ -44,9 +44,10 @@ local function update_bullet_red(twr, blt)
     -- update bullet position
     local dx = enmy.x - blt.x
     local dy = enmy.y - blt.y
-    blt.rotation = atan2(dx, dy)
-    blt.x = blt.x + cos(blt.rotation)*1
-    blt.y = blt.y + sin(blt.rotation)*1
+    local angle = atan2(dx, dy)
+    blt.x += cos(angle) * blt.acc
+    blt.y += sin(angle) * blt.acc
+    blt.acc *= 1.04
 
     -- handle collision
     if collide(blt, enmy) then
@@ -73,7 +74,7 @@ local function fire_bullet_red(twr)
         if #twr.bullets < twr.max_bullets and is_in_range(enmy, twr) then
             add(twr.bullets, {
                 x=twr.x, y=twr.y,
-                rotation=0,
+                acc=0.4,
                 enemy=enmy,
                 particles={},
             })
