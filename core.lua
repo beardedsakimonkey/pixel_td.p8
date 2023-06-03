@@ -125,6 +125,10 @@ function get_map()
     return maps[cur_map]
 end
 
+function add_bonus(type)
+    add(bonuses, {type=type, y=134, v=0})
+end
+
 --------------------------------------------------------------------------------
 -- INIT
 --------------------------------------------------------------------------------
@@ -243,6 +247,14 @@ function _update60()
 
     update_hint() -- should go after bonus_menu:update()
 
+    -- Animate bonuses
+    for bonus in all(bonuses) do
+        bonus.y, bonus.v = spring(bonus.y, 122, bonus.v, {
+            stiffness = 80,
+            damping = 16,
+        })
+    end
+
     -- Shake camera
     if shake > 0 then
         local shake_x = rnd(shake) - shake/2
@@ -277,7 +289,6 @@ function _draw()
     end
 
     -- Fade out of game over screen
-    -- TODO: fade in title screen?
     if fade_t > 0 then
         local color = fade_t <= 6 and DarkGray or fade_t <= 10 and DarkBlue or Black
         pal({
@@ -312,10 +323,12 @@ function _draw()
     draw_selection()
 
     -- Draw bonuses
-    -- TODO: animate in?
     for i, bonus in ipairs(bonuses) do
-        spr(bonus == 'INTEREST' and 35 or bonus == 'DAMAGE' and 36 or 37,
-            2+12*(i-1), 122)
+        spr(
+            bonus.type == 'INTEREST' and 35 or bonus.type == 'DAMAGE' and 36 or 37,
+            2+12*(i-1), -- x
+            bonus.y -- y
+        )
     end
 
     buy_menu:draw()

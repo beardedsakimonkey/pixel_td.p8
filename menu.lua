@@ -306,18 +306,18 @@ end
 
 function do_bonus_interest()
     sfx(5)
-    add(bonuses, 'INTEREST')
+    add_bonus'INTEREST'
     interest += 3
 end
 
 function do_bonus_damage()
     sfx(5)
-    add(bonuses, 'DAMAGE')
+    add_bonus'DAMAGE'
     bonus_dmg += 0.04
 end
 
 function do_bonus_range()
     sfx(5)
-    add(bonuses, 'RANGE')
+    add_bonus'RANGE'
     bonus_rng += 0.1
 end
