@@ -104,6 +104,7 @@ tower_cfg = {
     {dmg=3,    range=36, cd=38, max_bullets=4}, -- red
     {dmg=2.5,  range=36, cd=45, max_bullets=4}, -- blue
 }
+local MAX_INTEREST_T = 28
 
 local function end_game(state)
     game_over = state
@@ -151,6 +152,8 @@ function reinit()
     game_over = nil -- nil | 'lost' | 'won'
     fade_t = 0 -- fade out of game over screen
     pressing_l, pressing_r, pressing_z = false, false, false
+    interest_t = 0
+    -- interest_gained = nil
 
     init_enemy()
     init_menus()
@@ -185,6 +188,8 @@ function _update60()
 
     t = max(1, t+1)
     if start_t < 10 then start_t +=1 end
+    if interest_t > 0 then interest_t += 1 end
+    if interest_t > MAX_INTEREST_T then interest_t = 0; interest_gained = nil end
 
     update_selection()
 
@@ -319,6 +324,7 @@ function _draw()
 
     draw_hint()
     draw_stats()
+
     camera() -- things drawn below will not be affected by screen shake
 
     if game_over == 'lost' then
@@ -401,10 +407,24 @@ function draw_stats()
 
     local gold = tostr(flr(gold))
     x -= 3 + #gold*4
-    print(gold, x, y, LightGray)
+    local right = print(gold, x, y, LightGray)
     x -= 7
     spr(17, x, y)
     pal(0)
+
+    -- draw interest gained
+    if interest_t > 0 then
+        local t = interest_t\(MAX_INTEREST_T/7) -- 1 <= t <= 7
+        local str = '+' .. flr(interest_gained)
+        local width = print(str, 0, -20)
+        print_outlined(
+            str,
+            right - width - 1,
+            14-t\2,
+            ({DarkGray, LightGray, Yellow, Yellow, Yellow, LightGray, DarkGray})[t],
+            ({Black, Black, DarkBlue, DarkBlue, DarkBlue, Black, Black})[t]
+        )
+    end
 end
 
 function get_cell_corner(cell, cnr)

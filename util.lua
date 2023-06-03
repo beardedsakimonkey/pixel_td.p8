@@ -76,6 +76,7 @@ function hcenter(str)
     return 64 - width\2
 end
 
+-- TODO: better outline
 function print_outlined(str, x, y, color, outline_color)
     local w = print(str, 0, -20)
     rectfill(x-1, y-1, x-1+w, y+5, outline_color or Black)

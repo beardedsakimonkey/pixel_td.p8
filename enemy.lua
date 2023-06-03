@@ -223,9 +223,10 @@ function update_enemies()
         end
     end)
     -- apply interest on wave complete
-    -- TODO: visually indicate interest being applied?
     if had_enemies and #enemies == 0 then
-        gold += gold * interest/100
+        interest_t = 1
+        interest_gained = gold * interest/100
+        gold += interest_gained
     end
 end
 
