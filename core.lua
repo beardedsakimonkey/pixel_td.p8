@@ -36,6 +36,7 @@ maps = {
     }
 }
 BOSS_FREQ = 5 -- boss on every 5th wave
+-- TODO: ramp gold and enemy hp
 waves = {
     {hp=6,   type='SQUARE'},
     {hp=10,  type='DIAMOND'},
@@ -176,7 +177,7 @@ function _update60()
             end
         else
             if btnp(🅾️) then
-                sfx(0)
+                sfx(4)
                 fade_t = 10
             end
         end
@@ -190,7 +191,7 @@ function _update60()
             bonus_menu:handle_btn()
         else
             if btnp(🅾️) then
-                sfx(4)
+                sfx(0)
                 local twr = find_sel_tower()
                 if twr then
                     upg_menu:open()
@@ -284,6 +285,7 @@ function _draw()
     draw_selection()
 
     -- Draw bonuses
+    -- TODO: animate in?
     for i, bonus in ipairs(bonuses) do
         spr(bonus == 'INTEREST' and 35 or bonus == 'DAMAGE' and 36 or 37,
             2+12*(i-1), 122)
