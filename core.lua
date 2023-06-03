@@ -1,3 +1,24 @@
+--[[
+sound fx:
+ 0:  open menu
+ 1:  close menu
+ 2:  left/right
+ 3:  invalid
+ 4:  valid
+ 5:  confirm (e.g. sell, bonus)
+ 6:  enemy reaches end
+ 7:  start game
+ 8:  enemy death
+ 9:  buy/upgrade tower
+ 10: red bullet
+ 11: blue bullet
+ 12: open bonus menu (TODO)
+ 13: game over (TODO)
+ 14: game won (TODO)
+ 15: <placeholder>
+ 16+: music
+]]
+
 maps = {
     -- easy
     {
@@ -200,7 +221,7 @@ function _update60()
                 end
             end
             if btnp(❎) and can_send_wave() then
-                sfx(7)
+                sfx(4)
                 send_wave()
             end
         end
