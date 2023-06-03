@@ -143,7 +143,7 @@ function reinit()
     bonus_dmg = 1
     bonus_rng = 1
     t = 0
-    start_age = 0 -- cant use `t` bc it overflows
+    start_t = 0 -- cant use `t` bc it overflows
     shake = 0
     screen = 'title' -- 'title' | 'game'
     has_opened_shop = false
@@ -184,7 +184,7 @@ function _update60()
     end
 
     t = max(1, t+1)
-    if start_age < 10 then start_age +=1 end
+    if start_t < 10 then start_t +=1 end
 
     update_selection()
 
@@ -380,8 +380,8 @@ function draw_path(t)
 end
 
 function draw_stats()
-    local c = start_age <= 4 and DarkBlue
-           or start_age <= 8 and DarkGray or nil
+    local c = start_t <= 4 and DarkBlue
+           or start_t <= 8 and DarkGray or nil
     if c then
         pal({
             [2]=c, -- dark purple
