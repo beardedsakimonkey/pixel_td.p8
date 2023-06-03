@@ -72,17 +72,14 @@ function spring(cur_pos, dst_pos, cur_vel, cfg)
 end
 
 function hcenter(str)
-    local width = print(str, 0, -20) - 1
-    return 64 - width\2
+    return 64 - (print(str, 0, -20) - 1)\2
 end
 
 function print_outlined(str, x, y, color, outline_color)
-    local w = print(str, 0, -20)
     for x_off in all(split'-1,0,1') do
         for y_off in all(split'-1,0,1') do
             print(str, x+x_off, y+y_off, outline_color or Black)
         end
     end
-    print(str, x, y, color)
-    return x, w
+    return print(str, x, y, color)
 end

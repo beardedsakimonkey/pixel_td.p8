@@ -117,7 +117,8 @@ function draw_title()
 
         local str2 = 'start'
         local y2 = 74
-        local x = print_outlined(str2, hcenter(str2)+3, y2, LightGray)
+        local x = hcenter(str2)+3
+        print_outlined(str2, x, y2, LightGray)
         sspr(pressing_z and 112 or 96, 40, 9, 8, x-13, y2-1)
         pal(0)
     end

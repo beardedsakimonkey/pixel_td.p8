@@ -440,11 +440,12 @@ end
 
 function draw_game_over(text, color)
     local text = '- ' .. text .. ' -'
-    local x, w = print_outlined(text, hcenter(text), 50, color)
+    print_outlined(text, hcenter(text), 50, color)
     -- draw restart
-    local y = 68
     local str = 'restart'
-    local x = print_outlined(str, hcenter(str)+4, y, LightGray)
+    local x = hcenter(str)+4
+    local y = 68
+    print_outlined(str, x, y, LightGray)
     pal(Green, Black)
     spr(pressing_z and 94 or 92, x-12, y-1)
     pal(0)
