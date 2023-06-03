@@ -12,10 +12,10 @@ sound fx:
  9:  buy/upgrade tower
  10: red bullet
  11: blue bullet
- 12: open bonus menu (TODO)
- 13: game over (TODO)
- 14: game won (TODO)
- 15: <placeholder>
+ 12: green bullet
+ 13: open bonus menu (TODO)
+ 14: game over (TODO)
+ 15: game won (TODO)
  16+: music
 ]]
 
