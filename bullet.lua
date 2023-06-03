@@ -163,6 +163,7 @@ local function update_bullets_blue(twr)
         twr.bullets = {}
     else
         if twr.bullets[1].age == REGISTER_DMG then
+            sfx(13)
             -- register damage & slow
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy

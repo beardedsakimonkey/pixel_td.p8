@@ -39,8 +39,8 @@ function update_title()
     end
     -- Handle button press
     if z_age == nil then
-        if btnp(🅾️) then
-            sfx(4)
+        if btnp(🅾️) then -- start game
+            sfx(7)
             z_age = 0
         end
         if btnp(⬅️) then
