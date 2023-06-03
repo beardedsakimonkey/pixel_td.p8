@@ -16,6 +16,15 @@ function init_path_points()
             y = p.top + 6,
         })
     end
+    -- extend first and last point to edge of screen
+    for i = 1, #map, #map-1 do
+        local cnr = map[i].cnr
+        if cnr == 'top' or cnr == 'bot' then
+            path_points[i].y += cnr == 'top' and -6 or 6
+        else
+            path_points[i].x += cnr == 'left' and -6 or 6
+        end
+    end
 end
 
 local MAX_DEATH_AGE = 20
@@ -58,8 +67,7 @@ function spawn_enemy()
             elseif cnr == 'right' then dx = -speed
             elseif cnr == 'bot'   then dy = -speed end
             if wave % BOSS_FREQ == 0 and sending == 0 then
-                local boss_hps = {30, 50, 80, 130, 200}
-                local boss_hp = boss_hps[wave/BOSS_FREQ]
+                local boss_hp = ({30, 50, 80, 130, 200})[wave/BOSS_FREQ]
                 make_enemy('BOSS', boss_hp, dx, dy)
             else
                 make_enemy(w.type, w.hp, dx, dy)
@@ -97,7 +105,6 @@ local function line_contains_point(l1, l2, p)
 end
 
 local function move_enemy(e)
-    if e.death_age then return end
     -- Find the first line in the map that contains our position
     local l1, l2
     local p = 2
@@ -197,7 +204,9 @@ function update_enemies()
             enmy.slow_dur -= 1
         end
         -- update position
-        move_enemy(enmy)
+        if not enmy.death_age then
+            move_enemy(enmy)
+        end
         -- update hitbox
         if enmy.type == 'ARROW' then
             if enmy.dx ~= 0 then
@@ -214,6 +223,7 @@ function update_enemies()
         end
     end)
     -- apply interest on wave complete
+    -- TODO: visually indicate interest being applied?
     if had_enemies and #enemies == 0 then
         gold += gold * interest/100
     end
