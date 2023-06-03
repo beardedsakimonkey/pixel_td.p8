@@ -105,7 +105,7 @@ function Menu.handle_btn(m)
         end
     end
     if btnp(❎) then
-        sfx(1)
+        sfx(14)
         m:close()
     end
 end
@@ -247,7 +247,7 @@ function init_menus()
             -- need this condition to avoid immediately opening bonus menu after
             -- choosing a bonus.
             and #bonuses < wave \ BOSS_FREQ then
-            sfx(0)
+            sfx(13)
             Menu.open(m)
         end
         Menu.update(m)
@@ -278,7 +278,7 @@ function init_menus()
 end
 
 function do_close(menu)
-    sfx(1)
+    sfx(14)
     menu:close()
 end
 

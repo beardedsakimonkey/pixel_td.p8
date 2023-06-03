@@ -1,7 +1,7 @@
 --[[
 sound fx:
- 0:  open menu
- 1:  close menu
+ 0:  custom instrument
+ 1:  custom instrument
  2:  left/right
  3:  invalid
  4:  valid
@@ -13,10 +13,12 @@ sound fx:
  10: red bullet
  11: blue bullet
  12: green bullet
- 13: open bonus menu (TODO)
- 14: game over (TODO)
- 15: game won (TODO)
- 16+: music
+ 13: open menu
+ 14: close menu
+ 15: open bonus menu (TODO)
+ 16: game over (TODO)
+ 17: game won (TODO)
+ 24+: music
 ]]
 
 maps = {
@@ -221,7 +223,7 @@ function _update60()
             bonus_menu:handle_btn()
         else
             if btnp(🅾️) then
-                sfx(0)
+                sfx(13)
                 local twr = find_sel_tower()
                 if twr then
                     upg_menu:open()
