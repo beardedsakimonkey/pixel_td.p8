@@ -149,7 +149,7 @@ function reinit()
     has_opened_shop = false
     has_bought_tower = false
     game_over = nil -- nil | 'lost' | 'won'
-    fade_t = nil
+    fade_t = 0 -- fade out of game over screen
     pressing_l, pressing_r, pressing_z = false, false, false
 
     init_enemy()
@@ -190,16 +190,16 @@ function _update60()
 
     -- Handle button press
     if game_over then
-        if fade_t then
-            if fade_t > 0 then
-                fade_t -= 1
-            elseif fade_t == 0 then
+        if fade_t > 0 then
+            if fade_t == 14 then
                 reinit()
+            else
+                fade_t += 1
             end
         else
             if btnp(🅾️) then
                 sfx(4)
-                fade_t = 10
+                fade_t = 1
             end
         end
     else
@@ -272,8 +272,9 @@ function _draw()
     end
 
     -- Fade out of game over screen
-    if fade_t then
-        local color = fade_t >= 6 and DarkGray or fade_t >= 2 and DarkBlue or Black
+    -- TODO: fade in title screen?
+    if fade_t > 0 then
+        local color = fade_t <= 6 and DarkGray or fade_t <= 10 and DarkBlue or Black
         pal({
             DarkBlue, -- 1
             DarkPurple, -- 2
