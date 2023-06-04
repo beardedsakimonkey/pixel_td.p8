@@ -98,7 +98,6 @@ local function update_bullet_green(twr, blt)
     local enmy = blt.enemy
     if not is_in_range(enmy, twr) then
         del(twr.bullets, blt)
-        if #twr.bullets == 0 then sfx(12, -2) end
     else
         blt.age += 1
         if blt.age % twr.start_cd == 0 then -- don't trigger damage every frame
@@ -116,7 +115,6 @@ local function fire_bullet_green(twr)
     if #twr.bullets > 0 then return end
     for enmy in all(enemies) do
         if is_in_range(enmy, twr) then
-            sfx(12)
             add(twr.bullets, {
                 age=0,
                 enemy=enmy,

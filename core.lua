@@ -12,7 +12,7 @@ sound fx:
  9:  buy/upgrade tower
  10: red bullet
  11: blue bullet
- 12: green bullet
+ 12:
  13: open menu
  14: close menu
  15: open bonus menu (TODO)
