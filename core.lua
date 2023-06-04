@@ -1,24 +1,23 @@
 --[[
-sound fx:
- 0:  custom instrument
- 1:  custom instrument
- 2:  left/right
- 3:  invalid
- 4:  valid
- 5:  confirm (e.g. sell, bonus)
- 6:  enemy reaches end
- 7:  start game
- 8:  enemy death
- 9:  buy/upgrade tower
- 10: red bullet
- 11: blue bullet
- 12:
- 13: open menu
- 14: close menu
- 15: open bonus menu (TODO)
- 16: game over (TODO)
- 17: game won (TODO)
- 24+: music
+ sound fx
+ --------
+ 0-7:  custom instruments
+ 8-29: music
+ 30:   left/right
+ 31:   invalid
+ 32:   valid
+ 33:   confirm (e.g. sell, bonus)
+ 34:   enemy reaches end
+ 35:   start game
+ 36:   enemy death
+ 37:   buy/upgrade tower
+ 38:   red bullet
+ 39:   blue bullet
+ 40:   open menu
+ 41:   close menu
+ 42:   open bonus menu (TODO)
+ 43:   game over (TODO)
+ 44:   game won (TODO)
 ]]
 
 maps = {
@@ -115,7 +114,7 @@ local function end_game(state)
 end
 
 function remove_life(enmy)
-    sfx(6)
+    sfx(34)
     lives = max(lives - (enmy.type == 'BOSS' and 5 or 1), 0)
     if lives == 0 then
         end_game('lost')
@@ -209,7 +208,7 @@ function _update60()
             end
         else
             if btnp(🅾️) then
-                sfx(4)
+                sfx(32)
                 fade_t = 1
             end
         end
@@ -223,7 +222,7 @@ function _update60()
             bonus_menu:handle_btn()
         else
             if btnp(🅾️) then
-                sfx(13)
+                sfx(40)
                 local twr = find_sel_tower()
                 if twr then
                     upg_menu:open()
@@ -232,7 +231,7 @@ function _update60()
                 end
             end
             if btnp(❎) and can_send_wave() then
-                sfx(4)
+                sfx(32)
                 send_wave()
             end
         end

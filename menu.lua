@@ -93,19 +93,19 @@ function Menu.update(m)
 end
 
 function Menu.handle_btn(m)
-    if btnp(⬆️) then sfx(4); m.cur_idx = wrap(1, m.cur_idx-1, #m.items) end
-    if btnp(⬇️) then sfx(4); m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
+    if btnp(⬆️) then sfx(32); m.cur_idx = wrap(1, m.cur_idx-1, #m.items) end
+    if btnp(⬇️) then sfx(32); m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
     if btnp(🅾️) then
         local item = m.items[m.cur_idx]
         if not (item.is_disabled and item.is_disabled(m)) then
             item.cb(m)
             m:close()
         else
-            sfx(3)
+            sfx(31)
         end
     end
     if btnp(❎) then
-        sfx(14)
+        sfx(41)
         m:close()
     end
 end
@@ -144,22 +144,22 @@ function init_menus()
         end
         if btnp(⬅️) then
             if m.sel_twr > 1 then
-                sfx(2)
+                sfx(30)
                 m.sel_twr -= 1
                 m.carousel_sx = m.carousel_x
                 m.carousel_st = time()
             else
-                sfx(3)
+                sfx(31)
             end
         end
         if btnp(➡️) then
             if m.sel_twr < MAX_TWR then
-                sfx(2)
+                sfx(30)
                 m.sel_twr += 1
                 m.carousel_sx = m.carousel_x
                 m.carousel_st = time()
             else
-                sfx(3)
+                sfx(31)
             end
         end
     end
@@ -247,7 +247,7 @@ function init_menus()
             -- need this condition to avoid immediately opening bonus menu after
             -- choosing a bonus.
             and #bonuses < wave \ BOSS_FREQ then
-            sfx(13)
+            sfx(40)
             Menu.open(m)
         end
         Menu.update(m)
@@ -270,7 +270,7 @@ function init_menus()
 
     bonus_menu.handle_btn = function(m)
         if btnp(❎) then
-            sfx(3)
+            sfx(31)
             return
         end
         Menu.handle_btn(m)
@@ -278,26 +278,26 @@ function init_menus()
 end
 
 function do_close(menu)
-    sfx(14)
+    sfx(41)
     menu:close()
 end
 
 function do_buy(menu)
-    sfx(9)
+    sfx(37)
     local twr = make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
     gold -= twr.buy
     has_bought_tower = true
 end
 
 function do_sell()
-    sfx(5)
+    sfx(33)
     local twr = find_sel_tower()
     gold += twr.sell
     del(towers, twr)
 end
 
 function do_upgrade()
-    sfx(9)
+    sfx(37)
     local twr = find_sel_tower()
     make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
     gold -= twr.upg
@@ -305,19 +305,19 @@ function do_upgrade()
 end
 
 function do_bonus_interest()
-    sfx(5)
+    sfx(33)
     add_bonus'INTEREST'
     interest += 3
 end
 
 function do_bonus_damage()
-    sfx(5)
+    sfx(33)
     add_bonus'DAMAGE'
     bonus_dmg += 0.04
 end
 
 function do_bonus_range()
-    sfx(5)
+    sfx(33)
     add_bonus'RANGE'
     bonus_rng += 0.1
 end

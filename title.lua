@@ -40,15 +40,15 @@ function update_title()
     -- Handle button press
     if z_age == nil then
         if btnp(🅾️) then -- start game
-            sfx(7)
+            sfx(35)
             z_age = 0
         end
         if btnp(⬅️) then
-            sfx(2)
+            sfx(30)
             cur_map = wrap(1, cur_map-1, #maps)
         end
         if btnp(➡️) then
-            sfx(2)
+            sfx(30)
             cur_map = wrap(1, cur_map+1, #maps)
         end
     end
