@@ -32,7 +32,7 @@ function update_title()
     t += 1
     if z_age then
         z_age += 1
-        if z_age >= 50 then
+        if z_age >= 60 then
             screen = 'game'
             return
         end
@@ -54,9 +54,9 @@ function update_title()
     end
 
     -- Send letters up
-    if z_age then
+    if z_age and z_age >= 10 then
         for i, l in pairs(letters) do
-            if l.dest_y ~= OFFSCREEN_Y and z_age >= (i-1)*2 then
+            if l.dest_y ~= OFFSCREEN_Y and z_age >= (10+(i-1)*2) then
                 l.dest_y = OFFSCREEN_Y
                 l.v = 300
             end

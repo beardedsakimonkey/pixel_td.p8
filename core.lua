@@ -86,7 +86,7 @@ waves = {
     {hp=90,  type='ARROW'},
     {hp=118, type='CIRCLE'},
 }
--- Note: `sell` prices computed in init()
+-- Note: `sell` prices computed in _init()
 tower_cfg = {
     -- level 1
     {dmg=0.25, range=30, cd=5,                 buy=40, upg=40}, -- green
