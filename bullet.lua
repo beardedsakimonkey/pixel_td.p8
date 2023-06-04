@@ -116,7 +116,7 @@ local function fire_bullet_green(twr)
     if #twr.bullets > 0 then return end
     for enmy in all(enemies) do
         if is_in_range(enmy, twr) then
-            sfx(12, 1)
+            sfx(12)
             add(twr.bullets, {
                 age=0,
                 enemy=enmy,
