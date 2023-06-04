@@ -52,7 +52,7 @@ local function update_bullet_red(twr, blt)
     -- handle collision
     if collide(blt, enmy) then
         enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
-        sfx(38)
+        sfx(38, 2)
         if enmy.dmg_age == nil then enmy.dmg_age = 0 end
         if enmy.hp == 0 then
             gold += enmy.gold
@@ -163,7 +163,7 @@ local function update_bullets_blue(twr)
         twr.bullets = {}
     else
         if twr.bullets[1].age == REGISTER_DMG then
-            sfx(39)
+            sfx(39, 2)
             -- register damage & slow
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy

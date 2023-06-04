@@ -18,6 +18,12 @@
  42:   open bonus menu (TODO)
  43:   game over (TODO)
  44:   game won (TODO)
+
+channels
+--------
+0-1: music
+2:   towers, bullets, enemies
+3:   all other sfx
 ]]
 
 maps = {
@@ -114,7 +120,7 @@ local function end_game(state)
 end
 
 function remove_life(enmy)
-    sfx(34)
+    sfx(34, 2)
     lives = max(lives - (enmy.type == 'BOSS' and 5 or 1), 0)
     if lives == 0 then
         end_game('lost')
