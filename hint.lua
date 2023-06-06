@@ -48,15 +48,14 @@ function update_hint()
     end
     if dismissing_X then
         X_t = 0
-        X_v = 200
+        X_v = 150
     end
     local dest_pos = show_hint_X and 1 or OFFSCREEN
-    -- TODO: make this less stiff
     X_pos, X_v = spring(X_pos, dest_pos, X_v, {
-        stiffness = 200,
-        damping = 32,
+        stiffness = 100,
+        damping = 20,
         mass = 2,
-        precision = 0.2,
+        precision = 0.1,
     })
     if show_hint_Z then
         local flip = sel.dst_x < FLIP_Y
