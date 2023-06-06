@@ -50,17 +50,17 @@ maps = {
     },
     -- medium
     {
-        {x=0,  y=1,  cnr='left'},
-        {x=3,  y=1,  cnr='tr'},
-        {x=3,  y=5,  cnr='bl'},
-        {x=7,  y=5,  cnr='tr'},
-        {x=7,  y=9,  cnr='bl'},
-        {x=10,  y=9, cnr='right'},
+        {x=0,  y=1, cnr='left'},
+        {x=3,  y=1, cnr='tr'},
+        {x=3,  y=5, cnr='bl'},
+        {x=7,  y=5, cnr='tr'},
+        {x=7,  y=9, cnr='bl'},
+        {x=10, y=9, cnr='right'},
     },
     -- hard
     {
-        {x=0,  y=5,  cnr='left'},
-        {x=10,  y=5, cnr='right'},
+        {x=0,  y=5, cnr='left'},
+        {x=10, y=5, cnr='right'},
     }
 }
 BOSS_FREQ = 5 -- boss on every 5th wave
@@ -123,7 +123,7 @@ function remove_life(enmy)
     sfx(34, 2)
     lives = max(lives - (enmy.type == 'BOSS' and 5 or 1), 0)
     if lives == 0 then
-        end_game('lost')
+        end_game'lost'
     end
     shake = 3
 end
@@ -273,7 +273,7 @@ function _update60()
 
     -- should go after spawning enemies
     if sending == 0 and #enemies == 0 and wave == #waves then
-        end_game('won')
+        end_game'won'
         return
     end
 end
