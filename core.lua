@@ -248,6 +248,7 @@ function _update60()
     update_enemies()
     update_bullets()
     update_towers()
+    update_tower_ranges()
 
     buy_menu:update()
     upg_menu:update()

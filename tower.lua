@@ -88,3 +88,46 @@ function draw_towers()
         pal(0)
     end)
 end
+
+-- Range animation -------------------------------------------------------------
+
+local range = nil
+local range_v = 0
+local is_visible = false
+
+function update_tower_ranges()
+    local was_visible = is_visible
+    is_visible = buy_menu.is_open or upg_menu.is_open
+    if is_visible then
+        local dest_range = get_twr_range(find_sel_tower() or {range = tower_cfg[buy_menu.sel_twr].range})
+        if was_visible then -- update
+            range, range_v = spring(range, dest_range, range_v, {
+                stiffness = 220,
+                damping = 9,
+                mass = 0.2,
+                precision = 0.2,
+            })
+        else -- initialize
+            range = dest_range*0.66
+            range_v = 0
+        end
+    end
+end
+
+local function draw_range(x, y, range)
+    for x_off in all(split'-1,0,1') do
+        for y_off in all(split'-1,0,1') do
+            circ(x+x_off, y+y_off, range, Black)
+        end
+    end
+    circ(x, y, range, DarkBlue)
+end
+
+function draw_tower_ranges()
+    if upg_menu.is_open then
+        local twr = find_sel_tower()
+        draw_range(twr.x, twr.y, range)
+    elseif buy_menu.is_open then
+        draw_range(sel.x+6, sel.y+6, range)
+    end
+end

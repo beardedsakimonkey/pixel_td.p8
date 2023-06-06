@@ -2,42 +2,6 @@ buy_menu = nil
 upg_menu = nil
 bonus_menu = nil
 
--- Tower range -----------------------------------------------------------------
-
-range = nil
-range_v = 0
-
-local function draw_range(x, y, range)
-    for x_off in all(split'-1,0,1') do
-        for y_off in all(split'-1,0,1') do
-            circ(x+x_off, y+y_off, range, Black)
-        end
-    end
-    circ(x, y, range, DarkBlue)
-end
-
-function draw_tower_ranges()
-    if upg_menu.is_open then
-        local twr = find_sel_tower()
-        if twr then
-            draw_range(twr.x, twr.y, range)
-        end
-    elseif buy_menu.is_open then
-        draw_range(sel.x+6, sel.y+6, range)
-    end
-end
-
-function get_range()
-    local twr = find_sel_tower()
-    if twr then -- upgrade menu
-        return get_twr_range(twr)
-    else -- buy menu
-        return get_twr_range{range = tower_cfg[buy_menu.sel_twr].range}
-    end
-end
-
--- Menu ------------------------------------------------------------------------
-
 local Menu = {}
 
 local OFFSCREEN = 131
@@ -82,14 +46,6 @@ function Menu.update(m)
         damping = 12,
         mass = 0.25,
     })
-    if m.is_open then
-        range, range_v = spring(range, get_range(), range_v, {
-            stiffness = 220,
-            damping = 9,
-            mass = 0.2,
-            precision = 0.2,
-        })
-    end
 end
 
 function Menu.handle_btn(m)
@@ -117,8 +73,6 @@ end
 function Menu.open(m)
     m.is_open = true
     m.cur_idx = 1
-    range = flr(get_range() * 0.66)
-    range_v = 0
 end
 
 function init_menus()
