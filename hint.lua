@@ -43,8 +43,8 @@ function update_hint()
         Z_t += 1
         if Z_t < 0 then Z_t = FADE_DURATION+1 end
     else
-        Z_t = min(FADE_DURATION+1, Z_t)
-        Z_t = max(0, Z_t-1)
+        -- fade out hint Z
+        Z_t = max(0, min(FADE_DURATION+1, Z_t)-1)
     end
     if dismissing_X then
         X_t = 0
@@ -99,24 +99,29 @@ local function draw_hint_X()
 end
 
 local function draw_hint_Z()
+    -- Fade in
+    if Z_t <= FADE_DURATION then
+        local c = Z_t < 4 and DarkBlue or DarkGray
+        pal({
+            [1]=Black, -- dark blue
+            [6]=c,     -- light gray
+            [10]=c,    -- yellow
+            [13]=c,    -- indigo
+        })
+    end
+
     -- Draw arrow
     local flip = sel.dst_x < FLIP_Y
     sspr(32, 8, 5, 8, Z_x+(flip and -6 or 10), Z_y, 5, 8, not flip)
 
+    if Z_t <= FADE_DURATION then
+        pal(Indigo, Black)
+    end
+
     -- Draw button
     local s = max(0, (Z_t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
-    if Z_t <= FADE_DURATION then -- fade in
-        local c = Z_t < 4 and DarkBlue or DarkGray
-        pal({
-            [1]=Black,  -- dark blue
-            [6]=c,      -- light gray
-            [10]=c,     -- yellow
-            [13]=Black, -- indigo
-        })
-    end
     sspr(s*9, 24, 9, 8, Z_x, Z_y)
-    -- draw 'o'
-    rect(Z_x+3, Z_y+2, Z_x+5, Z_y+4, DarkBlue)
+    rect(Z_x+3, Z_y+2, Z_x+5, Z_y+4, DarkBlue) -- draw 'o'
 end
 
 function draw_hint()
