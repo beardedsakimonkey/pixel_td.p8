@@ -11,19 +11,16 @@ function init_path_points()
     local map = get_map()
     for i = 1, #map do
         local p = g2p(map[i])
-        add(path_points, {
-            x = p.left + 6,
-            y = p.top + 6,
-        })
-    end
-    -- extend first and last point to edge of screen
-    for i = 1, #map, #map-1 do
         local cnr = map[i].cnr
-        if cnr == 'top' or cnr == 'bot' then
-            path_points[i].y += cnr == 'top' and -6 or 6
-        else
-            path_points[i].x += cnr == 'left' and -6 or 6
-        end
+        -- extend first and last point to edge of screen
+        local xoff = cnr == 'left' and -6 or cnr == 'right' and 6 or 0
+        local yoff = cnr == 'top'  and -6 or cnr == 'bot'   and 6 or 0
+        -- move enemies down a bit to account for health bar
+        yoff += (cnr ~= 'top' and cnr ~= 'bot') and 1 or 0
+        add(path_points, {
+            x = p.left + 6 + xoff,
+            y = p.top + 6 + yoff,
+        })
     end
 end
 
