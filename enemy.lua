@@ -107,13 +107,11 @@ local function move_enemy(e)
     local p = 2
     while p <= #path_points do
         if line_contains_point(path_points[p-1], path_points[p], e) then
-            l1 = path_points[p-1]
-            l2 = path_points[p]
+            l1, l2 = path_points[p-1], path_points[p]
             break
         end
         p += 1
     end
-    assert(l1) -- enemy should always be on the path
 
     if e.dx ~= 0 then -- moving horizontally
         local right = e.dx > 0

@@ -16,8 +16,9 @@
  40:   open menu
  41:   close menu
  42:   open bonus menu (TODO)
- 43:   game over (TODO)
- 44:   game won (TODO)
+ 43:   earned interest (TODO)
+ 44:   game over (TODO)
+ 45:   game won (TODO)
 
 channels
 --------
@@ -432,7 +433,7 @@ function draw_stats()
     spr(17, x, y)
     pal(0)
 
-    -- draw interest gained
+    -- draw interest earned
     if interest_t > 0 then
         -- `t` is between 1 and 12 (but hits 13 on the very last frame)
         local t = interest_t\(MAX_INTEREST_T/12) + 1
