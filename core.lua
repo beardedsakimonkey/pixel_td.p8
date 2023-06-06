@@ -50,12 +50,12 @@ maps = {
     },
     -- medium
     {
-        {x=0,  y=1, cnr='left'},
-        {x=3,  y=1, cnr='tr'},
+        {x=0,  y=2, cnr='left'},
+        {x=3,  y=2, cnr='tr'},
         {x=3,  y=5, cnr='bl'},
         {x=7,  y=5, cnr='tr'},
-        {x=7,  y=9, cnr='bl'},
-        {x=10, y=9, cnr='right'},
+        {x=7,  y=8, cnr='bl'},
+        {x=10, y=8, cnr='right'},
     },
     -- hard
     {

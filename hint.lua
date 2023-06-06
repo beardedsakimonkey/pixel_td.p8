@@ -51,6 +51,7 @@ function update_hint()
         X_v = 200
     end
     local dest_pos = show_hint_X and 1 or OFFSCREEN
+    -- TODO: make this less stiff
     X_pos, X_v = spring(X_pos, dest_pos, X_v, {
         stiffness = 200,
         damping = 32,
@@ -89,8 +90,8 @@ local function draw_hint_X()
         spr(20, 25, X_pos)
         draw_X_btn(30, X_pos)
     elseif cur_map == 2 then
-        spr(21, 1, X_pos)
-        draw_X_btn(10, X_pos)
+        spr(21, X_pos, 14)
+        draw_X_btn(X_pos, 7)
     else
         spr(21, X_pos, 50)
         draw_X_btn(X_pos, 43)
