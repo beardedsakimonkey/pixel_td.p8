@@ -102,13 +102,11 @@ function update_tower_ranges()
         local dest_range = get_twr_range(find_sel_tower() or {range = tower_cfg[buy_menu.sel_twr].range})
         if was_visible then -- update
             range, range_v = spring(range, dest_range, range_v, {
-                stiffness = 220,
-                damping = 9,
-                mass = 0.2,
-                precision = 0.2,
+                stiffness = 120,
+                precision = 0.1,
             })
         else -- initialize
-            range = dest_range*0.66
+            range = dest_range*0.9
             range_v = 0
         end
     end
