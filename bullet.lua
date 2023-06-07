@@ -126,12 +126,10 @@ end
 
 local function draw_bullets_green(twr)
     for blt in all(twr.bullets) do
-        local a = cos((blt.age%61)/60)
-        line(
-            twr.x, twr.y,
-            blt.enemy.x, blt.enemy.y,
-            a > 0.95 and DarkBlue or a > 0.6 and DarkGreen or Green
-        )
+        local a = -cos((blt.age%121)/120) -- goes from -1 to 1 over 2 seconds
+        line(twr.x, twr.y, blt.enemy.x, blt.enemy.y,
+            (a < -.99 or a > .99) and DarkBlue or
+            (a < -.9 or a > .9) and DarkGreen or Green)
         -- don't cover up center pixel
         pset(twr.x, twr.y, Black)
     end

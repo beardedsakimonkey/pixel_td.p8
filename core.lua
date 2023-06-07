@@ -145,7 +145,7 @@ function _init()
     poke(0x5f5d, 3) -- button repeat interval
     cur_map = 1
     reinit()
-    music(0, 200)
+    -- music(0, 200)
 end
 
 function reinit()
@@ -463,7 +463,7 @@ end
 
 function draw_game_over(text, color)
     local text = '- ' .. text .. ' -'
-    print_outlined(text, hcenter(text), 50, color)
+    print_outlined(text, hcenter(text), 44, color)
     -- draw restart
     local str = 'restart'
     local x = hcenter(str)+4
