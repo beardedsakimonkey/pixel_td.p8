@@ -202,6 +202,8 @@ function init_menus()
             -- choosing a bonus.
             and #bonuses < wave \ BOSS_FREQ then
             sfx(40)
+            upg_menu:close()
+            buy_menu:close()
             Menu.open(m)
         end
         Menu.update(m)
