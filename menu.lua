@@ -1,6 +1,6 @@
-buy_menu = nil
-upg_menu = nil
-bonus_menu = nil
+-- buy_menu = nil
+-- upg_menu = nil
+-- bonus_menu = nil
 
 local Menu = {}
 

@@ -1,10 +1,7 @@
 local LETTER_HEIGHT = 19
 local OFFSCREEN_Y = -LETTER_HEIGHT
 
-local z_age
-local t
-local title_t -- non-overflowing `t`
-local letters
+local z_age, t, title_t, letters, pressing_left, pressing_right
 
 function init_title()
     z_age = nil
@@ -43,13 +40,28 @@ function update_title()
             sfx(35)
             z_age = 0
         end
+        -- Don't dim if btn pressed down while disabled
+        if pressing_right or (not pressing_right and cur_map < #maps) then
+            pressing_right = btn(➡️)
+        end
+        if pressing_left or (not pressing_left and cur_map > 1) then
+            pressing_left = btn(⬅️)
+        end
         if btnp(⬅️) then
-            sfx(30)
-            cur_map = wrap(1, cur_map-1, #maps)
+            if cur_map > 1 then
+                sfx(30)
+                cur_map -= 1
+            else
+                sfx(31)
+            end
         end
         if btnp(➡️) then
-            sfx(30)
-            cur_map = wrap(1, cur_map+1, #maps)
+            if cur_map < #maps then
+                sfx(30)
+                cur_map += 1
+            else
+                sfx(31)
+            end
         end
     end
 
@@ -80,6 +92,21 @@ function update_title()
     end
 end
 
+local function draw_arrow_btn(is_left, y)
+    local can_press, is_pressed
+    if is_left then
+        can_press = cur_map > 1 or pressing_left
+        is_pressed = pressing_l
+    else
+        can_press = cur_map < #maps or pressing_right
+        is_pressed = pressing_r
+    end
+    sspr(
+        (is_pressed or not can_press) and 112 or 96, not can_press and 48 or 32,
+        9, 8, is_left and 40 or 80, 49, 9, 8, is_left
+    )
+end
+
 function draw_title()
     -- Draw map
     draw_path(t)
@@ -93,27 +120,27 @@ function draw_title()
 
     -- Draw difficulty
     if z_age == nil or z_age < 27 then
-        local y = 50
         pal(Green, Black)
-        if z_age and z_age > 14 then -- fade out
+        -- fade out
+        if z_age and z_age > 14 then
             local c = z_age < 22 and DarkGray or DarkBlue
-            pal({
+            pal{
                 [1]=Black,  -- dark blue
                 [6]=c,      -- light gray
                 [8]=c,      -- red
                 [10]=c,     -- yellow
                 [13]=Black, -- indigo
-            })
+            }
         end
         -- draw buttons
-        sspr(pressing_l and 112 or 96, 32, 9, 8, 40, y-1, 9, 8, true)
-        sspr(pressing_r and 112 or 96, 32, 9, 8, 80, y-1)
+        draw_arrow_btn(true)
+        draw_arrow_btn(false)
 
         local str = cur_map == 1 and 'easy'
                  or cur_map == 2 and 'medium'
                  or 'hard'
         local c = cur_map == 3 and Red or Yellow
-        print_outlined(str, hcenter(str), y, c)
+        print_outlined(str, hcenter(str), 50, c)
 
         local str2 = 'start'
         local y2 = 74

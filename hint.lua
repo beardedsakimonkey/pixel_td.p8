@@ -101,12 +101,12 @@ local function draw_hint_Z()
     -- Fade in
     if Z_t <= FADE_DURATION then
         local c = Z_t < 4 and DarkBlue or DarkGray
-        pal({
+        pal{
             [1]=Black, -- dark blue
             [6]=c,     -- light gray
             [10]=c,    -- yellow
             [13]=c,    -- indigo
-        })
+        }
     end
 
     -- Draw arrow

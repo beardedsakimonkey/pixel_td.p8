@@ -63,7 +63,7 @@ function draw_towers()
     foreach(towers, function(twr)
         -- draw flicker
         if twr.age and (twr.age\2)%2 == 0 then
-            pal({
+            pal{
                 LightGray, -- 1 (dark blue)
                 LightGray, -- 2 (dark purple)
                 LightGray, -- 3 (dark green)
@@ -80,7 +80,7 @@ function draw_towers()
                 White,     -- 14 (pink)
                 White,     -- 15 (peach)
                 DarkGray,  -- 0 (black)
-            }, 0)
+            }
         end
         -- draw tower
         local p = g2p{x=twr.gx, y=twr.gy}

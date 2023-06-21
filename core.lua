@@ -412,13 +412,13 @@ function draw_stats()
     local c = start_t <= 4 and DarkBlue
            or start_t <= 8 and DarkGray or nil
     if c then
-        pal({
+        pal{
             [2]=c, -- dark purple
             [6]=c, -- light gray
             [8]=c, -- red
             [9]=c, -- orange
             [10]=c, -- yellow
-        })
+        }
     end
     local lives = tostr(lives)
     local x = 127 - #lives*4
