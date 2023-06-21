@@ -226,6 +226,7 @@ function update_enemies()
         interest_t = 1
         interest_gained = gold * interest/100
         gold += interest_gained
+        sfx(43)
     end
 end
 

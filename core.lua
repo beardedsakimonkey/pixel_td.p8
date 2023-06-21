@@ -16,7 +16,7 @@
  40:   open menu
  41:   close menu
  42:   open bonus menu
- 43:   earned interest (TODO)
+ 43:   earned interest
  44:   game over (TODO)
  45:   game won (TODO)
 
