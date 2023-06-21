@@ -221,8 +221,8 @@ function update_enemies()
             del(enemies, enmy)
         end
     end)
-    -- apply interest on wave complete
-    if had_enemies and #enemies == 0 then
+    -- apply interest on wave complete (except final wave)
+    if had_enemies and #enemies == 0 and wave < #waves then
         interest_t = 1
         interest_gained = gold * interest/100
         gold += interest_gained

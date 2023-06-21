@@ -17,12 +17,12 @@
  41:   close menu
  42:   open bonus menu
  43:   earned interest
- 44:   game over (TODO)
- 45:   game won (TODO)
+ 44:   game lost
+ 45:   game won
 
 channels
 --------
-0-1: music
+0-1: music (TODO)
 2:   towers, bullets
 3:   all other sfx
 ]]
@@ -118,12 +118,13 @@ local function end_game(state)
     game_over = state
     buy_menu:close()
     upg_menu:close()
+    sfx(state == 'lost' and 44 or 45)
 end
 
 function remove_life(enmy)
     sfx(34, 2)
     lives = max(lives - (enmy.type == 'BOSS' and 5 or 1), 0)
-    if lives == 0 then
+    if lives == 0 and not game_over then
         end_game'lost'
     end
     shake = 3
@@ -274,9 +275,8 @@ function _update60()
     end
 
     -- should go after spawning enemies
-    if sending == 0 and #enemies == 0 and wave == #waves then
+    if not game_over and sending == 0 and #enemies == 0 and wave == #waves then
         end_game'won'
-        return
     end
 end
 
