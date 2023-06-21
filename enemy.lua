@@ -74,7 +74,7 @@ function spawn_enemy()
 end
 
 function kill_enemy(enmy)
-    sfx(36, 2)
+    sfx(36, 3)
     enmy.death_age = 0
     enmy.death_particles = {
         {x=-1, y=-1},

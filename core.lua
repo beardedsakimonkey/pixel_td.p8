@@ -23,7 +23,7 @@
 channels
 --------
 0-1: music
-2:   towers, bullets, enemies
+2:   towers, bullets
 3:   all other sfx
 ]]
 
