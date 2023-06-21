@@ -201,7 +201,7 @@ function init_menus()
             -- need this condition to avoid immediately opening bonus menu after
             -- choosing a bonus.
             and #bonuses < wave \ BOSS_FREQ then
-            sfx(40)
+            sfx(42)
             upg_menu:close()
             buy_menu:close()
             Menu.open(m)

@@ -8,14 +8,14 @@
  32:   valid
  33:   confirm (e.g. sell, bonus)
  34:   enemy reaches end
- 35:   start game
+ 35:   start game / send wave
  36:   enemy death
  37:   buy/upgrade tower
  38:   red bullet
  39:   blue bullet
  40:   open menu
  41:   close menu
- 42:   open bonus menu (TODO)
+ 42:   open bonus menu
  43:   earned interest (TODO)
  44:   game over (TODO)
  45:   game won (TODO)
@@ -238,7 +238,7 @@ function _update60()
                 end
             end
             if btnp(❎) and can_send_wave() then
-                sfx(32)
+                sfx(35)
                 send_wave()
             end
         end
