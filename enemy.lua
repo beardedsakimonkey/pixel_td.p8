@@ -46,9 +46,13 @@ end
 function spawn_enemy()
     if sending > 0 then
         local w = waves[wave]
-        local gap = w.type == 'ARROW' and 15 or 10
-        local speed = w.type == 'ARROW' and 0.5
-                    or w.type == 'RECTANGLE' and 0.2
+        local type = wave%5==0 and 'CIRCLE' or
+                     wave%4==0 and 'ARROW' or
+                     wave%3==0 and 'RECTANGLE' or
+                     wave%2==0 and 'DIAMOND' or 'SQUARE'
+        local gap = type == 'ARROW' and 15 or 10
+        local speed = type == 'ARROW' and 0.5
+                    or type == 'RECTANGLE' and 0.2
                     or 0.25
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
@@ -67,7 +71,7 @@ function spawn_enemy()
                 local boss_hp = ({30, 50, 80, 130, 200})[wave/BOSS_FREQ]
                 make_enemy('BOSS', boss_hp, dx, dy)
             else
-                make_enemy(w.type, w.hp, dx, dy)
+                make_enemy(type, w.hp, dx, dy)
             end
         end
     end
