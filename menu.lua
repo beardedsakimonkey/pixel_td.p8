@@ -253,8 +253,8 @@ function do_sell()
 end
 
 function do_upgrade()
-    sfx(37)
     local twr = find_sel_tower()
+    sfx(46 + (twr.type-1)\3)
     make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
     gold -= twr.upg
     del(towers, twr)

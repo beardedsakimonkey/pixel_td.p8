@@ -10,7 +10,7 @@
  34:   enemy reaches end
  35:   start game / send wave
  36:   enemy death
- 37:   buy/upgrade tower
+ 37:   buy tower
  38:   red bullet
  39:   blue bullet
  40:   open menu
@@ -19,6 +19,7 @@
  43:   earned interest
  44:   game lost
  45:   game won
+ 46-48: upgrade tower
 
 channels
 --------
