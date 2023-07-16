@@ -226,7 +226,10 @@ function update_enemies()
         interest_t = 1
         interest_gained = gold * interest/100
         gold += interest_gained
-        sfx(43)
+        -- don't play sfx on boss waves
+        if wave % BOSS_FREQ ~= 0 then
+            sfx(43)
+        end
     end
 end
 

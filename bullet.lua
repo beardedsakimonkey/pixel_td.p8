@@ -8,12 +8,10 @@ end
 -- Red -------------------------------------------------------------------------
 
 local function collide(blt, enmy)
-    local left  = enmy.x - enmy.width/2
-    local right = enmy.x + enmy.width/2
-    local top   = enmy.y - enmy.height/2
-    local bot   = enmy.y + enmy.height/2
-    return blt.x >= left and blt.x <= right
-       and blt.y >= top  and blt.y <= bot
+    return blt.x >= (enmy.x - enmy.width/2) -- left
+       and blt.x <= (enmy.x + enmy.width/2) -- right
+       and blt.y >= (enmy.y - enmy.height/2) -- top
+       and blt.y <= (enmy.y + enmy.height/2) -- bot
 end
 
 local function update_bullet_red(twr, blt)
