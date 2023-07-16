@@ -11,8 +11,8 @@
  35:   start game / send wave
  36:   enemy death
  37:   buy tower
- 38:   red bullet
- 39:   blue bullet
+ 38:   -
+ 39:   -
  40:   open menu
  41:   close menu
  42:   open bonus menu
@@ -24,8 +24,7 @@
 channels
 --------
 0-1: music (TODO)
-2:   towers, bullets
-3:   all other sfx
+2-3: sfx
 ]]
 
 maps = {
