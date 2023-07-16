@@ -9,10 +9,10 @@
  33:   confirm (e.g. sell, bonus)
  34:   enemy reaches end
  35:   start game / send wave
- 36:   enemy death
- 37:   buy tower
- 38:   -
- 39:   -
+ 36:   buy tower
+ 37:   enemy death 1
+ 38:   enemy death 2
+ 39:   enemy death 3
  40:   open menu
  41:   close menu
  42:   open bonus menu
@@ -23,7 +23,7 @@
 
 channels
 --------
-0-1: music (TODO)
+0-1: music
 2-3: sfx
 ]]
 

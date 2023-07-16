@@ -239,7 +239,7 @@ function do_close(menu)
 end
 
 function do_buy(menu)
-    sfx(37)
+    sfx(36)
     local twr = make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
     gold -= twr.buy
     has_bought_tower = true
