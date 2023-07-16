@@ -120,8 +120,8 @@ local function move_enemy(e)
     if e.dx ~= 0 then -- moving horizontally
         local right = e.dx > 0
         local edge_x = right and max(l1.x, l2.x) or min(l1.x, l2.x)
-        local overflow = right and ((e.x + e.dx) - edge_x)
-                                or (edge_x - (e.x + e.dx))
+        local overflow = right and (e.x + e.dx) - edge_x
+                                or edge_x - (e.x + e.dx)
         -- If the new position would go out of bounds on the path, split the
         -- travel distance into horizontal and vertical movement.
         if overflow > 0 then
@@ -139,13 +139,13 @@ local function move_enemy(e)
                 remove_life(e)
             end
         else
-            e.x += (e.dx * e.slow)
+            e.x += e.dx * e.slow
         end
     elseif e.dy ~= 0 then -- moving vertically
         local down = e.dy > 0
         local edge_y = down and max(l1.y, l2.y) or min(l1.y, l2.y)
-        local overflow = down and ((e.y + e.dy) - edge_y)
-                               or (edge_y - (e.y + e.dy))
+        local overflow = down and (e.y + e.dy) - edge_y
+                               or edge_y - (e.y + e.dy)
         if overflow > 0 then
             e.y = edge_y
             if path_points[p+1] then
@@ -161,7 +161,7 @@ local function move_enemy(e)
                 remove_life(e)
             end
         else
-            e.y += (e.dy * e.slow)
+            e.y += e.dy * e.slow
         end
     end
 end
