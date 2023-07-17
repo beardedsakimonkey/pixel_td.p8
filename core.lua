@@ -118,6 +118,7 @@ local function end_game(state)
     game_over = state
     buy_menu:close()
     upg_menu:close()
+    music(-1)
     sfx(state == 'lost' and 44 or 45)
 end
 
@@ -146,7 +147,6 @@ function _init()
     poke(0x5f5d, 3) -- button repeat interval
     cur_map = 1
     reinit()
-    music(0)
 end
 
 function reinit()
@@ -172,6 +172,7 @@ function reinit()
     init_menus()
     init_tower()
     init_title()
+    music(0)
 end
 
 --------------------------------------------------------------------------------
