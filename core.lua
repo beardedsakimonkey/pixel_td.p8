@@ -1,25 +1,38 @@
 --[[
  sound fx
  --------
- 0-7:  custom instruments
- 8-29: music
- 30:   left/right
- 31:   invalid
- 32:   valid
- 33:   confirm (e.g. sell, bonus)
- 34:   enemy reaches end
- 35:   start game / send wave
- 36:   buy tower
- 37:   enemy death 1
- 38:   enemy death 2
- 39:   enemy death 3
- 40:   open menu
- 41:   close menu
- 42:   open bonus menu
- 43:   earned interest
- 44:   game lost
- 45:   game won
+ 0-1:   custom instruments for sfx
+ 2-4:   custom instruments for hard mode
+ 5:     -
+ 6:     custom instrument for easy mode
+ 7:     -
+ 8-14:  music for easy mode
+ 15-18: -
+ 19-26: music for hard mode
+ 27-29: music for title screen
+ 30:    left/right
+ 31:    invalid
+ 32:    valid
+ 33:    confirm (e.g. sell, bonus)
+ 34:    enemy reaches end
+ 35:    start game / send wave
+ 36:    buy tower
+ 37:    enemy death 1
+ 38:    enemy death 2
+ 39:    enemy death 3
+ 40:    open menu
+ 41:    close menu
+ 42:    open bonus menu
+ 43:    earned interest
+ 44:    game lost
+ 45:    game won
  46-48: upgrade tower
+
+patterns
+--------
+0-9:   easy mode
+40-49: hard mode
+56-58: title screen
 
 channels
 --------
@@ -197,7 +210,7 @@ function _update60()
         init_path_points()
         init_selection()
         init_hint() -- should go after init_selection()
-        music(0, nil, 0b11)
+        music(cur_map==3 and 40 or 0, nil, 0b11)
     end
 
     t = max(1, t+1)
