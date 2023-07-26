@@ -21,15 +21,7 @@ end
 function make_tower(type, gx, gy)
     local cfg = tower_cfg[type]
     local p = g2p{x=gx, y=gy}
-    local update_bullets = ({update_bullets_blue,
-                             update_bullets_green,
-                             update_bullets_red})[type%MAX_TWR + 1]
-    local fire_bullet = ({fire_bullet_blue,
-                          fire_bullet_green,
-                          fire_bullet_red})[type%MAX_TWR + 1]
-    local draw_bullets = ({draw_bullets_blue,
-                           draw_bullets_green,
-                           draw_bullets_red})[type%MAX_TWR + 1]
+    local type_idx = type%MAX_TWR + 1
     return add(towers, {
         type=type,
         gx=gx, gy=gy, -- in grid coordinates
@@ -42,9 +34,15 @@ function make_tower(type, gx, gy)
         range=cfg.range,
         age=0, -- for flicker
         buy=cfg.buy, sell=cfg.sell, upg=cfg.upg,
-        update_bullets=update_bullets,
-        fire_bullet=fire_bullet,
-        draw_bullets=draw_bullets,
+        update_bullets=({update_bullets_blue,
+                         update_bullets_green,
+                         update_bullets_red})[type_idx],
+        fire_bullet=({fire_bullet_blue,
+                      fire_bullet_green,
+                      fire_bullet_red})[type_idx],
+        draw_bullets=({draw_bullets_blue,
+                       draw_bullets_green,
+                       draw_bullets_red})[type_idx],
     })
 end
 
