@@ -96,8 +96,8 @@ waves = { -- values are enemy hp
 tower_cfg = {
     -- level 1
     {dmg=0.25, range=30, cd=5,                 buy=40, upg=40}, -- green
-    {dmg=2.3,  range=30, cd=38, max_bullets=1, buy=40, upg=40}, -- red
-    {dmg=2,    range=30, cd=60, max_bullets=1, buy=30, upg=30}, -- blue
+    {dmg=2.3,  range=30, cd=38,                buy=40, upg=40}, -- red
+    {dmg=2,    range=30, cd=60,                buy=30, upg=30}, -- blue
     -- level 2
     {dmg=0.6,  range=32, cd=5,                 upg=40}, -- green
     {dmg=2.8,  range=32, cd=38, max_bullets=2, upg=40}, -- red

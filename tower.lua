@@ -99,9 +99,7 @@ end
 
 -- Range animation -------------------------------------------------------------
 
-local range = nil
-local range_v = 0
-local is_visible = false
+local range, range_v, is_visible = nil, 0, false
 
 function update_tower_ranges()
     local was_visible = is_visible
