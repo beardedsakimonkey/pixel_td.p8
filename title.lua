@@ -125,11 +125,11 @@ function draw_title()
         if z_age and z_age > 14 then
             local c = z_age < 22 and DarkGray or DarkBlue
             pal{
-                [1]=Black,  -- dark blue
-                [6]=c,      -- light gray
-                [8]=c,      -- red
-                [10]=c,     -- yellow
-                [13]=Black, -- indigo
+                [DarkBlue]=Black,
+                [LightGray]=c,
+                [Red]=c,
+                [Yellow]=c,
+                [Indigo]=Black,
             }
         end
         -- draw buttons

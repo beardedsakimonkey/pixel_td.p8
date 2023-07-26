@@ -102,10 +102,10 @@ local function draw_hint_Z()
     if Z_t <= FADE_DURATION then
         local c = Z_t < 4 and DarkBlue or DarkGray
         pal{
-            [1]=Black, -- dark blue
-            [6]=c,     -- light gray
-            [10]=c,    -- yellow
-            [13]=c,    -- indigo
+            [DarkBlue]=Black,
+            [LightGray]=c,
+            [Yellow]=c,
+            [Indigo]=c,
         }
     end
 

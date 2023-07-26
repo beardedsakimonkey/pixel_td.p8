@@ -413,11 +413,11 @@ function draw_stats()
            or start_t <= 8 and DarkGray or nil
     if c then
         pal{
-            [2]=c, -- dark purple
-            [6]=c, -- light gray
-            [8]=c, -- red
-            [9]=c, -- orange
-            [10]=c, -- yellow
+            [DarkPurple]=c,
+            [LightGray]=c,
+            [Red]=c,
+            [Orange]=c,
+            [Yellow]=c,
         }
     end
     local lives = tostr(lives)
