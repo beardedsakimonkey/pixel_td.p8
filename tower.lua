@@ -1,9 +1,5 @@
 MAX_TWR = 3 -- how many types of towers are there
 
-function is_green_twr(type) return type % MAX_TWR == 1 end
-function is_red_twr(type)   return type % MAX_TWR == 2 end
-function is_blue_twr(type)  return type % MAX_TWR == 0 end
-
 function get_twr_range(twr)  return round(twr.range * bonus_rng) end
 function get_twr_damage(twr) return twr.dmg * bonus_dmg end
 
@@ -31,6 +27,15 @@ end
 function make_tower(type, gx, gy)
     local cfg = tower_cfg[type]
     local p = g2p{x=gx, y=gy}
+    local update_bullets = ({update_bullets_blue,
+                             update_bullets_green,
+                             update_bullets_red})[type%MAX_TWR + 1]
+    local fire_bullet = ({fire_bullet_blue,
+                          fire_bullet_green,
+                          fire_bullet_red})[type%MAX_TWR + 1]
+    local draw_bullets = ({draw_bullets_blue,
+                           draw_bullets_green,
+                           draw_bullets_red})[type%MAX_TWR + 1]
     return add(towers, {
         type=type,
         gx=gx, gy=gy, -- in grid coordinates
@@ -43,6 +48,9 @@ function make_tower(type, gx, gy)
         range=cfg.range,
         age=0, -- for flicker
         buy=cfg.buy, sell=cfg.sell, upg=cfg.upg,
+        update_bullets=update_bullets,
+        fire_bullet=fire_bullet,
+        draw_bullets=draw_bullets,
     })
 end
 

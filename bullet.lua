@@ -14,55 +14,57 @@ local function collide(blt, enmy)
        and blt.y <= (enmy.y + enmy.height/2) -- bot
 end
 
-local function update_bullet_red(twr, blt)
-    if blt.enemy.hp == 0 then
-        -- enemy died, try to find new target
-        local new_target = tbl_find(enemies, function(enmy)
-            return enmy.hp > 0
-        end)
-        if new_target then
-            blt.enemy = new_target
-        else
+function update_bullets_red(twr)
+    foreach(twr.bullets, function(blt)
+        if blt.enemy.hp == 0 then
+            -- enemy died, try to find new target
+            local new_target = tbl_find(enemies, function(enmy)
+                return enmy.hp > 0
+            end)
+            if new_target then
+                blt.enemy = new_target
+            else
+                del(twr.bullets, blt)
+            end
+            return
+        end
+        local enmy = blt.enemy
+
+        -- update particles
+        for p in all(blt.particles) do
+            p.age += 1
+            if p.age > 3 then
+                del(blt.particles, p)
+            end
+        end
+
+        local oldx, oldy = blt.x, blt.y
+
+        -- update bullet position
+        local angle = atan2(enmy.x-blt.x, enmy.y-blt.y)
+        blt.x += cos(angle) * blt.acc
+        blt.y += sin(angle) * blt.acc
+        blt.acc *= 1.04
+
+        -- handle collision
+        if collide(blt, enmy) then
+            enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
+            if enmy.dmg_age == nil then enmy.dmg_age = 0 end
+            if enmy.hp == 0 then
+                gold += enmy.gold
+                kill_enemy(enmy)
+            end
             del(twr.bullets, blt)
+        else
+            -- add particle
+            if t%2 == 0 then
+                add(blt.particles, {x=oldx, y=oldy, age=1})
+            end
         end
-        return
-    end
-    local enmy = blt.enemy
-
-    -- update particles
-    for p in all(blt.particles) do
-        p.age += 1
-        if p.age > 3 then
-            del(blt.particles, p)
-        end
-    end
-
-    local oldx, oldy = blt.x, blt.y
-
-    -- update bullet position
-    local angle = atan2(enmy.x-blt.x, enmy.y-blt.y)
-    blt.x += cos(angle) * blt.acc
-    blt.y += sin(angle) * blt.acc
-    blt.acc *= 1.04
-
-    -- handle collision
-    if collide(blt, enmy) then
-        enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
-        if enmy.dmg_age == nil then enmy.dmg_age = 0 end
-        if enmy.hp == 0 then
-            gold += enmy.gold
-            kill_enemy(enmy)
-        end
-        del(twr.bullets, blt)
-    else
-        -- add particle
-        if t%2 == 0 then
-            add(blt.particles, {x=oldx, y=oldy, age=1})
-        end
-    end
+    end)
 end
 
-local function fire_bullet_red(twr)
+function fire_bullet_red(twr)
     twr.cd = max(0, twr.cd-1)
     if twr.cd > 0 then return end
     for enmy in all(enemies) do
@@ -78,7 +80,7 @@ local function fire_bullet_red(twr)
     end
 end
 
-local function draw_bullets_red(twr)
+function draw_bullets_red(twr)
     for blt in all(twr.bullets) do
         pset(blt.x, blt.y, Red)
         for part in all(blt.particles) do
@@ -89,24 +91,26 @@ end
 
 -- Green -----------------------------------------------------------------------
 
-local function update_bullet_green(twr, blt)
-    local enmy = blt.enemy
-    if not is_in_range(enmy, twr) then
-        del(twr.bullets, blt)
-    else
-        blt.age += 1
-        if blt.age % twr.start_cd == 0 then -- don't trigger damage every frame
-            enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
-            if enmy.dmg_age == nil then enmy.dmg_age = 0 end
-            if enmy.hp == 0 then
-                gold += enmy.gold
-                kill_enemy(enmy)
+function update_bullets_green(twr)
+    foreach(twr.bullets, function(blt)
+        local enmy = blt.enemy
+        if not is_in_range(enmy, twr) then
+            del(twr.bullets, blt)
+        else
+            blt.age += 1
+            if blt.age % twr.start_cd == 0 then -- don't trigger damage every frame
+                enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
+                if enmy.dmg_age == nil then enmy.dmg_age = 0 end
+                if enmy.hp == 0 then
+                    gold += enmy.gold
+                    kill_enemy(enmy)
+                end
             end
         end
-    end
+    end)
 end
 
-local function fire_bullet_green(twr)
+function fire_bullet_green(twr)
     if #twr.bullets > 0 then return end
     for enmy in all(enemies) do
         if is_in_range(enmy, twr) then
@@ -119,7 +123,7 @@ local function fire_bullet_green(twr)
     end
 end
 
-local function draw_bullets_green(twr)
+function draw_bullets_green(twr)
     for blt in all(twr.bullets) do
         local a = -cos((blt.age%121)/120) -- goes from -1 to 1 over 2 seconds
         line(twr.x, twr.y, blt.enemy.x, blt.enemy.y,
@@ -132,7 +136,7 @@ end
 
 -- Blue ------------------------------------------------------------------------
 
-local function update_bullets_blue(twr)
+function update_bullets_blue(twr)
     local REGISTER_DMG = 30
     local num_bullets = #twr.bullets
     local misfires = 0 -- enemy died before bullet registered damage
@@ -172,7 +176,7 @@ local function update_bullets_blue(twr)
     end
 end
 
-local function fire_bullet_blue(twr)
+function fire_bullet_blue(twr)
     twr.cd = max(0, twr.cd-1)
     if twr.cd > 0 or #twr.bullets > 0 then return end
     -- Avoid targeting already-slowed enemies at first. If we have bullets
@@ -206,7 +210,7 @@ local function fire_bullet_blue(twr)
     end
 end
 
-local function draw_bullets_blue(twr)
+function draw_bullets_blue(twr)
     for blt in all(twr.bullets) do
         local color
         if blt.age >= 20 and blt.age <= 42 then
@@ -227,38 +231,10 @@ end
 --------------------------------------------------------------------------------
 
 function update_bullets()
-    foreach(towers, function(twr)
-        if is_red_twr(twr.type) then
-            foreach(twr.bullets, function(blt)
-                update_bullet_red(twr, blt)
-            end)
-        elseif is_green_twr(twr.type) then
-            foreach(twr.bullets, function(blt)
-                update_bullet_green(twr, blt)
-            end)
-        elseif is_blue_twr(twr.type) then
-            update_bullets_blue(twr)
-        end
-    end)
-    foreach(towers, function(twr)
-        if is_red_twr(twr.type) then
-            fire_bullet_red(twr)
-        elseif is_green_twr(twr.type) then
-            fire_bullet_green(twr)
-        elseif is_blue_twr(twr.type) then
-            fire_bullet_blue(twr)
-        end
-    end)
+    for twr in all(towers) do twr:update_bullets() end
+    for twr in all(towers) do twr:fire_bullet() end
 end
 
 function draw_bullets()
-    foreach(towers, function(twr)
-        if is_red_twr(twr.type) then
-            draw_bullets_red(twr)
-        elseif is_green_twr(twr.type) then
-            draw_bullets_green(twr)
-        elseif is_blue_twr(twr.type) then
-            draw_bullets_blue(twr)
-        end
-    end)
+    for twr in all(towers) do twr:draw_bullets() end
 end
