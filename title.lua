@@ -39,6 +39,7 @@ function update_title()
         if btnp(🅾️) then -- start game
             sfx(35)
             z_age = 0
+            music(-1, 1000) -- fade title music out
         end
         -- Don't dim if btn pressed down while disabled
         if pressing_right or (not pressing_right and cur_map < #maps) then

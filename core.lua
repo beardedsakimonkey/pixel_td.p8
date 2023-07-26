@@ -171,7 +171,7 @@ function reinit()
     init_menus()
     init_tower()
     init_title()
-    music(0)
+    music(56)
 end
 
 --------------------------------------------------------------------------------
@@ -197,6 +197,7 @@ function _update60()
         init_path_points()
         init_selection()
         init_hint() -- should go after init_selection()
+        music(0, nil, 0b11)
     end
 
     t = max(1, t+1)
