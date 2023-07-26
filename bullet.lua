@@ -40,9 +40,7 @@ local function update_bullet_red(twr, blt)
     local oldx, oldy = blt.x, blt.y
 
     -- update bullet position
-    local dx = enmy.x - blt.x
-    local dy = enmy.y - blt.y
-    local angle = atan2(dx, dy)
+    local angle = atan2(enmy.x-blt.x, enmy.y-blt.y)
     blt.x += cos(angle) * blt.acc
     blt.y += sin(angle) * blt.acc
     blt.acc *= 1.04

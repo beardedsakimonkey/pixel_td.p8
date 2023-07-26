@@ -99,7 +99,8 @@ function update_tower_ranges()
     local was_visible = is_visible
     is_visible = buy_menu.is_open or upg_menu.is_open
     if is_visible then
-        local dest_range = get_twr_range(find_sel_tower() or {range = tower_cfg[buy_menu.sel_twr].range})
+        local dest_range = get_twr_range(find_sel_tower()
+                                or {range = tower_cfg[buy_menu.sel_twr].range})
         if was_visible then -- update
             range, range_v = spring(range, dest_range, range_v, {
                 stiffness = 120,
