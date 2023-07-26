@@ -11,7 +11,7 @@ local show_hint_X,
       Z_t
 
 local OFFSCREEN = -10
-local SHINE_DELAY = 300 -- 10 sec
+local SHINE_DELAY = 150 -- 5 sec
 local FLIP_Y = 20
 local FADE_DURATION = 7
 
