@@ -45,7 +45,7 @@ end
 
 function spawn_enemy()
     if sending > 0 then
-        local w = waves[wave]
+        local hp = waves[wave]
         local type = wave%5==0 and 'CIRCLE' or
                      wave%4==0 and 'ARROW' or
                      wave%3==0 and 'RECTANGLE' or
@@ -71,7 +71,7 @@ function spawn_enemy()
                 local boss_hp = ({30, 50, 80, 130, 200})[wave/BOSS_FREQ]
                 make_enemy('BOSS', boss_hp, dx, dy)
             else
-                make_enemy(type, w.hp, dx, dy)
+                make_enemy(type, hp, dx, dy)
             end
         end
     end

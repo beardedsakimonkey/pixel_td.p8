@@ -65,33 +65,32 @@ maps = {
     }
 }
 BOSS_FREQ = 5 -- boss on every 5th wave
--- TODO: ramp gold and enemy hp
-waves = {
-    {hp=6},   -- SQUARE
-    {hp=10},  -- DIAMOND
-    {hp=20},  -- RECTANGLE
-    {hp=10},  -- ARROW
-    {hp=17},  -- CIRCLE
-    {hp=22},  -- SQUARE
-    {hp=26},  -- DIAMOND
-    {hp=40},  -- RECTANGLE
-    {hp=22},  -- ARROW
-    {hp=36},  -- CIRCLE
-    {hp=40},  -- SQUARE
-    {hp=48},  -- DIAMOND
-    {hp=64},  -- RECTANGLE
-    {hp=44},  -- ARROW
-    {hp=60},  -- CIRCLE
-    {hp=64},  -- SQUARE
-    {hp=70},  -- DIAMOND
-    {hp=90},  -- RECTANGLE
-    {hp=60},  -- ARROW
-    {hp=84},  -- CIRCLE
-    {hp=90},  -- SQUARE
-    {hp=96},  -- DIAMOND
-    {hp=130}, -- RECTANGLE
-    {hp=90},  -- ARROW
-    {hp=118}, -- CIRCLE
+waves = { -- values are enemy hp
+    6,   -- SQUARE
+    10,  -- DIAMOND
+    20,  -- RECTANGLE
+    10,  -- ARROW
+    17,  -- CIRCLE
+    22,  -- SQUARE
+    26,  -- DIAMOND
+    40,  -- RECTANGLE
+    22,  -- ARROW
+    36,  -- CIRCLE
+    40,  -- SQUARE
+    48,  -- DIAMOND
+    64,  -- RECTANGLE
+    44,  -- ARROW
+    60,  -- CIRCLE
+    64,  -- SQUARE
+    70,  -- DIAMOND
+    90,  -- RECTANGLE
+    60,  -- ARROW
+    84,  -- CIRCLE
+    90,  -- SQUARE
+    96,  -- DIAMOND
+    130, -- RECTANGLE
+    90,  -- ARROW
+    118, -- CIRCLE
 }
 -- Note: `sell` prices computed in _init()
 tower_cfg = {
