@@ -316,8 +316,8 @@ function _draw()
         local color = fade_t <= 6 and DarkGray or fade_t <= 10 and DarkBlue or Black
         pal({
             DarkBlue, -- 1
-            DarkPurple, -- 2
-            color, -- 3
+            DarkBlue, -- 2
+            DarkBlue, -- 3
             color, -- 4
             color, -- 5
             color, -- 6
@@ -363,10 +363,8 @@ function _draw()
 
     camera() -- things drawn below will not be affected by screen shake
 
-    if game_over == 'lost' then
-        draw_game_over('game over', Red)
-    elseif game_over == 'won' then
-        draw_game_over('you win', Orange)
+    if game_over == 'lost' or game_over == 'won' then
+        draw_game_over(game_over, Red)
     end
 end
 
@@ -475,15 +473,19 @@ function get_cell_corner(cell, cnr)
     if cnr == 'tr'    then return {x = cell.left,  y = cell.top} end
 end
 
-function draw_game_over(text, color)
-    local text = '- ' .. text .. ' -'
-    print_outlined(text, hcenter(text), 44, color)
+function draw_game_over(game_over, color)
+    pal(game_over == 'lost' and Green or Pink, Black)
+    sspr(
+        0, game_over == 'lost' and 64 or 75,
+        56, 9,
+        game_over == 'lost' and 36 or 39, 51
+    )
+    pal(Green, Black)
     -- draw restart
     local str = 'restart'
     local x = hcenter(str)+4
     local y = 68
     print_outlined(str, x, y, LightGray)
-    pal(Green, Black)
     spr(pressing_z and 94 or 92, x-12, y-1)
     pal(0)
 end
