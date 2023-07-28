@@ -388,36 +388,36 @@ function draw_path(t)
         elseif cell_a.cnr == 'tr' then
             line(a.left, a.bot-1, a.left, a.top+1, Black)
         end
-
-        -- draw path decoration
-        if cur_map == 3 then pal(DarkBlue, DarkPurple) end
-        for j = 1, #map, #map-1 do
-            local cnr = map[j].cnr
-            local p = g2p(map[j])
-            local sx, sy, w, h, dx, dy
-            local flip_x, flip_y = false, false
-            local off = (t\7)%4
-            if cnr == 'top' or cnr == 'bot' then
-                w = 11; h = 6
-                flip_y = cnr == 'bot'
-                sx = cnr == 'bot' and 84-off or 80+off
-                sy = 8
-                dy = cnr == 'bot' and 128-h or 0
-                dx = mid(0, p.left, 117)
-                if dx > 0 then dx += 1 end -- account for cell border
-            else
-                w = 6; h = 11
-                flip_x = cnr == 'right'
-                sx = 96
-                sy = cnr == 'right' and 12-off or 8+off
-                dx = cnr == 'right' and 128-w or 0
-                dy = mid(0, p.top, 116)
-                if dy > 0 then dy += 1 end -- account for cell border
-            end
-            sspr(sx, sy, w, h, dx, dy, w, h, flip_x, flip_y)
-        end
-        pal(0)
     end
+
+    -- draw path entrance/exit decoration
+    if cur_map == 3 then pal(DarkBlue, DarkPurple) end
+    for j = 1, #map, #map-1 do
+        local cnr = map[j].cnr
+        local p = g2p(map[j])
+        local sx, sy, w, h, dx, dy
+        local flip_x, flip_y = false, false
+        local off = (t\7)%4
+        if cnr == 'top' or cnr == 'bot' then
+            w = 11; h = 6
+            flip_y = cnr == 'bot'
+            sx = cnr == 'bot' and 84-off or 80+off
+            sy = 8
+            dy = cnr == 'bot' and 128-h or 0
+            dx = mid(0, p.left, 117)
+            if dx > 0 then dx += 1 end -- account for cell border
+        else
+            w = 6; h = 11
+            flip_x = cnr == 'right'
+            sx = 96
+            sy = cnr == 'right' and 12-off or 8+off
+            dx = cnr == 'right' and 128-w or 0
+            dy = mid(0, p.top, 116)
+            if dy > 0 then dy += 1 end -- account for cell border
+        end
+        sspr(sx, sy, w, h, dx, dy, w, h, flip_x, flip_y)
+    end
+    pal(0)
 end
 
 function draw_stats()
