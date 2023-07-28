@@ -212,7 +212,8 @@ function init_menus()
     bonus_menu.draw = function(m)
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
-        print('bonus', m.x+25, m.y+3, LightGray)
+        print('bonus', m.x+25, m.y+4, DarkBlue)
+        print('bonus', m.x+25, m.y+3, Indigo)
         if m.cur_idx == 1 then pal(Indigo, Yellow) end
         spr(32, 91, m.y+11+8*0)
         pal(0)
