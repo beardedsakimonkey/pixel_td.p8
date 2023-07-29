@@ -147,8 +147,8 @@ function get_map()
     return maps[cur_map]
 end
 
-function add_bonus(type)
-    add(bonuses, {type=type, y=134, v=0})
+function add_bonus(spr)
+    add(bonuses, {spr=spr, y=134, v=0})
 end
 
 --------------------------------------------------------------------------------
@@ -348,7 +348,7 @@ function _draw()
     -- Draw bonuses
     for i, bonus in ipairs(bonuses) do
         spr(
-            31+({'INTEREST', 'DAMAGE', 'RANGE'})[bonus.type],
+            bonus.spr,
             1+12*(i-1), -- x
             bonus.y-1 -- y
         )

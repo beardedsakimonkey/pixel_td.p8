@@ -212,8 +212,7 @@ function init_menus()
     bonus_menu.draw = function(m)
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
-        print('bonus', m.x+25, m.y+4, DarkBlue)
-        print('bonus', m.x+25, m.y+3, Indigo)
+        sspr(0, 88, 19, 6, m.x+25, m.y+3) -- menu title
         if m.cur_idx ~= 1 then pal(Yellow, Indigo) end
         spr(32, 91, m.y+11+8*0)
         pal(0)
@@ -263,18 +262,18 @@ end
 
 function do_bonus_interest()
     sfx(33)
-    add_bonus'INTEREST'
+    add_bonus(35)
     interest += 3
 end
 
 function do_bonus_damage()
     sfx(33)
-    add_bonus'DAMAGE'
+    add_bonus(36)
     bonus_dmg += 0.04
 end
 
 function do_bonus_range()
     sfx(33)
-    add_bonus'RANGE'
+    add_bonus(37)
     bonus_rng += 0.1
 end
