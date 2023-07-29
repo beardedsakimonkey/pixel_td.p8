@@ -7,7 +7,7 @@ local Menu = {}
 local OFFSCREEN = 131
 
 function Menu.new(cfg)
-    local m = {
+    return setmetatable({
         x=cfg.x, dst_y=cfg.dst_y,
         w=cfg.w, h=cfg.h,
         is_open=false,
@@ -15,9 +15,7 @@ function Menu.new(cfg)
         cur_idx=1,
         y=OFFSCREEN,
         v=0,
-    }
-    setmetatable(m, {__index = Menu})
-    return m
+    }, {__index = Menu})
 end
 
 function Menu.draw(m)
@@ -49,8 +47,12 @@ function Menu.update(m)
 end
 
 function Menu.handle_btn(m)
-    if btnp(⬆️) then sfx(32); m.cur_idx = wrap(1, m.cur_idx-1, #m.items) end
-    if btnp(⬇️) then sfx(32); m.cur_idx = wrap(1, m.cur_idx+1, #m.items) end
+    local function move_selection(offset)
+        sfx(32)
+        m.cur_idx = wrap(1, m.cur_idx+offset, #m.items)
+    end
+    if btnp(⬆️) then move_selection(-1) end
+    if btnp(⬇️) then move_selection(1) end
     if btnp(🅾️) then
         local item = m.items[m.cur_idx]
         if not (item.is_disabled and item.is_disabled(m)) then
@@ -78,14 +80,11 @@ end
 function init_menus()
     -- Buy menu ----------------------------------------------------------------
     buy_menu = Menu.new{x=35, dst_y=98, w=59, h=27}
-    add(buy_menu.items, {text='buy',    y=11+8*0, cb=do_buy,
+    add(buy_menu.items, {text='buy',    y=11, cb=do_buy,
         is_disabled=function(m) return gold < tower_cfg[m.sel_twr].buy end})
-    add(buy_menu.items, {text='cancel', y=11+8*1, cb=do_close})
+    add(buy_menu.items, {text='cancel', y=11+8, cb=do_close})
 
-    buy_menu.sel_twr = 1
-    buy_menu.carousel_x = 0
-    buy_menu.carousel_sx = 0
-    buy_menu.carousel_st = 0
+    buy_menu.sel_twr, buy_menu.carousel_x, buy_menu.carousel_sx, buy_menu.carousel_st = 1, 0, 0, 0
 
     buy_menu.handle_btn = function(m)
         Menu.handle_btn(m)
@@ -96,26 +95,18 @@ function init_menus()
         if m.pressing_left or (not m.pressing_left and m.sel_twr ~= 1) then
             m.pressing_left = btn(⬅️)
         end
-        if btnp(⬅️) then
-            if m.sel_twr > 1 then
+        local function nav_carousel(offset)
+            if offset==-1 and m.sel_twr>1 or offset==1 and m.sel_twr<MAX_TWR then
                 sfx(30)
-                m.sel_twr -= 1
+                m.sel_twr += offset
                 m.carousel_sx = m.carousel_x
                 m.carousel_st = time()
             else
                 sfx(31)
             end
         end
-        if btnp(➡️) then
-            if m.sel_twr < MAX_TWR then
-                sfx(30)
-                m.sel_twr += 1
-                m.carousel_sx = m.carousel_x
-                m.carousel_st = time()
-            else
-                sfx(31)
-            end
-        end
+        if btnp(⬅️) then nav_carousel(-1) end
+        if btnp(➡️) then nav_carousel(1) end
     end
 
     local CAROUSEL_GAP = 20
@@ -130,30 +121,29 @@ function init_menus()
     end
 
     buy_menu.draw = function(m)
-        if m.y == OFFSCREEN then return end
+        local x, y = m.x, m.y
+        if y == OFFSCREEN then return end
         Menu.draw(m)
-        local can_left  = m.sel_twr ~= 1 or m.pressing_left
-        local can_right = m.sel_twr ~= MAX_TWR or m.pressing_right
-        if can_left then
+        if m.sel_twr ~= 1 or m.pressing_left then -- can go left
             local off_x = m.pressing_left and -1 or 0
-            rectfill(m.x+16+off_x, m.y+3, m.x+18+off_x, m.y+7, DarkGray)
-            print('⬅️', m.x+14+off_x, m.y+3, LightGray)
+            rectfill(x+16+off_x, y+3, x+18+off_x, y+7, DarkGray)
+            print('⬅️', x+14+off_x, y+3, LightGray)
         else
-            print('⬅️', m.x+14, m.y+3, DarkGray)
+            print('⬅️', x+14, y+3, DarkGray)
         end
-        if can_right then
+        if m.sel_twr ~= MAX_TWR or m.pressing_right then -- can go right
             local off_x = m.pressing_right and 1 or 0
-            rectfill(m.x+40+off_x, m.y+4, m.x+42+off_x, m.y+7, DarkGray)
-            print('➡️', m.x+38+off_x, m.y+3, LightGray)
+            rectfill(x+40+off_x, y+4, x+42+off_x, y+7, DarkGray)
+            print('➡️', x+38+off_x, y+3, LightGray)
         else
-            print('➡️', m.x+38, m.y+3, DarkGray)
+            print('➡️', x+38, y+3, DarkGray)
         end
-        clip(m.x+21, m.y+2, 17, 7)
+        clip(x+21, y+2, 17, 7)
         for i=1,MAX_TWR do
-            spr(i, m.x+26+((i-1)*CAROUSEL_GAP)+m.carousel_x, m.y+2)
+            spr(i, x+26 + (i-1)*CAROUSEL_GAP + m.carousel_x, y+2)
         end
         clip()
-        print(tower_cfg[m.sel_twr].buy, m.x+26, m.y+11+8*0, Indigo)
+        print(tower_cfg[m.sel_twr].buy, x+26, y+11, Indigo)
     end
 
     buy_menu.open = function(m)
@@ -163,10 +153,10 @@ function init_menus()
 
     -- Upgrade menu ------------------------------------------------------------
     upg_menu = Menu.new{x=35, dst_y=89, w=59, h=36}
-    add(upg_menu.items, {text='upgrade', y=12+8*0, cb=do_upgrade,
+    add(upg_menu.items, {text='upgrade', y=12, cb=do_upgrade,
         is_disabled=function(m) return not m.twr.upg or gold < m.twr.upg end})
-    add(upg_menu.items, {text='sell',    y=12+8*1, cb=do_sell})
-    add(upg_menu.items, {text='cancel',  y=12+8*2, cb=do_close})
+    add(upg_menu.items, {text='sell',    y=20, cb=do_sell})
+    add(upg_menu.items, {text='cancel',  y=28, cb=do_close})
 
     upg_menu.update = function(m)
         Menu.update(m)
@@ -176,9 +166,9 @@ function init_menus()
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
         if m.twr.upg then
-            print(m.twr.upg, m.x+44, m.y+12+8*0, Indigo)
+            print(m.twr.upg, m.x+44, m.y+12, Indigo)
         end
-        print(m.twr.sell, m.x+44, m.y+12+8*1, Indigo)
+        print(m.twr.sell, m.x+44, m.y+20, Indigo)
         local x = m.x+26
         local y = m.y+2
         spr(m.twr.type, x, y)
@@ -191,13 +181,12 @@ function init_menus()
 
     -- Bonus menu --------------------------------------------------------------
     bonus_menu = Menu.new{x=31, dst_y=89, w=70, h=36}
-    add(bonus_menu.items, {text='+3% interest', y=12+8*0, cb=do_bonus_interest})
-    add(bonus_menu.items, {text='+4% damage',   y=12+8*1, cb=do_bonus_damage})
-    add(bonus_menu.items, {text='+10% range',   y=12+8*2, cb=do_bonus_range})
+    add(bonus_menu.items, {text='+3% interest', y=12, cb=do_bonus_interest})
+    add(bonus_menu.items, {text='+4% damage',   y=20, cb=do_bonus_damage})
+    add(bonus_menu.items, {text='+10% range',   y=28, cb=do_bonus_range})
 
     bonus_menu.update = function(m)
-        local has_boss = wave > 0 and wave % BOSS_FREQ == 0
-        if has_boss and not m.is_open and can_send_wave()
+        if wave > 0 and wave % BOSS_FREQ == 0 and not m.is_open and can_send_wave()
             -- need this condition to avoid immediately opening bonus menu after
             -- choosing a bonus.
             and #bonuses < wave \ BOSS_FREQ then
@@ -214,13 +203,11 @@ function init_menus()
         Menu.draw(m)
         sspr(0, 88, 19, 6, m.x+25, m.y+3) -- menu title
         if m.cur_idx ~= 1 then pal(Yellow, Indigo) end
-        spr(32, 91, m.y+11+8*0)
-        pal(0)
         if m.cur_idx ~= 2 then pal(Red, Indigo) end
-        spr(33, 91, m.y+11+8*1)
-        pal(0)
         if m.cur_idx ~= 3 then pal(Green, Indigo) end
-        spr(34, 91, m.y+11+8*2)
+        for i = 0, 2 do
+            spr(32+i, 91, m.y+11+8*i)
+        end
         pal(0)
     end
 
