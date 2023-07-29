@@ -214,13 +214,13 @@ function init_menus()
         Menu.draw(m)
         print('bonus', m.x+25, m.y+4, DarkBlue)
         print('bonus', m.x+25, m.y+3, Indigo)
-        if m.cur_idx == 1 then pal(Indigo, Yellow) end
+        if m.cur_idx ~= 1 then pal(Yellow, Indigo) end
         spr(32, 91, m.y+11+8*0)
         pal(0)
-        if m.cur_idx == 2 then pal(Indigo, Red) end
+        if m.cur_idx ~= 2 then pal(Red, Indigo) end
         spr(33, 91, m.y+11+8*1)
         pal(0)
-        if m.cur_idx == 3 then pal(Indigo, Green) end
+        if m.cur_idx ~= 3 then pal(Green, Indigo) end
         spr(34, 91, m.y+11+8*2)
         pal(0)
     end

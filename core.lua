@@ -348,9 +348,9 @@ function _draw()
     -- Draw bonuses
     for i, bonus in ipairs(bonuses) do
         spr(
-            bonus.type == 'INTEREST' and 35 or bonus.type == 'DAMAGE' and 36 or 37,
-            2+12*(i-1), -- x
-            bonus.y -- y
+            31+({'INTEREST', 'DAMAGE', 'RANGE'})[bonus.type],
+            1+12*(i-1), -- x
+            bonus.y-1 -- y
         )
     end
 
