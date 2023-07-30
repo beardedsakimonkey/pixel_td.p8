@@ -371,75 +371,98 @@ end
 function draw_path(t)
     local map = get_map()
     for i = 1, #map-1 do
-        local ca, cb = map[i], map[i+1]
-        local pa, pb = g2p(ca), g2p(cb)
-        local color2 = DarkBlue -- inset color
+        local c1, c2 = map[i], map[i+1]
+        local p1, p2 = g2p(c1), g2p(c2)
 
         -- cover grid lines
-        rectfill(pa.left+1, pa.bot-1, pb.right-1, pb.top+1, Black)
+        rectfill(p1.left+2, p1.bot-2, p2.right-2, p2.top+2, Black)
 
-        if ca.cnr == 'top' then
+        -- draws a line with inset border
+        local function l(side, x1, y1, x2, y2)
+            line(x1, y1, x2, y2, Indigo)
+            local x1o = side == 'left' and 1 or side == 'right' and -1 or 0
+            local y1o = side == 'top' and 1 or side == 'bot' and -1 or 0
+            local x2o, y2o = x1o, y1o
+            local function get_offset(c)
+                return (c.cnr=='bl' or c.cnr=='tr') and -1
+                    or (c.cnr=='tl' or c.cnr=='br') and 1 or 0
+            end
+            if side == 'top' then
+                x1o += get_offset(c1)
+                x2o += get_offset(c2)
+            elseif side == 'bot' then
+                x1o += -get_offset(c1)
+                x2o += -get_offset(c2)
+            elseif side == 'left' then
+                y1o += get_offset(c1)
+                y2o += get_offset(c2)
+            elseif side == 'right' then
+                y1o += -get_offset(c1)
+                y2o += -get_offset(c2)
+            end
+            line(x1+x1o, y1+y1o, x2+x2o, y2+y2o, DarkBlue)
+        end
+
+        local p1_left, p1_right, p1_top, p1_bot = p1.left, p1.right, p1.top, p1.bot
+        local p2_left, p2_right, p2_top, p2_bot = p2.left, p2.right, p2.top, p2.bot
+
+        if c1.cnr == 'top' then
             -- left line
-            line(pa.left,  pa.top, pb.left,  cb.cnr=='br' and pb.top or pb.bot, Indigo)
+            l('left', p1_left,  p1_top, p2_left,  c2.cnr=='br' and p2_top or p2_bot)
             -- right line
-            line(pa.right, pa.top, pb.right, cb.cnr=='bl' and pb.top or pb.bot)
-        elseif ca.cnr == 'left' then
+            l('right', p1_right, p1_top, p2_right, c2.cnr=='bl' and p2_top or p2_bot)
+        elseif c1.cnr == 'left' then
             -- top line
-            line(pa.left, pa.top, pb.right, pb.top, Indigo)
-            line(pa.left, pa.top+1, cb.cnr=='br' and pb.left or pb.right, pb.top+1, color2)
+            l('top', p1_left, p1_top, c2.cnr=='br' and p2_left or p2_right, p2_top)
             -- bottom line
-            line(pa.left, pa.bot, pb.right, pb.bot, Indigo)
-        elseif ca.cnr == 'bl' then
-            if pb.right > pa.right then -- exiting right
+            l('bot', p1_left, p1_bot, c2.cnr=='tr' and p2_left or p2_right, p2_bot)
+        elseif c1.cnr == 'bl' then
+            if p2_right > p1_right then -- exiting right
                 -- top line
-                line(pa.right, pa.top, cb.cnr=='br' and pb.left or pb.right, pb.top, Indigo)
-                line(pa.right, pa.top+1, cb.cnr=='br' and pb.left or pb.right, pb.top+1, color2)
+                l('top', p1_right, p1_top, c2.cnr=='br' and p2_left or p2_right, p2_top)
                 -- bottom line
-                line(pa.left,  pa.bot, cb.cnr=='tr' and pb.left or pb.right, pb.bot, Indigo)
+                l('bot', p1_left,  p1_bot, c2.cnr=='tr' and p2_left or p2_right, p2_bot)
             else -- exiting up
                 -- left line
-                line(pa.left,  pa.bot, pb.left,  cb.cnr=='tr' and pb.bot or pb.top, Indigo)
+                l('left', p1_left,  p1_bot, p2_left,  c2.cnr=='tr' and p2_bot or p2_top)
                 -- right line
-                line(pa.right, pa.top, pb.right, cb.cnr=='tl' and pb.bot or pb.top)
+                l('right', p1_right, p1_top, p2_right, c2.cnr=='tl' and p2_bot or p2_top)
             end
-        elseif ca.cnr == 'tl' then
-            if pb.right > pa.right then -- exiting right
+        elseif c1.cnr == 'tl' then
+            if p2_right > p1_right then -- exiting right
                 -- top line
-                line(pa.left,  pa.top, cb.cnr=='br' and pb.left or pb.right, pb.top, Indigo)
-                line(pa.left+1,  pa.top+1, cb.cnr=='br' and pb.left or pb.right, pb.top+1, color2)
+                l('top', p1_left,  p1_top, c2.cnr=='br' and p2_left or p2_right, p2_top)
                 -- bottom line
-                line(pa.right, pa.bot, cb.cnr=='tr' and pb.left or pb.right, pb.bot, Indigo)
+                l('bot', p1_right, p1_bot, c2.cnr=='tr' and p2_left or p2_right, p2_bot)
             else -- exiting down
                 -- left line
-                line(pa.left,  pa.top, pb.left,  cb.cnr=='bl' and pb.bot or pb.top, Indigo)
+                l('left', p1_left,  p1_top, p2_left,  c2.cnr=='br' and p2_top or p2_bot)
                 -- right line
-                line(pa.right, pa.bot, pb.right, cb.cnr=='br' and pb.bot or pb.top)
+                l('right', p1_right, p1_bot, p2_right, c2.cnr=='bl' and p2_top or p2_bot)
             end
-        elseif ca.cnr == 'br' then
-            if pb.left < pa.left then -- exiting left
+        elseif c1.cnr == 'br' then
+            if p2_left < p1_left then -- exiting left
                 -- top line
-                line(pa.left,  pa.top, cb.cnr=='bl' and pb.right or pb.left, pb.top, Indigo)
-                line(pa.left,  pa.top+1, cb.cnr=='bl' and pb.right or pb.left, pb.top+1, color2)
+                l('top', p1_left,  p1_top, c2.cnr=='bl' and p2_right or p2_left, p2_top)
                 -- bottom line
-                line(pa.right, pa.bot, cb.cnr=='tl' and pb.right or pb.left, pb.bot, Indigo)
+                l('bot', p1_right, p1_bot, c2.cnr=='tl' and p2_right or p2_left, p2_bot, Indigo)
             else -- exiting up
                 -- left line
-                line(pa.left,  pa.top, pb.left,  cb.cnr=='tr' and pb.bot or pb.top, Indigo)
+                l('left', p1_left,  p1_top, p2_left,  c2.cnr=='tr' and p2_bot or p2_top)
                 -- right line
-                line(pa.right, pa.bot, pb.right, cb.cnr=='tl' and pb.bot or pb.top)
+                l('right', p1_right, p1_bot, p2_right, c2.cnr=='tl' and p2_bot or p2_top)
             end
-        elseif ca.cnr == 'tr' then
-            if pb.left < pa.left then -- exiting left
+        elseif c1.cnr == 'tr' then
+            if p2_left < p1_left then -- exiting left
                 -- top line
-                line(pa.right, pa.top, cb.cnr=='tl' and pb.left or pb.right, pb.top, Indigo)
-                line(pa.right-1, pa.top+1, cb.cnr=='tl' and pb.left or pb.right, pb.top+1, color2)
+                l('top', p1_right, p1_top, c2.cnr=='tl' and p2_left or p2_right, p2_top)
                 -- bottom line
-                line(pa.left,  pa.bot, cb.cnr=='bl' and pb.left or pb.right, pb.bot, Indigo)
+                l('bot', p1_left,  p1_bot, c2.cnr=='bl' and p2_left or p2_right, p2_bot)
             else -- exiting down
                 -- left line
-                line(pa.left,  pa.bot, pb.left,  cb.cnr=='br' and pb.top or pb.bot, Indigo)
+                l('left', p1_left,  p1_bot, p2_left,  c2.cnr=='br' and p2_top or p2_bot)
                 -- right line
-                line(pa.right, pa.top, pb.right, cb.cnr=='bl' and pb.top or pb.bot)
+                l('right', p1_right, p1_top, p2_right, c2.cnr=='bl' and p2_top or p2_bot)
             end
         end
     end
@@ -475,45 +498,45 @@ function draw_path(t)
 end
 
 function draw_stats()
-    -- local c = start_t <= 4 and DarkBlue
-    --        or start_t <= 8 and DarkGray or nil
-    -- if c then
-    --     pal{
-    --         [DarkPurple]=c,
-    --         [LightGray]=c,
-    --         [Red]=c,
-    --         [Orange]=c,
-    --         [Yellow]=c,
-    --     }
-    -- end
-    -- local lives = tostr(lives)
-    -- local x = 127 - #lives*4
-    -- local y = 2
-    -- print(lives, x, y, (shake > 0 and t%2 == 0) and Red or LightGray)
-    -- x -= 9
-    -- spr(18, x, y)
+    local c = start_t <= 4 and DarkBlue
+           or start_t <= 8 and DarkGray or nil
+    if c then
+        pal{
+            [DarkPurple]=c,
+            [LightGray]=c,
+            [Red]=c,
+            [Orange]=c,
+            [Yellow]=c,
+        }
+    end
+    local lives = tostr(lives)
+    local x = 127 - #lives*4
+    local y = 2
+    print(lives, x, y, (shake > 0 and t%2 == 0) and Red or LightGray)
+    x -= 9
+    spr(18, x, y)
 
-    -- local gold = tostr(flr(gold))
-    -- x -= 3 + #gold*4
-    -- local right = print(gold, x, y, LightGray)
-    -- x -= 7
-    -- spr(17, x, y)
-    -- pal(0)
+    local gold = tostr(flr(gold))
+    x -= 3 + #gold*4
+    local right = print(gold, x, y, LightGray)
+    x -= 7
+    spr(17, x, y)
+    pal(0)
 
---     -- draw interest earned
---     if interest_t > 0 then
---         -- `t` is between 1 and 12 (but hits 13 on the very last frame)
---         local t = interest_t\(MAX_INTEREST_T/12) + 1
---         local str = '+' .. flr(interest_gained)
---         local width = print(str, 0, -20)
---         print_outlined(
---             str,
---             right - width + 3,
---             13-t\2,
---             (t==1 or t>=11) and DarkGray or t==2 and LightGray or Yellow,
---             (t==1 or t>=11) and Black or DarkBlue
---         )
---     end
+    -- draw interest earned
+    if interest_t > 0 then
+        -- `t` is between 1 and 12 (but hits 13 on the very last frame)
+        local t = interest_t\(MAX_INTEREST_T/12) + 1
+        local str = '+' .. flr(interest_gained)
+        local width = print(str, 0, -20)
+        print_outlined(
+            str,
+            right - width + 3,
+            13-t\2,
+            (t==1 or t>=11) and DarkGray or t==2 and LightGray or Yellow,
+            (t==1 or t>=11) and Black or DarkBlue
+        )
+    end
 end
 
 function draw_game_over(game_over, color)
