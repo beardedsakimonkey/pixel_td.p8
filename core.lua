@@ -510,7 +510,7 @@ end
 function draw_game_over(game_over, color)
     pal(game_over == 'lost' and Green or Pink, Black)
     sspr(
-        0, game_over == 'lost' and 64 or 75,
+        0, game_over == 'lost' and 64 or 74,
         56, 9,
         game_over == 'lost' and 36 or 39, 51
     )
