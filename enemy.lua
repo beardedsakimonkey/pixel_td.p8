@@ -35,7 +35,7 @@ local function make_enemy(type, max_hp, dx, dy)
         dx=dx, dy=dy,
         hp=max_hp, max_hp=max_hp,
         slow=1, slow_dur=0,
-        gold=4,
+        gold=flr(2+3*sqrt(wave)),
         death_age=nil,
         death_particles=nil,
         width=size, height=size, -- for collision detection
@@ -45,15 +45,14 @@ end
 
 function spawn_enemy()
     if sending > 0 then
-        local hp = waves[wave]
         local type = wave%5==0 and 'CIRCLE' or
                      wave%4==0 and 'ARROW' or
                      wave%3==0 and 'RECTANGLE' or
                      wave%2==0 and 'DIAMOND' or 'SQUARE'
-        local gap = type == 'ARROW' and 15 or 10
-        local speed = type == 'ARROW' and 0.5
-                    or type == 'RECTANGLE' and 0.2
-                    or 0.25
+        local hp = flr(3+2*wave^1.5)
+        if type == 'ARROW' then hp *= 0.9 end
+        local gap = type == 'ARROW' and 12 or 10
+        local speed = type == 'ARROW' and 0.5 or 1/3
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
         --  => X = gap / speed
@@ -65,7 +64,7 @@ function spawn_enemy()
                            cnr=='top' and speed or cnr=='bot' and -speed or 0
             if wave % BOSS_FREQ == 0 and sending == 0 then
                 type = 'BOSS'
-                hp = ({30, 50, 80, 130, 200})[wave/BOSS_FREQ]
+                hp = 20*wave
             end
             make_enemy(type, hp, dx, dy)
         end
@@ -215,7 +214,7 @@ function update_enemies()
         end
     end)
     -- apply interest on wave complete (except final wave)
-    if had_enemies and #enemies == 0 and wave < #waves then
+    if had_enemies and #enemies == 0 and wave < NUM_WAVES then
         interest_t = 1
         interest_gained = gold * interest/100
         gold += interest_gained
@@ -292,7 +291,7 @@ function draw_enemies()
 end
 
 function can_send_wave()
-    return sending == 0 and #enemies == 0 and wave < #waves and not game_over
+    return sending == 0 and #enemies == 0 and wave < NUM_WAVES and not game_over
 end
 
 function send_wave()

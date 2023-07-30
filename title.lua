@@ -20,7 +20,7 @@ function init_title()
     for l in all(letters) do
         l.y = OFFSCREEN_Y
         l.v = 0
-        l.dest_y = 12
+        l.dest_y = 13
     end
 end
 

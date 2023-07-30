@@ -72,47 +72,21 @@ maps = {
     }
 }
 BOSS_FREQ = 5 -- boss on every 5th wave
-waves = { -- values are enemy hp
-    6,   -- SQUARE
-    10,  -- DIAMOND
-    20,  -- RECTANGLE
-    10,  -- ARROW
-    17,  -- CIRCLE
-    22,  -- SQUARE
-    26,  -- DIAMOND
-    40,  -- RECTANGLE
-    22,  -- ARROW
-    36,  -- CIRCLE
-    40,  -- SQUARE
-    48,  -- DIAMOND
-    64,  -- RECTANGLE
-    44,  -- ARROW
-    60,  -- CIRCLE
-    64,  -- SQUARE
-    70,  -- DIAMOND
-    90,  -- RECTANGLE
-    60,  -- ARROW
-    84,  -- CIRCLE
-    90,  -- SQUARE
-    96,  -- DIAMOND
-    130, -- RECTANGLE
-    90,  -- ARROW
-    118, -- CIRCLE
-}
+NUM_WAVES = 20
 -- Note: `sell` prices computed in _init()
 tower_cfg = {
     -- level 1
-    {dmg=0.25, range=30, cd=5,                 buy=40, upg=40}, -- green
-    {dmg=2.3,  range=30, cd=38,                buy=40, upg=40}, -- red
-    {dmg=2,    range=30, cd=60,                buy=30, upg=30}, -- blue
+    {dmg=0.25, range=30, cd=5,                 buy=40, upg=45}, -- green
+    {dmg=2.3,  range=30, cd=38,                buy=40, upg=45}, -- red
+    {dmg=2,    range=30, cd=60,                buy=30, upg=45}, -- blue
     -- level 2
-    {dmg=0.6,  range=32, cd=5,                 upg=40}, -- green
-    {dmg=2.8,  range=32, cd=38, max_bullets=2, upg=40}, -- red
-    {dmg=2.3,  range=32, cd=55, max_bullets=2, upg=40}, -- blue
+    {dmg=0.6,  range=32, cd=5,                 upg=50}, -- green
+    {dmg=2.8,  range=32, cd=38, max_bullets=2, upg=50}, -- red
+    {dmg=2.3,  range=32, cd=55, max_bullets=2, upg=70}, -- blue
     -- level 3
-    {dmg=0.9,  range=34, cd=5,                 upg=50}, -- green
-    {dmg=2.8,  range=34, cd=38, max_bullets=3, upg=50}, -- red
-    {dmg=2.4,  range=34, cd=50, max_bullets=3, upg=50}, -- blue
+    {dmg=0.9,  range=34, cd=5,                 upg=60}, -- green
+    {dmg=2.8,  range=34, cd=38, max_bullets=3, upg=60}, -- red
+    {dmg=2.4,  range=34, cd=50, max_bullets=3, upg=90}, -- blue
     -- level 4
     {dmg=1.3,  range=36, cd=5},                 -- green
     {dmg=3,    range=36, cd=38, max_bullets=4}, -- red
@@ -199,7 +173,7 @@ function _update60()
     end
     -- Initialize once we know the map
     if t == 0 then
-        lives = cur_map == 1 and 20 or cur_map == 2 and 10 or 5
+        lives = cur_map == 1 and 10 or cur_map == 2 and 5 or 3
         init_grid_bitmap()
         init_path_points()
         init_selection()
@@ -283,7 +257,7 @@ function _update60()
     end
 
     -- should go after spawning enemies
-    if not game_over and sending == 0 and #enemies == 0 and wave == #waves then
+    if not game_over and sending == 0 and #enemies == 0 and wave == NUM_WAVES then
         end_game'won'
     end
 end
@@ -329,7 +303,7 @@ function _draw()
     end
 
     -- Draw wave count
-    local wave_str = wave .. '/' .. #waves
+    local wave_str = wave .. '/' .. NUM_WAVES
     print_outlined(wave_str, hcenter(wave_str), 122, DarkBlue)
 
     draw_path(0)
