@@ -57,22 +57,17 @@ function spawn_enemy()
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
         --  => X = gap / speed
-        local frames = flr(gap / speed)
+        local frames = gap \ speed
         if t % frames == 0 then
             sending -= 1
-            local dx, dy = 0, 0
-            local map = get_map()
-            local cnr = map[1].cnr
-            if     cnr == 'top'   then dy = speed
-            elseif cnr == 'left'  then dx = speed
-            elseif cnr == 'right' then dx = -speed
-            elseif cnr == 'bot'   then dy = -speed end
+            local cnr = get_map()[1].cnr
+            local dx, dy = cnr=='left' and speed or cnr=='right' and -speed or 0,
+                           cnr=='top' and speed or cnr=='bot' and -speed or 0
             if wave % BOSS_FREQ == 0 and sending == 0 then
-                local boss_hp = ({30, 50, 80, 130, 200})[wave/BOSS_FREQ]
-                make_enemy('BOSS', boss_hp, dx, dy)
-            else
-                make_enemy(type, hp, dx, dy)
+                type = 'BOSS'
+                hp = ({30, 50, 80, 130, 200})[wave/BOSS_FREQ]
             end
+            make_enemy(type, hp, dx, dy)
         end
     end
 end
@@ -181,18 +176,16 @@ function update_enemies()
         if enmy.death_age then
             enmy.death_age += 1
             if enmy.death_age%2 == 0 then
-                for i=0,4,4 do
-                    enmy.death_particles[i+1][1] += rand(-1, 0)
-                    enmy.death_particles[i+1][2] += rand(-1, 0)
-
-                    enmy.death_particles[i+2][1] += rand(0, 1)
-                    enmy.death_particles[i+2][2] += rand(-1, 0)
-
-                    enmy.death_particles[i+3][1] += rand(0, 1)
-                    enmy.death_particles[i+3][2] += rand(0, 1)
-
-                    enmy.death_particles[i+4][1] += rand(-1, 0)
-                    enmy.death_particles[i+4][2] += rand(0, 1)
+                local offsets = {
+                    {-1, 0}, {-1, 0}, -- particle 1 x/y
+                    {0, 1}, {-1, 0},  -- particle 2 x/y
+                    {0, 1}, {0, 1},   -- particle 3 x/y
+                    {-1, 0}, {0, 1},  -- particle 4 x/y
+                }
+                for i=1,7 do
+                    for j=0,1 do
+                        enmy.death_particles[i][1+j] += rand(unpack(offsets[i+j]))
+                    end
                 end
             end
         end
