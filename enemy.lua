@@ -81,14 +81,14 @@ function kill_enemy(enmy)
     sfx(37 + rand(0, 2))
     enmy.death_age = 0
     enmy.death_particles = {
-        {x=-1, y=-1},
-        {x=1,  y=-1},
-        {x=1,  y=1},
-        {x=-1, y=1},
-        {x=-1, y=-1},
-        {x=1,  y=-1},
-        {x=1,  y=1},
-        {x=-1, y=1},
+        {-1, -1},
+        {1,  -1},
+        {1,  1},
+        {-1, 1},
+        {-1, -1},
+        {1,  -1},
+        {1,  1},
+        {-1, 1},
     }
 end
 
@@ -182,17 +182,17 @@ function update_enemies()
             enmy.death_age += 1
             if enmy.death_age%2 == 0 then
                 for i=0,4,4 do
-                    enmy.death_particles[i+1].x += rand(-1, 0)
-                    enmy.death_particles[i+1].y += rand(-1, 0)
+                    enmy.death_particles[i+1][1] += rand(-1, 0)
+                    enmy.death_particles[i+1][2] += rand(-1, 0)
 
-                    enmy.death_particles[i+2].x += rand(0, 1)
-                    enmy.death_particles[i+2].y += rand(-1, 0)
+                    enmy.death_particles[i+2][1] += rand(0, 1)
+                    enmy.death_particles[i+2][2] += rand(-1, 0)
 
-                    enmy.death_particles[i+3].x += rand(0, 1)
-                    enmy.death_particles[i+3].y += rand(0, 1)
+                    enmy.death_particles[i+3][1] += rand(0, 1)
+                    enmy.death_particles[i+3][2] += rand(0, 1)
 
-                    enmy.death_particles[i+4].x += rand(-1, 0)
-                    enmy.death_particles[i+4].y += rand(0, 1)
+                    enmy.death_particles[i+4][1] += rand(-1, 0)
+                    enmy.death_particles[i+4][2] += rand(0, 1)
                 end
             end
         end
@@ -252,7 +252,7 @@ function draw_enemies()
                     circfill(enmy.x, enmy.y, enmy.death_age/2,
                          enmy.death_age%2 == 0 and c2 or c)
                 end
-                pset(enmy.x+part.x, enmy.y+part.y,
+                pset(enmy.x+part[1], enmy.y+part[2],
                     enmy.death_age > (MAX_DEATH_AGE*0.5) and c2 or c)
             end
             return
