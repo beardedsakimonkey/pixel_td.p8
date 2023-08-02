@@ -129,11 +129,10 @@ function reinit()
     interest_gained = nil
     game_over = nil -- nil | 'lost' | 'won'
     fade_t = 0 -- fade out of game over screen
-    pressing_l, pressing_r, pressing_z, pressing_x = false, false, false, false
+    -- pressing_l, pressing_r, pressing_z, pressing_x = false, false, false, false
     showing_stats = false
-    -- for stats
-    game_start_time = nil
-    game_end_time = nil
+    -- game_start_time = nil
+    -- game_end_time = nil
     total_bonus_int = 0
     total_bonus_dmg = 0
 
@@ -475,16 +474,15 @@ function draw_hud()
     end
     local lives = tostr(lives)
     local x = 127 - #lives*4
-    local y = 2
-    print(lives, x, y, (shake > 0 and t%2 == 0) and Red or LightGray)
+    print(lives, x, 2, (shake > 0 and t%2 == 0) and Red or LightGray)
     x -= 9
-    spr(18, x, y)
+    spr(18, x, 2)
 
     local gold = tostr(flr(gold))
     x -= 3 + #gold*4
-    local right = print(gold, x, y, LightGray)
+    local right = print(gold, x, 2, LightGray)
     x -= 7
-    spr(17, x, y)
+    spr(17, x, 2)
     pal(0)
 
     -- draw interest earned

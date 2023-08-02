@@ -26,29 +26,9 @@ end
 
 local MAX_DEATH_AGE = 20
 
-local function make_enemy(type, max_hp, gold, dx, dy)
-    local size = type == 'CIRCLE' and 3 or type == 'SQUARE' and 4 or 5
-    add(enemies, {
-        type=type,
-        x=path_points[1].x,
-        y=path_points[1].y,
-        dx=dx, dy=dy,
-        hp=max_hp, max_hp=max_hp,
-        slow=1, slow_dur=0,
-        gold=gold,
-        death_age=nil,
-        death_particles=nil,
-        width=size, height=size, -- for collision detection
-        dmg_age=nil,
-    })
-end
-
 function spawn_enemy()
     if sending > 0 then
-        local type = wave%5==0 and 'CIRCLE' or
-                     wave%4==0 and 'ARROW' or
-                     wave%3==0 and 'RECTANGLE' or
-                     wave%2==0 and 'DIAMOND' or 'SQUARE'
+        local type = ({'CIRCLE', 'SQUARE', 'DIAMOND', 'RECTANGLE', 'ARROW'})[wave%5+1]
         local hp = cur_map == 3 and flr(4+2*wave^1.6) or flr(4+2*wave^1.5)
         if type == 'ARROW' then hp = flr(0.8*hp) end
         local gap = type == 'ARROW' and 12 or 10
@@ -57,8 +37,7 @@ function spawn_enemy()
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
         --  => X = gap / speed
-        local frames = gap \ speed
-        if t % frames == 0 then
+        if t % (gap\speed) == 0 then
             sending -= 1
             local cnr = get_map()[1].cnr
             local dx, dy = cnr=='left' and speed or cnr=='right' and -speed or 0,
@@ -67,8 +46,20 @@ function spawn_enemy()
                 type = 'BOSS'
                 hp = 10*wave
             end
-            local gold = flr(4+2*sqrt(wave))
-            make_enemy(type, hp, gold, dx, dy)
+            local size = type == 'CIRCLE' and 3 or type == 'SQUARE' and 4 or 5
+            add(enemies, {
+                type=type,
+                x=path_points[1].x,
+                y=path_points[1].y,
+                dx=dx, dy=dy,
+                hp=hp, max_hp=hp,
+                slow=1, slow_dur=0,
+                gold=flr(4+2*sqrt(wave)),
+                death_age=nil,
+                death_particles=nil,
+                width=size, height=size, -- for collision detection
+                dmg_age=nil,
+            })
         end
     end
 end
