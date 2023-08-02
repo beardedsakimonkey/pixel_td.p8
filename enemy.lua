@@ -49,10 +49,11 @@ function spawn_enemy()
                      wave%4==0 and 'ARROW' or
                      wave%3==0 and 'RECTANGLE' or
                      wave%2==0 and 'DIAMOND' or 'SQUARE'
-        local hp = flr(4+2*wave^1.5)
+        local hp = cur_map == 3 and flr(4+2*wave^1.6) or flr(4+2*wave^1.5)
         if type == 'ARROW' then hp = flr(0.8*hp) end
         local gap = type == 'ARROW' and 12 or 10
-        local speed = type == 'ARROW' and 0.5 or 1/3
+        local speed = cur_map == 3 and (type == 'ARROW' and 1/3 or 0.25)
+                                   or (type == 'ARROW' and 0.5 or 1/3)
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
         --  => X = gap / speed
@@ -217,7 +218,7 @@ function update_enemies()
     -- apply interest on wave complete (except final wave)
     if had_enemies and #enemies == 0 and wave < NUM_WAVES then
         interest_t = 1
-        interest_gained = gold * interest/100
+        interest_gained = round(gold * interest)
         gold += interest_gained
         -- don't play sfx on boss waves
         if wave % BOSS_FREQ ~= 0 then

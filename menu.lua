@@ -253,17 +253,17 @@ end
 function do_bonus_damage()
     sfx(33)
     add_bonus(35)
-    bonus_dmg += 0.03
+    bonus_dmg += .03
 end
 
 function do_bonus_range()
     sfx(33)
     add_bonus(36)
-    bonus_rng += 0.08
+    bonus_rng += .08
 end
 
 function do_bonus_interest()
     sfx(33)
     add_bonus(37)
-    interest += 5
+    interest += .05
 end

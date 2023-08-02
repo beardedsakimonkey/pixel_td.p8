@@ -133,7 +133,6 @@ function reinit()
     wave = 0
     gold = 100
     bonuses = {}
-    interest = 3
     bonus_dmg = 1
     bonus_rng = 1
     t = 0
@@ -146,7 +145,7 @@ function reinit()
     fade_t = 0 -- fade out of game over screen
     pressing_l, pressing_r, pressing_z = false, false, false
     interest_t = 0
-    -- interest_gained = nil
+    interest_gained = nil
 
     init_enemy()
     init_menus()
@@ -173,7 +172,8 @@ function _update60()
     end
     -- Initialize once we know the map
     if t == 0 then
-        lives = cur_map == 1 and 10 or cur_map == 2 and 5 or 3
+        lives = cur_map == 1 and 10 or cur_map == 2 and 5 or 1
+        interest = cur_map == 3 and .05 or .03
         init_grid_bitmap()
         init_path_points()
         init_selection()
@@ -495,7 +495,7 @@ function draw_stats()
     if interest_t > 0 then
         -- `t` is between 1 and 12 (but hits 13 on the very last frame)
         local t = interest_t\(MAX_INTEREST_T/12) + 1
-        local str = '+' .. flr(interest_gained)
+        local str = '+' .. interest_gained
         local width = print(str, 0, -20)
         print_outlined(
             str,

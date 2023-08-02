@@ -169,7 +169,7 @@ function update_bullets_blue(twr)
                     gold += enmy.gold
                     kill_enemy(enmy)
                 end
-                enmy.slow = 0.3
+                enmy.slow = cur_map == 3 and 0.5 or 0.3
                 enmy.slow_dur = 100
             end
         end
