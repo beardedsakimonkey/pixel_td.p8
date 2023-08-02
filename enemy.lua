@@ -216,9 +216,11 @@ function update_enemies()
         end
     end)
     -- apply interest on wave complete (except final wave)
-    if had_enemies and #enemies == 0 and wave < NUM_WAVES then
+    if had_enemies and #enemies == 0 and wave < NUM_WAVES and not game_over then
         interest_t = 1
         interest_gained = round(gold * interest)
+        -- update stats
+        total_bonus_int += interest_gained - round(gold * initial_int)
         gold += interest_gained
         -- don't play sfx on boss waves
         if wave % BOSS_FREQ ~= 0 then

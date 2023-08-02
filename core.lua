@@ -131,8 +131,10 @@ function reinit()
     fade_t = 0 -- fade out of game over screen
     pressing_l, pressing_r, pressing_z, pressing_x = false, false, false, false
     showing_stats = false
+    -- for stats
     game_start_time = nil
     game_end_time = nil
+    total_bonus_int = 0
 
     init_enemy()
     init_menus()
@@ -161,7 +163,8 @@ function _update60()
     -- Initialize once we know the map
     if t == 0 then
         lives = cur_map == 1 and 10 or cur_map == 2 and 5 or 1
-        interest = cur_map == 3 and .05 or .03
+        initial_int = cur_map == 3 and .05 or .03
+        interest = initial_int
         init_grid_bitmap()
         init_path_points()
         init_selection()
@@ -535,5 +538,9 @@ function draw_game_over(game_over, color)
         end
         print('time:', 45, 97, Indigo)
         print(sec\60 .. ':' .. sec_str, 67, 97, LightGray)
+
+        -- Draw bonus interest
+        local int_str = '\fa+' .. total_bonus_int .. ' \f6bonus interest'
+        print(int_str, hcenter(int_str), 106)
     end
 end
