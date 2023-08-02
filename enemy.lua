@@ -26,7 +26,7 @@ end
 
 local MAX_DEATH_AGE = 20
 
-local function make_enemy(type, max_hp, dx, dy)
+local function make_enemy(type, max_hp, gold, dx, dy)
     local size = type == 'CIRCLE' and 3 or type == 'SQUARE' and 4 or 5
     add(enemies, {
         type=type,
@@ -35,7 +35,7 @@ local function make_enemy(type, max_hp, dx, dy)
         dx=dx, dy=dy,
         hp=max_hp, max_hp=max_hp,
         slow=1, slow_dur=0,
-        gold=flr(2+3*sqrt(wave)),
+        gold=gold,
         death_age=nil,
         death_particles=nil,
         width=size, height=size, -- for collision detection
@@ -49,8 +49,8 @@ function spawn_enemy()
                      wave%4==0 and 'ARROW' or
                      wave%3==0 and 'RECTANGLE' or
                      wave%2==0 and 'DIAMOND' or 'SQUARE'
-        local hp = flr(3+2*wave^1.5)
-        if type == 'ARROW' then hp *= 0.9 end
+        local hp = flr(4+2*wave^1.5)
+        if type == 'ARROW' then hp = flr(0.8*hp) end
         local gap = type == 'ARROW' and 12 or 10
         local speed = type == 'ARROW' and 0.5 or 1/3
         -- Send out enemies every X frames
@@ -64,9 +64,10 @@ function spawn_enemy()
                            cnr=='top' and speed or cnr=='bot' and -speed or 0
             if wave % BOSS_FREQ == 0 and sending == 0 then
                 type = 'BOSS'
-                hp = 20*wave
+                hp = 10*wave
             end
-            make_enemy(type, hp, dx, dy)
+            local gold = flr(4+2*sqrt(wave))
+            make_enemy(type, hp, gold, dx, dy)
         end
     end
 end
