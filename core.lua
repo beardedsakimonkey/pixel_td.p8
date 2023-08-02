@@ -76,20 +76,20 @@ NUM_WAVES = 20
 -- Note: `sell` prices computed in _init()
 tower_cfg = {
     -- level 1
-    {dmg=0.25, range=30, cd=5,                 buy=40, upg=45}, -- green
     {dmg=2.3,  range=30, cd=38,                buy=40, upg=45}, -- red
+    {dmg=0.25, range=30, cd=5,                 buy=40, upg=45}, -- green
     {dmg=2,    range=30, cd=60,                buy=30, upg=45}, -- blue
     -- level 2
-    {dmg=0.6,  range=32, cd=5,                 upg=50}, -- green
     {dmg=2.8,  range=32, cd=38, max_bullets=2, upg=50}, -- red
+    {dmg=0.6,  range=32, cd=5,                 upg=50}, -- green
     {dmg=2.3,  range=32, cd=55, max_bullets=2, upg=70}, -- blue
     -- level 3
-    {dmg=0.9,  range=34, cd=5,                 upg=60}, -- green
     {dmg=2.8,  range=34, cd=38, max_bullets=3, upg=60}, -- red
+    {dmg=0.9,  range=34, cd=5,                 upg=60}, -- green
     {dmg=2.4,  range=34, cd=50, max_bullets=3, upg=90}, -- blue
     -- level 4
-    {dmg=1.3,  range=36, cd=5},                 -- green
     {dmg=3,    range=36, cd=38, max_bullets=4}, -- red
+    {dmg=1.3,  range=36, cd=5},                 -- green
     {dmg=2.5,  range=36, cd=45, max_bullets=4}, -- blue
 }
 local MAX_INTEREST_T = 48

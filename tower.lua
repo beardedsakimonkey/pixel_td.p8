@@ -35,14 +35,14 @@ function make_tower(type, gx, gy)
         age=0, -- for flicker
         buy=cfg.buy, sell=cfg.sell, upg=cfg.upg,
         update_bullets=({update_bullets_blue,
-                         update_bullets_green,
-                         update_bullets_red})[type_idx],
+                         update_bullets_red,
+                         update_bullets_green})[type_idx],
         fire_bullet=({fire_bullet_blue,
-                      fire_bullet_green,
-                      fire_bullet_red})[type_idx],
+                      fire_bullet_red,
+                      fire_bullet_green})[type_idx],
         draw_bullets=({draw_bullets_blue,
-                       draw_bullets_green,
-                       draw_bullets_red})[type_idx],
+                       draw_bullets_red,
+                       draw_bullets_green})[type_idx],
     })
 end
 
