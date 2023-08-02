@@ -523,7 +523,8 @@ function draw_game_over(game_over, color)
 
     if showing_stats then
         -- Draw stats background
-        local x0, y0, x1, y1 = -2, 92, 129, 126
+        local top = 92
+        local x0, y0, x1, y1 = -2, top, 129, top+34
         rect(x0, y0, x1, y1, Black)
         rect(x0+1, y0+1, x1-1, y1-1, DarkBlue)
         fillp(0b0101101001011010)
@@ -537,14 +538,14 @@ function draw_game_over(game_over, color)
             sec_str = '0' .. sec_str
         end
         local time_str = '\fdtime: \f6' .. sec\60 .. ':' .. sec_str
-        print(time_str, hcenter(time_str), 97)
+        print(time_str, hcenter(time_str), top+5)
 
         -- Draw bonus interest
         local int_str = '\fa+' .. total_bonus_int .. ' \f6bonus interest'
-        print(int_str, hcenter(int_str), 106)
+        print(int_str, hcenter(int_str), top+14)
 
         -- Draw bonus damage
         local dmg_str = '\f8+' .. flr(total_bonus_dmg) .. ' \f6bonus damage'
-        print(dmg_str, hcenter(dmg_str), 116)
+        print(dmg_str, hcenter(dmg_str), top+24)
     end
 end
