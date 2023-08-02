@@ -131,8 +131,8 @@ function reinit()
     fade_t = 0 -- fade out of game over screen
     -- pressing_l, pressing_r, pressing_z, pressing_x = false, false, false, false
     showing_stats = false
-    -- game_start_time = nil
-    -- game_end_time = nil
+    game_start_time = 0
+    game_end_time = 0
     total_bonus_int = 0
     total_bonus_dmg = 0
 
@@ -531,19 +531,15 @@ function draw_game_over(game_over, color)
 
         -- Draw time
         local sec = game_end_time - game_start_time
-        local sec_str = tostr(flr(sec%60))
-        if #sec_str == 1 then
-            sec_str = '0' .. sec_str
-        end
-        local time_str = '\fdtime: \f6' .. sec\60 .. ':' .. sec_str
+        local time_str = '\fd' .. sec\60 .. ' \f6MIN \fd' .. flr(sec%60) .. ' \f6SEC '
         print(time_str, hcenter(time_str), top+5)
 
         -- Draw bonus interest
-        local int_str = '\fa+' .. total_bonus_int .. ' \f6bonus interest'
+        local int_str = '\fa+' .. total_bonus_int .. ' \f6BONUS INTEREST'
         print(int_str, hcenter(int_str), top+14)
 
         -- Draw bonus damage
-        local dmg_str = '\f8+' .. flr(total_bonus_dmg) .. ' \f6bonus damage'
+        local dmg_str = '\f8+' .. flr(total_bonus_dmg) .. ' \f6BONUS DAMAGE'
         print(dmg_str, hcenter(dmg_str), top+24)
     end
 end
