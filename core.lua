@@ -40,36 +40,19 @@ channels
 2-3: sfx
 ]]
 
+local function parse_map(str)
+    local ret = {}
+    for cell in all(split(str, '|')) do
+        local vals = split(cell)
+        add(ret, {x=vals[1], y=vals[2], cnr=vals[3]})
+    end
+    return ret
+end
+
 maps = {
-    -- easy
-    {
-        {x=1,  y=0,  cnr='top'},
-        {x=1,  y=3,  cnr='bl'},
-        {x=3,  y=3,  cnr='br'},
-        {x=3,  y=1,  cnr='tl'},
-        {x=9,  y=1,  cnr='tr'},
-        {x=9,  y=5,  cnr='br'},
-        {x=1,  y=5,  cnr='tl'},
-        {x=1,  y=9,  cnr='bl'},
-        {x=7,  y=9,  cnr='br'},
-        {x=7,  y=7,  cnr='tl'},
-        {x=9,  y=7,  cnr='tr'},
-        {x=9,  y=10, cnr='bot'},
-    },
-    -- medium
-    {
-        {x=0,  y=2, cnr='left'},
-        {x=3,  y=2, cnr='tr'},
-        {x=3,  y=5, cnr='bl'},
-        {x=7,  y=5, cnr='tr'},
-        {x=7,  y=8, cnr='bl'},
-        {x=10, y=8, cnr='right'},
-    },
-    -- hard
-    {
-        {x=0,  y=5, cnr='left'},
-        {x=10, y=5, cnr='right'},
-    }
+    parse_map'1,0,top|1,3,bl|3,3,br|3,1,tl|9,1,tr|9,5,br|1,5,tl|1,9,bl|7,9,br|7,7,tl|9,7,tr|9,10,bot',
+    parse_map'0,2,left|3,2,tr|3,5,bl|7,5,tr|7,8,bl|10,8,right',
+    parse_map'0,5,left|10,5,right',
 }
 BOSS_FREQ = 5 -- boss on every 5th wave
 NUM_WAVES = 20
