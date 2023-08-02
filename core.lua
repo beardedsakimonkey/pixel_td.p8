@@ -83,6 +83,7 @@ local function end_game(state)
     upg_menu:close()
     music(-1)
     sfx(state == 'lost' and 44 or 45)
+    game_end_time = time()
 end
 
 function remove_life(enmy)
@@ -124,11 +125,14 @@ function reinit()
     screen = 'title' -- 'title' | 'game'
     has_opened_shop = false
     has_bought_tower = false
+    interest_t = 0
+    interest_gained = nil
     game_over = nil -- nil | 'lost' | 'won'
     fade_t = 0 -- fade out of game over screen
     pressing_l, pressing_r, pressing_z, pressing_x = false, false, false, false
-    interest_t = 0
-    interest_gained = nil
+    showing_stats = false
+    game_start_time = nil
+    game_end_time = nil
 
     init_enemy()
     init_menus()
@@ -184,6 +188,10 @@ function _update60()
             if btnp(🅾️) then
                 sfx(32)
                 fade_t = 1
+            end
+            if btnp(❎) then
+                sfx(32)
+                showing_stats = not showing_stats
             end
         end
     else
@@ -311,7 +319,7 @@ function _draw()
     bonus_menu:draw()
 
     draw_hint()
-    draw_stats()
+    draw_hud()
 
     camera() -- things drawn below will not be affected by screen shake
 
@@ -449,7 +457,7 @@ function draw_path(t)
     pal(0)
 end
 
-function draw_stats()
+function draw_hud()
     local c = start_t <= 4 and DarkBlue
            or start_t <= 8 and DarkGray or nil
     if c then
@@ -509,4 +517,23 @@ function draw_game_over(game_over, color)
     print_outlined('show stats', x2, 82, LightGray)
     sspr(112, pressing_x and 72 or 64, 9, 8, x2-13, 82-1)
     pal(0)
+
+    if showing_stats then
+        -- Draw stats background
+        local x0, y0, x1, y1 = -2, 92, 129, 126
+        rect(x0, y0, x1, y1, Black)
+        rect(x0+1, y0+1, x1-1, y1-1, DarkBlue)
+        fillp(0b0101101001011010)
+        rectfill(x0+2, y0+2, x1-2, y1-2, 0x01)
+        fillp(0)
+
+        -- Draw time
+        local sec = game_end_time - game_start_time
+        local sec_str = tostr(flr(sec%60))
+        if #sec_str == 1 then
+            sec_str = '0' .. sec_str
+        end
+        print('time:', 45, 97, Indigo)
+        print(sec\60 .. ':' .. sec_str, 67, 97, LightGray)
+    end
 end
