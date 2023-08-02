@@ -538,8 +538,8 @@ function draw_game_over(game_over, color)
         if #sec_str == 1 then
             sec_str = '0' .. sec_str
         end
-        print('time:', 45, 97, Indigo)
-        print(sec\60 .. ':' .. sec_str, 67, 97, LightGray)
+        local time_str = '\fdtime: \f6' .. sec\60 .. ':' .. sec_str
+        print(time_str, hcenter(time_str), 97)
 
         -- Draw bonus interest
         local int_str = '\fa+' .. total_bonus_int .. ' \f6bonus interest'
