@@ -135,6 +135,7 @@ function reinit()
     game_start_time = nil
     game_end_time = nil
     total_bonus_int = 0
+    total_bonus_dmg = 0
 
     init_enemy()
     init_menus()
@@ -542,5 +543,9 @@ function draw_game_over(game_over, color)
         -- Draw bonus interest
         local int_str = '\fa+' .. total_bonus_int .. ' \f6bonus interest'
         print(int_str, hcenter(int_str), 106)
+
+        -- Draw bonus damage
+        local dmg_str = '\f8+' .. flr(total_bonus_dmg) .. ' \f6bonus damage'
+        print(dmg_str, hcenter(dmg_str), 116)
     end
 end
