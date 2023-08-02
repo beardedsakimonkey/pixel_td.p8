@@ -510,13 +510,14 @@ function draw_game_over(game_over, color)
     )
     pal(Green, Black)
     local x = 56
+    local y = 63
     -- Draw restart button
-    print_outlined('restart', x, 66, LightGray)
-    sspr(96, pressing_z and 72 or 64, 9, 8, x-13, 66-1)
+    print_outlined('restart', x, y, LightGray)
+    sspr(96, pressing_z and 72 or 64, 9, 8, x-13, y-1)
 
     -- Draw stats button
-    print_outlined('stats', x, 77, LightGray)
-    sspr(112, pressing_x and 72 or 64, 9, 8, x-13, 77-1)
+    print_outlined('stats', x, y+12, LightGray)
+    sspr(112, pressing_x and 72 or 64, 9, 8, x-13, y+11)
     pal(0)
 
     if showing_stats then
