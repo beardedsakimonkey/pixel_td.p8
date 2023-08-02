@@ -517,13 +517,13 @@ function draw_game_over(game_over, color)
     -- Draw stats button
     local s = showing_stats and 'hide stats' or 'show stats'
     local x2 = hcenter(s)+ 4
-    print_outlined(s, x2, 82, LightGray)
-    sspr(112, pressing_x and 72 or 64, 9, 8, x2-13, 82-1)
+    print_outlined(s, x2, 77, LightGray)
+    sspr(112, pressing_x and 72 or 64, 9, 8, x2-13, 77-1)
     pal(0)
 
     if showing_stats then
         -- Draw stats background
-        local top = 92
+        local top = 85
         local x0, y0, x1, y1 = -2, top, 129, top+34
         rect(x0, y0, x1, y1, Black)
         rect(x0+1, y0+1, x1-1, y1-1, DarkBlue)
