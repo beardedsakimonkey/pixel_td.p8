@@ -242,7 +242,10 @@ end
 function do_upgrade()
     local twr = find_sel_tower()
     sfx(46 + (twr.type-1)\3)
-    make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
+    local new_twr = make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
+    -- carry over existing bullets/cd
+    new_twr.bullets = twr.bullets
+    new_twr.cd = twr.cd
     gold -= twr.upg
     del(towers, twr)
 end
