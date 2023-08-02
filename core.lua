@@ -143,7 +143,7 @@ function reinit()
     has_bought_tower = false
     game_over = nil -- nil | 'lost' | 'won'
     fade_t = 0 -- fade out of game over screen
-    pressing_l, pressing_r, pressing_z = false, false, false
+    pressing_l, pressing_r, pressing_z, pressing_x = false, false, false, false
     interest_t = 0
     interest_gained = nil
 
@@ -161,6 +161,7 @@ function _update60()
     pressing_l = btn(⬅️)
     pressing_r = btn(➡️)
     pressing_z = btn(🅾️)
+    pressing_x = btn(❎)
 
     if screen == 'title' then
         update_title()
@@ -512,14 +513,17 @@ function draw_game_over(game_over, color)
     sspr(
         0, game_over == 'lost' and 64 or 74,
         56, 9,
-        game_over == 'lost' and 36 or 39, 51
+        game_over == 'lost' and 36 or 39, 42
     )
     pal(Green, Black)
-    -- draw restart
-    local str = 'restart'
-    local x = hcenter(str)+4
-    local y = 68
-    print_outlined(str, x, y, LightGray)
-    spr(pressing_z and 94 or 92, x-12, y-1)
+    -- Draw restart button
+    local x = hcenter'restart' + 4
+    print_outlined('restart', x, 66, LightGray)
+    sspr(96, pressing_z and 72 or 64, 9, 8, x-13, 66-1)
+
+    -- Draw stats button
+    local x2 = hcenter'show stats' + 4
+    print_outlined('show stats', x2, 82, LightGray)
+    sspr(112, pressing_x and 72 or 64, 9, 8, x2-13, 82-1)
     pal(0)
 end

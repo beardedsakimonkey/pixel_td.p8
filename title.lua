@@ -138,17 +138,12 @@ function draw_title()
         draw_arrow_btn(false)
 
         -- Draw start button
-        local str = 'start'
-        local y2 = 74
-        local x = hcenter(str)+3
-        print_outlined(str, x, y2, LightGray)
-        sspr(96, pressing_z and 72 or 64, 9, 8, x-13, y2-1)
+        local x = hcenter'start' + 3
+        print_outlined('start', x, 74, LightGray)
+        sspr(96, pressing_z and 72 or 64, 9, 8, x-13, 74-1)
         pal(0)
 
-        local str2 = cur_map == 1 and 'easy'
-                 or cur_map == 2 and 'medium'
-                 or 'hard'
-        local c = cur_map == 3 and Red or cur_map == 2 and Yellow or Green
-        print_outlined(str2, hcenter(str2), 50, c)
+        local str2 = ({'easy', 'medium', 'hard'})[cur_map]
+        print_outlined(str2, hcenter(str2), 50, ({Green, Yellow, Red})[cur_map])
     end
 end
