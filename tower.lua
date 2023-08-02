@@ -91,14 +91,18 @@ end
 
 -- Range animation -------------------------------------------------------------
 
-local range, range_v, is_visible = nil, 0, false
+local range, range_v, is_visible, dest_range, is_growing = nil, 0, false, nil, true
 
 function update_tower_ranges()
     local was_visible = is_visible
     is_visible = buy_menu.is_open or upg_menu.is_open
     if is_visible then
-        local dest_range = get_twr_range(find_sel_tower()
+        local prev_dest_range = dest_range
+        dest_range = get_twr_range(find_sel_tower()
                                 or {range = tower_cfg[buy_menu.sel_twr].range})
+        if dest_range ~= prev_dest_range then
+            is_growing = prev_dest_range == nil or dest_range > prev_dest_range
+        end
         if was_visible then -- update
             range, range_v = spring(range, dest_range, range_v, {
                 stiffness = 120,
@@ -125,6 +129,6 @@ function draw_tower_ranges()
         local twr = find_sel_tower()
         draw_range(twr.x, twr.y, range)
     elseif buy_menu.is_open then
-        draw_range(sel.x+6, sel.y+6, range)
+        draw_range(sel.x+6, sel.y+6, is_growing and flr(range) or ceil(range))
     end
 end
