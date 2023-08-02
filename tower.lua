@@ -109,7 +109,7 @@ function update_tower_ranges()
                 precision = 0.1,
             })
         else -- initialize
-            range = dest_range*0.9
+            range = dest_range-4
             range_v = 0
         end
     end
