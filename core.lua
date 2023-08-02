@@ -76,21 +76,21 @@ NUM_WAVES = 20
 -- Note: `sell` prices computed in _init()
 tower_cfg = {
     -- level 1
-    {dmg=2.3,  range=34, cd=38,                buy=40, upg=45}, -- red
-    {dmg=0.25, range=30, cd=5,                 buy=40, upg=45}, -- green
-    {dmg=2,    range=26, cd=60,                buy=30, upg=45}, -- blue
+    {dmg=2.3,  range=30, cd=38,                buy=40, upg=50}, -- red
+    {dmg=0.25, range=26, cd=5,                 buy=40, upg=50}, -- green
+    {dmg=2,    range=22, cd=60,                buy=30, upg=50}, -- blue
     -- level 2
-    {dmg=2.8,  range=38, cd=38, max_bullets=2, upg=50}, -- red
-    {dmg=0.6,  range=34, cd=5,                 upg=50}, -- green
-    {dmg=2.3,  range=30, cd=55, max_bullets=2, upg=70}, -- blue
+    {dmg=2.8,  range=36, cd=38, max_bullets=2, upg=55}, -- red
+    {dmg=0.6,  range=32, cd=5,                 upg=55}, -- green
+    {dmg=2.3,  range=26, cd=55, max_bullets=2, upg=70}, -- blue
     -- level 3
-    {dmg=3.0,  range=42, cd=38, max_bullets=3, upg=60}, -- red
-    {dmg=0.9,  range=38, cd=5,                 upg=60}, -- green
-    {dmg=2.4,  range=34, cd=50, max_bullets=3, upg=90}, -- blue
+    {dmg=3.0,  range=42, cd=38, max_bullets=3, upg=70}, -- red
+    {dmg=0.9,  range=38, cd=5,                 upg=70}, -- green
+    {dmg=2.4,  range=30, cd=50, max_bullets=3, upg=90}, -- blue
     -- level 4
-    {dmg=3.1,    range=46, cd=38, max_bullets=4}, -- red
-    {dmg=1.3,  range=42, cd=5},                 -- green
-    {dmg=2.5,  range=38, cd=45, max_bullets=4}, -- blue
+    {dmg=3.1,  range=48, cd=38, max_bullets=4}, -- red
+    {dmg=1.3,  range=44, cd=5},                 -- green
+    {dmg=2.5,  range=34, cd=45, max_bullets=4}, -- blue
 }
 local MAX_INTEREST_T = 48
 
