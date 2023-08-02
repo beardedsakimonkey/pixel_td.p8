@@ -103,7 +103,7 @@ local function draw_arrow_btn(is_left, y)
         is_pressed = pressing_r
     end
     sspr(
-        (is_pressed or not can_press) and 112 or 96, not can_press and 48 or 32,
+        80, not can_press and 80 or is_pressed and 72 or 64,
         9, 8, is_left and 40 or 80, 49, 9, 8, is_left
     )
 end
@@ -133,21 +133,22 @@ function draw_title()
                 [Indigo]=Black,
             }
         end
-        -- draw buttons
+        -- Draw arrow buttons
         draw_arrow_btn(true)
         draw_arrow_btn(false)
 
-        local str2 = 'start'
+        -- Draw start button
+        local str = 'start'
         local y2 = 74
-        local x = hcenter(str2)+3
-        print_outlined(str2, x, y2, LightGray)
-        sspr(pressing_z and 112 or 96, 40, 9, 8, x-13, y2-1)
+        local x = hcenter(str)+3
+        print_outlined(str, x, y2, LightGray)
+        sspr(96, pressing_z and 72 or 64, 9, 8, x-13, y2-1)
         pal(0)
 
-        local str = cur_map == 1 and 'easy'
+        local str2 = cur_map == 1 and 'easy'
                  or cur_map == 2 and 'medium'
                  or 'hard'
         local c = cur_map == 3 and Red or cur_map == 2 and Yellow or Green
-        print_outlined(str, hcenter(str), 50, c)
+        print_outlined(str2, hcenter(str2), 50, c)
     end
 end

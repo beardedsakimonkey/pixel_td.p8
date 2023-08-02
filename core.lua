@@ -331,7 +331,7 @@ function _draw()
 
     camera() -- things drawn below will not be affected by screen shake
 
-    if game_over == 'lost' or game_over == 'won' then
+    if game_over then
         draw_game_over(game_over, Red)
     end
 end
