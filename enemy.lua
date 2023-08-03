@@ -32,8 +32,8 @@ function spawn_enemy()
         local hp = cur_map == 3 and flr(4+2*wave^1.6) or flr(4+2*wave^1.5)
         if type == 'ARROW' then hp = flr(0.8*hp) end
         local gap = type == 'ARROW' and 12 or 10
-        local speed = cur_map == 3 and (type == 'ARROW' and 1/3 or 0.25)
-                                   or (type == 'ARROW' and 0.5 or 1/3)
+        local speed = cur_map==2 and (type == 'ARROW' and 0.5 or 1/3)
+                                  or (type == 'ARROW' and 1/3 or 0.25)
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
         --  => X = gap / speed
