@@ -127,7 +127,7 @@ local function draw_range(x, y, range)
             circ(x+x_off, y+y_off, range, Black)
         end
     end
-    circ(x, y, range, DarkBlue)
+    circ(x, y, range, shadow_color())
 end
 
 function draw_tower_ranges()

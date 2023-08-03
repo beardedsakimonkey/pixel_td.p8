@@ -115,6 +115,14 @@ function draw_title()
 
     -- Draw title
     pal(Pink, Black)
+    if cur_map == 3 then
+        pal{
+            [Orange]=Red,
+            [Brown]=DarkPurple,
+            [Green]=DarkGray,
+            [DarkGreen]=Brown,
+        }
+    end
     for l in all(letters) do
         sspr(l.x, 32, l.w, LETTER_HEIGHT, 19+l.x, l.y)
     end

@@ -257,17 +257,25 @@ function _update60()
     end
 end
 
+function shadow_color()
+    return cur_map == 3 and Brown or DarkBlue
+end
+
 --------------------------------------------------------------------------------
 -- DRAW
 --------------------------------------------------------------------------------
 function _draw()
     cls(Black)
     pal(1) -- reset display palette
-    pal(Peach, 140, 1) -- hidden palette
+    -- Hidden palette
+    pal(Peach, 140, 1)
+    if cur_map == 3 then
+        pal(Brown, 130, 1)
+    end
 
     -- Draw grid lines
-    for y = 10, 127, 12 do line(0, y, 127, y, DarkBlue) end
-    for x = 10, 127, 12 do line(x, 0, x, 127, DarkBlue) end
+    for y = 10, 127, 12 do line(0, y, 127, y, shadow_color()) end
+    for x = 10, 127, 12 do line(x, 0, x, 127, shadow_color()) end
 
     if screen == 'title' then
         draw_title()
@@ -299,7 +307,7 @@ function _draw()
 
     -- Draw wave count
     local wave_str = wave .. '/' .. NUM_WAVES
-    print_outlined(wave_str, hcenter(wave_str), 122, DarkBlue)
+    print_outlined(wave_str, hcenter(wave_str), 122, shadow_color())
 
     draw_path(0)
     draw_towers()
@@ -363,7 +371,7 @@ function draw_path(t)
                 y1o += -get_offset(c1)
                 y2o += -get_offset(c2)
             end
-            line(x1+x1o, y1+y1o, x2+x2o, y2+y2o, DarkBlue)
+            line(x1+x1o, y1+y1o, x2+x2o, y2+y2o, shadow_color())
         end
 
         local p1_left, p1_right, p1_top, p1_bot = p1.left, p1.right, p1.top, p1.bot
@@ -525,9 +533,9 @@ function draw_game_over(game_over, color)
         local top = 85
         local x0, y0, x1, y1 = -2, top, 129, top+34
         rect(x0, y0, x1, y1, Black)
-        rect(x0+1, y0+1, x1-1, y1-1, DarkBlue)
+        rect(x0+1, y0+1, x1-1, y1-1, shadow_color())
         fillp(0b0101101001011010)
-        rectfill(x0+2, y0+2, x1-2, y1-2, 0x01)
+        rectfill(x0+2, y0+2, x1-2, y1-2, cur_map==3 and 0x04 or 0x01)
         fillp(0)
 
         -- Draw time
