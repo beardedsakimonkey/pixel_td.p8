@@ -184,15 +184,16 @@ function fire_bullet_blue(twr)
     -- NOTE: we could choose to avoid multiple blue towers targeting the same
     -- enemy on the same frame.
     local skipped = {}
-    for i, enmy in ipairs(enemies) do
+    for i = #enemies, 1, -1 do
+        local enmy = enemies[i]
         if is_in_range(enmy, twr) then
-            if enmy.slow_dur ~= 0 then
-                add(skipped, i)
-            else
+            if enmy.slow_dur == 0 then
                 add(twr.bullets, {
                     age=0,
                     enemy=enmy,
                 })
+            else
+                add(skipped, i)
             end
             twr.cd = twr.start_cd
         end
