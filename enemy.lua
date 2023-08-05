@@ -29,7 +29,7 @@ local MAX_DEATH_AGE = 20
 function spawn_enemy()
     if sending > 0 then
         local type = ({'CIRCLE', 'SQUARE', 'DIAMOND', 'RECTANGLE', 'ARROW'})[wave%5+1]
-        local hp = cur_map == 3 and flr(4+2*wave^1.6) or flr(4+2*wave^1.5)
+        local hp = flr(4+2*wave^(cur_map==3 and 1.58 or 1.5))
         if type == 'ARROW' then hp = flr(0.8*hp) end
         local gap = type == 'ARROW' and 12 or 10
         local speed = cur_map==2 and (type == 'ARROW' and 0.5 or 1/3)
