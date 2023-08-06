@@ -248,8 +248,9 @@ function update_bullets_blue(twr)
                 if enmy.hp == 0 then
                     kill_enemy(enmy)
                 end
-                enmy.slow = cur_map == 3 and 0.5 or 0.3
-                enmy.slow_dur = 100
+                -- enmy.slow = cur_map == 3 and 0.5 or 0.3
+                enmy.slow = ({0.5, 0.4, 0.3})[get_twr_level(twr.type)]
+                enmy.slow_dur = 50
             end
         end
     end
@@ -263,6 +264,19 @@ function fire_bullet_blue(twr)
     -- NOTE: we could choose to avoid multiple blue towers targeting the same
     -- enemy on the same frame.
     local skipped = {}
+    if #enemies > 0 and enemies[#enemies].type == 'BOSS' then
+        local boss = enemies[#enemies]
+        if is_in_range(boss, twr) then
+            add(twr.bullets, {
+                age=0,
+                enemy=boss,
+            })
+            twr.cd = get_twr_start_cd(twr)
+            if #twr.bullets == twr.max_bullets then
+                return
+            end
+        end
+    end
     for i = #enemies, 1, -1 do
         local enmy = enemies[i]
         if is_in_range(enmy, twr) then
@@ -275,9 +289,9 @@ function fire_bullet_blue(twr)
                 add(skipped, i)
             end
             twr.cd = get_twr_start_cd(twr)
-        end
-        if #twr.bullets == twr.max_bullets then
-            return
+            if #twr.bullets == twr.max_bullets then
+                return
+            end
         end
     end
     for i in all(skipped) do

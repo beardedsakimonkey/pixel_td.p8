@@ -30,9 +30,10 @@ function spawn_enemy()
     if sending > 0 then
         local type = ({'CIRCLE', 'SQUARE', 'DIAMOND', 'RECTANGLE', 'ARROW'})[wave%5+1]
         local hp = flr(4+2*wave^(cur_map==3 and 1.58 or 1.5))
-        if type == 'ARROW' then hp = flr(0.8*hp) end
+        if type == 'ARROW'  then hp = flr(0.8*hp) end
+        if type == 'CIRCLE' then hp = flr(0.8*hp) end
         local gap = type == 'ARROW' and 12 or 10
-        local speed = cur_map==2 and (type == 'ARROW' and 0.5 or 1/3)
+        local speed = cur_map==2 and (type == 'ARROW' and 0.4 or 1/3)
                                   or (type == 'ARROW' and 1/3 or 0.25)
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
@@ -54,7 +55,8 @@ function spawn_enemy()
                 dx=dx, dy=dy,
                 hp=hp, max_hp=hp,
                 slow=1, slow_dur=0,
-                gold=flr(4+2*sqrt(wave)),
+                -- gold=flr(4+2*sqrt(wave)),
+                gold=flr(3+2*sqrt(wave)),
                 death_age=nil,
                 death_particles=nil,
                 width=size, height=size, -- for collision detection
@@ -253,7 +255,7 @@ function draw_enemies()
         local hp_width = enmy.type == 'ARROW' and 5 or enmy.width
         local left = enmy.x - enmy.width\2
         rect(left, hp_y, left+hp_width-1, hp_y, DarkGreen)
-        local hp_rem = ceil(enmy.hp / enmy.max_hp*hp_width)
+        local hp_rem = ceil(enmy.hp/enmy.max_hp * hp_width)
         rect(left, hp_y, left+hp_rem-1, hp_y, Green)
     end)
 end

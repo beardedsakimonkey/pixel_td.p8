@@ -93,15 +93,15 @@ dmg=2.4,range=28,buy=40,upg=50
 dmg=2.0,range=25,buy=35,upg=50
 
 dmg=2.9,range=36,upg=55
-dmg=4.0,range=32,upg=55
+dmg=3.0,range=32,upg=55
 dmg=2.3,range=28,upg=60
 
 dmg=3.0,range=42,upg=70
-dmg=5.0,range=38,upg=70
+dmg=3.5,range=38,upg=70
 dmg=2.4,range=31,upg=75
 
 dmg=3.1,range=48
-dmg=6.0,range=44
+dmg=4.0,range=44
 dmg=2.5,range=35
 ]]
 local MAX_GOLD_INC_T = 48

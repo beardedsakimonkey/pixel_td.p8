@@ -6,6 +6,9 @@ function get_twr_start_cd(twr)
     local diff = twr.start_cd * bonus_atkspd - twr.start_cd
     return twr.start_cd - diff
 end
+function get_twr_level(type)
+    return ceil(type/3)
+end
 
 function find_sel_tower()
     return tbl_find(towers, function(twr)
@@ -32,9 +35,13 @@ function make_tower(type, gx, gy)
         gx=gx, gy=gy, -- in grid coordinates
         x=p.left+6, y=p.top+6, -- in pixel coordinates
         bullets={},
-        max_bullets=ceil(type/3),
+        max_bullets=get_twr_level(type),
         cd=0, -- in frames
-        start_cd=({60, 38, 50})[type_idx],
+        start_cd=({
+            70, -- blue
+            38, -- red
+            50, -- green
+        })[type_idx],
         dmg=cfg.dmg,
         range=cfg.range,
         age=0, -- for flicker
