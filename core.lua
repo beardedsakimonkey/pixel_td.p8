@@ -376,64 +376,65 @@ function draw_path(t)
 
         local p1_left, p1_right, p1_top, p1_bot = p1.left, p1.right, p1.top, p1.bot
         local p2_left, p2_right, p2_top, p2_bot = p2.left, p2.right, p2.top, p2.bot
+        local c1_cnr, c2_cnr = c1.cnr, c2.cnr
 
-        if c1.cnr == 'top' then
+        if c1_cnr == 'top' then
             -- left line
-            l('left', p1_left,  p1_top, p2_left,  c2.cnr=='br' and p2_top or p2_bot)
+            l('left', p1_left,  p1_top, p2_left,  c2_cnr=='br' and p2_top or p2_bot)
             -- right line
-            l('right', p1_right, p1_top, p2_right, c2.cnr=='bl' and p2_top or p2_bot)
-        elseif c1.cnr == 'left' then
+            l('right', p1_right, p1_top, p2_right, c2_cnr=='bl' and p2_top or p2_bot)
+        elseif c1_cnr == 'left' then
             -- top line
-            l('top', p1_left, p1_top, c2.cnr=='br' and p2_left or p2_right, p2_top)
+            l('top', p1_left, p1_top, c2_cnr=='br' and p2_left or p2_right, p2_top)
             -- bottom line
-            l('bot', p1_left, p1_bot, c2.cnr=='tr' and p2_left or p2_right, p2_bot)
-        elseif c1.cnr == 'bl' then
+            l('bot', p1_left, p1_bot, c2_cnr=='tr' and p2_left or p2_right, p2_bot)
+        elseif c1_cnr == 'bl' then
             if p2_right > p1_right then -- exiting right
                 -- top line
-                l('top', p1_right, p1_top, c2.cnr=='br' and p2_left or p2_right, p2_top)
+                l('top', p1_right, p1_top, c2_cnr=='br' and p2_left or p2_right, p2_top)
                 -- bottom line
-                l('bot', p1_left,  p1_bot, c2.cnr=='tr' and p2_left or p2_right, p2_bot)
+                l('bot', p1_left,  p1_bot, c2_cnr=='tr' and p2_left or p2_right, p2_bot)
             else -- exiting up
                 -- left line
-                l('left', p1_left,  p1_bot, p2_left,  c2.cnr=='tr' and p2_bot or p2_top)
+                l('left', p1_left,  p1_bot, p2_left,  c2_cnr=='tr' and p2_bot or p2_top)
                 -- right line
-                l('right', p1_right, p1_top, p2_right, c2.cnr=='tl' and p2_bot or p2_top)
+                l('right', p1_right, p1_top, p2_right, c2_cnr=='tl' and p2_bot or p2_top)
             end
-        elseif c1.cnr == 'tl' then
+        elseif c1_cnr == 'tl' then
             if p2_right > p1_right then -- exiting right
                 -- top line
-                l('top', p1_left,  p1_top, c2.cnr=='br' and p2_left or p2_right, p2_top)
+                l('top', p1_left,  p1_top, c2_cnr=='br' and p2_left or p2_right, p2_top)
                 -- bottom line
-                l('bot', p1_right, p1_bot, c2.cnr=='tr' and p2_left or p2_right, p2_bot)
+                l('bot', p1_right, p1_bot, c2_cnr=='tr' and p2_left or p2_right, p2_bot)
             else -- exiting down
                 -- left line
-                l('left', p1_left,  p1_top, p2_left,  c2.cnr=='br' and p2_top or p2_bot)
+                l('left', p1_left,  p1_top, p2_left,  c2_cnr=='br' and p2_top or p2_bot)
                 -- right line
-                l('right', p1_right, p1_bot, p2_right, c2.cnr=='bl' and p2_top or p2_bot)
+                l('right', p1_right, p1_bot, p2_right, c2_cnr=='bl' and p2_top or p2_bot)
             end
-        elseif c1.cnr == 'br' then
+        elseif c1_cnr == 'br' then
             if p2_left < p1_left then -- exiting left
                 -- top line
                 l('top', p1_left,  p1_top, c2.cnr=='bl' and p2_right or p2_left, p2_top)
                 -- bottom line
-                l('bot', p1_right, p1_bot, c2.cnr=='tl' and p2_right or p2_left, p2_bot, Indigo)
+                l('bot', p1_right, p1_bot, c2_cnr=='tl' and p2_right or p2_left, p2_bot, Indigo)
             else -- exiting up
                 -- left line
-                l('left', p1_left,  p1_top, p2_left,  c2.cnr=='tr' and p2_bot or p2_top)
+                l('left', p1_left,  p1_top, p2_left,  c2_cnr=='tr' and p2_bot or p2_top)
                 -- right line
-                l('right', p1_right, p1_bot, p2_right, c2.cnr=='tl' and p2_bot or p2_top)
+                l('right', p1_right, p1_bot, p2_right, c2_cnr=='tl' and p2_bot or p2_top)
             end
-        elseif c1.cnr == 'tr' then
+        elseif c1_cnr == 'tr' then
             if p2_left < p1_left then -- exiting left
                 -- top line
-                l('top', p1_right, p1_top, c2.cnr=='tl' and p2_left or p2_right, p2_top)
+                l('top', p1_right, p1_top, c2_cnr=='tl' and p2_left or p2_right, p2_top)
                 -- bottom line
-                l('bot', p1_left,  p1_bot, c2.cnr=='bl' and p2_left or p2_right, p2_bot)
+                l('bot', p1_left,  p1_bot, c2_cnr=='bl' and p2_left or p2_right, p2_bot)
             else -- exiting down
                 -- left line
-                l('left', p1_left,  p1_bot, p2_left,  c2.cnr=='br' and p2_top or p2_bot)
+                l('left', p1_left,  p1_bot, p2_left,  c2_cnr=='br' and p2_top or p2_bot)
                 -- right line
-                l('right', p1_right, p1_top, p2_right, c2.cnr=='bl' and p2_top or p2_bot)
+                l('right', p1_right, p1_top, p2_right, c2_cnr=='bl' and p2_top or p2_bot)
             end
         end
     end
