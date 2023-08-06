@@ -90,45 +90,128 @@ end
 
 -- Green -----------------------------------------------------------------------
 
-function update_bullets_green(twr)
-    foreach(twr.bullets, function(blt)
-        local enmy = blt.enemy
-        if not is_in_range(enmy, twr) then
-            del(twr.bullets, blt)
-        else
-            blt.age += 1
-            if blt.age % twr.start_cd == 0 then -- don't trigger damage every frame
-                enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
-                if enmy.dmg_age == nil then enmy.dmg_age = 0 end
-                if enmy.hp == 0 then
-                    kill_enemy(enmy)
-                end
-            end
-        end
-    end)
+local function register_damage(enmy, dmg)
+    enmy.hp = max(0, enmy.hp - dmg)
+    if enmy.dmg_age == nil then -- start flicker
+        enmy.dmg_age = 0
+    end
+    if enmy.hp == 0 then
+        kill_enemy(enmy)
+    end
 end
 
-function fire_bullet_green(twr)
-    if #twr.bullets > 0 then return end
-    for enmy in all(enemies) do
-        if is_in_range(enmy, twr) then
-            add(twr.bullets, {
-                age=0,
-                enemy=enmy,
-            })
+function update_bullets_green(twr)
+    local blt = twr.bullets[1]
+    if not blt then
+        return
+    end
+    local REGISTER_DMG = 11
+    if blt.enemy.hp == 0 then
+        del(twr.bullets, blt)
+        if blt.age < REGISTER_DMG then -- enemy died before bullet registered damage
+            twr.cd = 0
             return
+        end
+    else
+        blt.age += 1
+    end
+    if blt.age > 22 then
+        twr.bullets = {}
+    else
+        if blt.age == REGISTER_DMG then
+            register_damage(blt.enemy, get_twr_damage(twr))
+        end
+        -- Update bounce bullets
+        for bounce_blt in all(blt.bounce_blts) do
+            if bounce_blt.enemy.hp == 0 then
+                del(blt.bounce_blts, bounce_blt)
+            else
+                bounce_blt.age += 1
+            end
+            if bounce_blt.age == REGISTER_DMG then
+                register_damage(bounce_blt.enemy, get_twr_damage(twr)/2)
+            end
         end
     end
 end
 
+local function find_neighbors(enemy)
+    local n1_dist, n2_dist  = 0x7fff.ffff, 0x7fff.ffff
+    local n1_enmy, n2_enmy
+    for enmy in all(enemies) do
+        if enmy ~= enemy and enmy.hp > 0 then
+            local dist = distance(enemy, enmy)
+            if dist < 13 then
+                if dist < n1_dist then
+                    n1_dist, n1_enmy = dist, enmy
+                elseif dist < n2_dist then
+                    n2_dist, n2_enmy = dist, enmy
+                end
+            end
+        end
+    end
+    return {n1_enmy, n2_enmy}
+end
+
+function fire_bullet_green(twr)
+    twr.cd = max(0, twr.cd-1)
+    if twr.cd > 0 or #twr.bullets > 0 then return end
+
+    local function fire_bullet(enmy)
+        -- look for bounce target
+        local bounce_blts = {}
+        local neighbors = find_neighbors(enmy)
+        for i = 1, twr.max_bullets-1 do
+            if neighbors[i] then
+                add(bounce_blts, {
+                    age=0,
+                    enemy=neighbors[i],
+                })
+            end
+        end
+        add(twr.bullets, {
+            age=0,
+            enemy=enmy,
+            bounce_blts=bounce_blts,
+        })
+        twr.cd = twr.start_cd
+    end
+
+    -- Prefer second enemy so that we can reach two neighbors
+    -- TODO: improve this
+    if twr.max_bullets > 2 and enemies[2] and is_in_range(enemies[2], twr) then
+        fire_bullet(enemies[2])
+        return
+    else
+        for enmy in all(enemies) do
+            if is_in_range(enmy, twr) then
+                fire_bullet(enmy)
+                return
+            end
+        end
+    end
+end
+
+local function get_bullet_color(age)
+    if     age <=  3 then return DarkBlue
+    elseif age <=  6 then return DarkGreen
+    elseif age <=  8 then return Green
+    elseif age <= 11 then return White
+    elseif age <= 16 then return Green
+    elseif age <= 18 then return DarkGreen
+    else                  return DarkBlue end
+end
+
 function draw_bullets_green(twr)
-    for blt in all(twr.bullets) do
-        local a = -cos((blt.age%121)/120) -- goes from -1 to 1 over 2 seconds
-        line(twr.x, twr.y, blt.enemy.x, blt.enemy.y,
-            (a < -.99 or a > .99) and DarkBlue or
-            (a < -.9 or a > .9) and DarkGreen or Green)
-        -- don't cover up center pixel
-        pset(twr.x, twr.y, Black)
+    local blt = twr.bullets[1]
+    if not blt then return end
+    -- Draw primary bullet
+    line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, get_bullet_color(blt.age))
+    pset(twr.x, twr.y, Black) -- don't cover up center pixel
+    -- Draw bounce bullet
+    for bounce_blt in all(blt.bounce_blts) do
+        line(blt.enemy.x, blt.enemy.y, bounce_blt.enemy.x, bounce_blt.enemy.y,
+             get_bullet_color(bounce_blt.age))
     end
 end
 

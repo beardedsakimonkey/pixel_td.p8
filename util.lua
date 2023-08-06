@@ -48,6 +48,10 @@ function rand(low, hi)
     return flr(rnd(hi+1-low)) + low
 end
 
+function distance(e1, e2)
+    return sqrt((e1.x-e2.x)^2 + (e1.y-e2.y)^2)
+end
+
 -- Convert grid coordinates to pixel coordinates
 function g2p(cell)
     local top  = (cell.y * 12) - 2

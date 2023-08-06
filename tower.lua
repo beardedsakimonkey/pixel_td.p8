@@ -33,9 +33,9 @@ function make_tower(type, gx, gy)
         gx=gx, gy=gy, -- in grid coordinates
         x=p.left+6, y=p.top+6, -- in pixel coordinates
         bullets={},
-        max_bullets=cfg.max_bullets or 1,
+        max_bullets=ceil(type/3),
         cd=0, -- in frames
-        start_cd=cfg.cd or 0,
+        start_cd=({60, 38, 50})[type_idx],
         dmg=cfg.dmg,
         range=cfg.range,
         age=0, -- for flicker

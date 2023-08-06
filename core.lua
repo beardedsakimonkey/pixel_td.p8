@@ -369,6 +369,10 @@ function _draw()
     if game_over then
         draw_game_over(game_over, Red)
     end
+    -- cursor(2, 2, Orange)
+    -- for dbg in all(debug or {}) do
+    --     print(dbg)
+    -- end
 end
 
 function draw_path(t)
