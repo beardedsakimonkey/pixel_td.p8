@@ -160,10 +160,8 @@ function reinit()
     game_over = nil -- nil | 'lost' | 'won'
     fade_t = 0 -- fade out of game over screen
     -- pressing_l, pressing_r, pressing_z, pressing_x = false, false, false, false
-    showing_stats = false
     game_start_time = 0
     game_end_time = 0
-    total_bonus_dmg = 0
 
     init_enemy()
     init_menus()
@@ -560,29 +558,4 @@ function draw_game_over(game_over, color)
     -- Draw restart button
     print_outlined('restart', x, y, LightGray)
     sspr(96, pressing_z and 72 or 64, 9, 8, x-13, y-1)
-
-    -- Draw stats button
-    print_outlined('stats', x, y+12, LightGray)
-    sspr(112, pressing_x and 72 or 64, 9, 8, x-13, y+11)
-    pal(0)
-
-    if showing_stats then
-        -- Draw stats background
-        local top = 85
-        local x0, y0, x1, y1 = -2, top, 129, top+34
-        rect(x0, y0, x1, y1, Black)
-        rect(x0+1, y0+1, x1-1, y1-1, shadow_color())
-        fillp(0b0101101001011010)
-        rectfill(x0+2, y0+2, x1-2, y1-2, cur_map==3 and 0x04 or 0x01)
-        fillp(0)
-
-        -- Draw time
-        local sec = game_end_time - game_start_time
-        local time_str = '\fd' .. sec\60 .. ' \f6MIN \fd' .. flr(sec%60) .. ' \f6SEC '
-        print(time_str, hcenter(time_str), top+5)
-
-        -- Draw bonus damage
-        local dmg_str = '\f8+' .. flr(total_bonus_dmg) .. ' \f6BONUS DAMAGE'
-        print(dmg_str, hcenter(dmg_str), top+24)
-    end
 end

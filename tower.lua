@@ -1,12 +1,7 @@
 MAX_TWR = 3 -- how many types of towers are there
 
 function get_twr_range(twr) return round(twr.range * bonus_rng) end
-function get_twr_damage(twr)
-    local dmg = twr.dmg * bonus_dmg
-    -- update stats
-    total_bonus_dmg += dmg - twr.dmg
-    return dmg
-end
+function get_twr_damage(twr) return twr.dmg * bonus_dmg end
 function get_twr_start_cd(twr)
     local diff = twr.start_cd * bonus_atkspd - twr.start_cd
     return twr.start_cd - diff
