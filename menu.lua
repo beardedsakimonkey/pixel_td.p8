@@ -181,9 +181,9 @@ function init_menus()
 
     -- Bonus menu --------------------------------------------------------------
     bonus_menu = Menu.new{x=31, dst_y=89, w=70, h=36}
-    add(bonus_menu.items, {text='+3% damage',   y=12, cb=do_bonus_damage})
-    add(bonus_menu.items, {text='+8% range',    y=20, cb=do_bonus_range})
-    add(bonus_menu.items, {text='+6% interest', y=28, cb=do_bonus_interest})
+    add(bonus_menu.items, {text='+3% damage',       y=12, cb=do_bonus_damage})
+    add(bonus_menu.items, {text='+8% range',        y=20, cb=do_bonus_range})
+    add(bonus_menu.items, {text='+6% attack speed', y=28, cb=do_bonus_atkspd})
 
     bonus_menu.update = function(m)
         if wave > 0 and wave % BOSS_FREQ == 0 and not m.is_open and can_send_wave()
@@ -204,7 +204,7 @@ function init_menus()
         sspr(0, 88, 19, 6, m.x+25, m.y+3) -- menu title
         if m.cur_idx ~= 1 then pal(Red, Indigo) end
         if m.cur_idx ~= 2 then pal(Green, Indigo) end
-        if m.cur_idx ~= 3 then pal(Yellow, Indigo) end
+        if m.cur_idx ~= 3 then pal(Blue, Indigo) end
         for i = 0, 2 do
             spr(32+i, 91, m.y+11+8*i)
         end
@@ -262,8 +262,8 @@ function do_bonus_range()
     bonus_rng += .08
 end
 
-function do_bonus_interest()
+function do_bonus_atkspd()
     sfx(33)
     add_bonus(37)
-    interest += .06
+    bonus_atkspd += .15
 end

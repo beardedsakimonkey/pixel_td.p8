@@ -74,9 +74,15 @@ end
 
 function kill_enemy(enmy)
     sfx(37 + rand(0, 2))
-    gold += enmy.gold
     enmy.death_age = 0
     enmy.death_particles = split2'-1,-1|1,-1|1,1|-1,1|-1,-1|1,-1|1,1|-1,1'
+    -- increment gold
+    if not game_over then
+        gold += enmy.gold
+        gold_inc_t = 1
+        gold_inc = enmy.gold
+        -- sfx(43)
+    end
 end
 
 local function line_contains_point(l1, l2, p)
@@ -154,7 +160,6 @@ local function move_enemy(e)
 end
 
 function update_enemies()
-    local had_enemies = #enemies > 0
     foreach(enemies, function(enmy)
         -- update flashing
         if enmy.dmg_age then
@@ -201,18 +206,6 @@ function update_enemies()
             del(enemies, enmy)
         end
     end)
-    -- apply interest on wave complete (except final wave)
-    if had_enemies and #enemies == 0 and wave < NUM_WAVES and not game_over then
-        interest_t = 1
-        interest_gained = round(gold * interest)
-        -- update stats
-        total_bonus_int += interest_gained - round(gold * initial_int)
-        gold += interest_gained
-        -- don't play sfx on boss waves
-        if wave % BOSS_FREQ ~= 0 then
-            sfx(43)
-        end
-    end
 end
 
 function draw_enemies()

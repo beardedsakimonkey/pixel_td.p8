@@ -74,7 +74,7 @@ function fire_bullet_red(twr)
                 enemy=enmy,
                 particles={},
             })
-            twr.cd = twr.start_cd
+            twr.cd = get_twr_start_cd(twr)
         end
     end
 end
@@ -174,7 +174,7 @@ function fire_bullet_green(twr)
             enemy=enmy,
             bounce_blts=bounce_blts,
         })
-        twr.cd = twr.start_cd
+        twr.cd = get_twr_start_cd(twr)
     end
 
     -- Prefer second enemy so that we can reach two neighbors
@@ -275,7 +275,7 @@ function fire_bullet_blue(twr)
             else
                 add(skipped, i)
             end
-            twr.cd = twr.start_cd
+            twr.cd = get_twr_start_cd(twr)
         end
         if #twr.bullets == twr.max_bullets then
             return

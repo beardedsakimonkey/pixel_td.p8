@@ -104,7 +104,7 @@ dmg=3.1,range=48
 dmg=6.0,range=44
 dmg=2.5,range=35
 ]]
-local MAX_INTEREST_T = 48
+local MAX_GOLD_INC_T = 48
 
 local function end_game(state)
     game_over = state
@@ -148,21 +148,21 @@ function reinit()
     bonuses = {}
     bonus_dmg = 1
     bonus_rng = 1
+    bonus_atkspd = 1
     t = 0
     start_t = 0 -- cant use `t` bc it overflows
     shake = 0
     screen = 'title' -- 'title' | 'game'
     has_opened_shop = false
     has_bought_tower = false
-    interest_t = 0
-    interest_gained = nil
+    gold_inc = nil -- gold increase animation
+    gold_inc_t = 0
     game_over = nil -- nil | 'lost' | 'won'
     fade_t = 0 -- fade out of game over screen
     -- pressing_l, pressing_r, pressing_z, pressing_x = false, false, false, false
     showing_stats = false
     game_start_time = 0
     game_end_time = 0
-    total_bonus_int = 0
     total_bonus_dmg = 0
 
     init_enemy()
@@ -192,8 +192,6 @@ function _update60()
     -- Initialize once we know the map
     if t == 0 then
         lives = cur_map == 1 and 10 or cur_map == 2 and 5 or 1
-        initial_int = cur_map == 3 and .05 or .03
-        interest = initial_int
         init_grid_bitmap()
         init_path_points()
         init_selection()
@@ -203,8 +201,11 @@ function _update60()
 
     t = max(1, t+1)
     if start_t < 10 then start_t +=1 end
-    if interest_t > 0 then interest_t += 1 end
-    if interest_t > MAX_INTEREST_T then interest_t = 0; interest_gained = nil end
+    if gold_inc_t > 0 then gold_inc_t += 1 end
+    if gold_inc_t > MAX_GOLD_INC_T then
+        gold_inc_t = 0
+        gold_inc = nil
+    end
 
     update_selection()
 
@@ -530,11 +531,11 @@ function draw_hud()
     spr(17, x, 2)
     pal(0)
 
-    -- draw interest earned
-    if interest_t > 0 then
+    -- Draw gold earned
+    if gold_inc then
         -- `t` is between 1 and 12 (but hits 13 on the very last frame)
-        local t = interest_t\(MAX_INTEREST_T/12) + 1
-        local str = '+' .. interest_gained
+        local t = gold_inc_t\(MAX_GOLD_INC_T/12) + 1
+        local str = '+' .. gold_inc
         local width = print(str, 0, -20)
         print_outlined(
             str,
@@ -579,10 +580,6 @@ function draw_game_over(game_over, color)
         local sec = game_end_time - game_start_time
         local time_str = '\fd' .. sec\60 .. ' \f6MIN \fd' .. flr(sec%60) .. ' \f6SEC '
         print(time_str, hcenter(time_str), top+5)
-
-        -- Draw bonus interest
-        local int_str = '\fa+' .. total_bonus_int .. ' \f6BONUS INTEREST'
-        print(int_str, hcenter(int_str), top+14)
 
         -- Draw bonus damage
         local dmg_str = '\f8+' .. flr(total_bonus_dmg) .. ' \f6BONUS DAMAGE'
