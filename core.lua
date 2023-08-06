@@ -23,7 +23,7 @@
  40:    open menu
  41:    close menu
  42:    open bonus menu
- 43:    earned interest
+ 43:    -
  44:    game lost
  45:    game won
  46-48: upgrade tower

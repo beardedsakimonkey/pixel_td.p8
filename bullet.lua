@@ -192,19 +192,18 @@ function fire_bullet_green(twr)
     end
 end
 
-local function get_bullet_color(age)
-    if     age <=  3 then return DarkBlue
-    elseif age <=  6 then return DarkGreen
-    elseif age <=  8 then return Green
-    elseif age <= 11 then return White
-    elseif age <= 16 then return Green
-    elseif age <= 18 then return DarkGreen
-    else                  return DarkBlue end
-end
-
 function draw_bullets_green(twr)
     local blt = twr.bullets[1]
     if not blt then return end
+    local function get_bullet_color(age)
+        if     age <=  3 then return DarkBlue
+        elseif age <=  6 then return DarkGreen
+        elseif age <=  8 then return Green
+        elseif age <= 11 then return White
+        elseif age <= 16 then return Green
+        elseif age <= 18 then return DarkGreen
+        else                  return DarkBlue end
+    end
     -- Draw primary bullet
     line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, get_bullet_color(blt.age))
     pset(twr.x, twr.y, Black) -- don't cover up center pixel
@@ -218,7 +217,7 @@ end
 -- Blue ------------------------------------------------------------------------
 
 function update_bullets_blue(twr)
-    local REGISTER_DMG = 30
+    local REGISTER_DMG = 11
     local num_bullets = #twr.bullets
     local misfires = 0 -- enemy died before bullet registered damage
     for blt in all(twr.bullets) do
@@ -237,7 +236,7 @@ function update_bullets_blue(twr)
         return
     end
     if #twr.bullets == 0 then return end
-    if twr.bullets[1].age >= 60 then
+    if twr.bullets[1].age >= 22 then
         twr.bullets = {}
     else
         if twr.bullets[1].age == REGISTER_DMG then
@@ -294,18 +293,16 @@ end
 function draw_bullets_blue(twr)
     for blt in all(twr.bullets) do
         local color
-        if blt.age >= 20 and blt.age <= 42 then
-            if     blt.age <= 23 then color = DarkBlue
-            elseif blt.age <= 26 then color = Peach
-            elseif blt.age <= 28 then color = Blue
-            elseif blt.age <= 31 then color = White
-            elseif blt.age <= 36 then color = Blue
-            elseif blt.age <= 38 then color = Peach
-            else                      color = DarkBlue end
-            line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
-            -- don't cover up center pixel
-            pset(twr.x, twr.y, Black)
-        end
+        if     blt.age <=  3 then color = DarkBlue
+        elseif blt.age <=  6 then color = Peach
+        elseif blt.age <=  8 then color = Blue
+        elseif blt.age <= 11 then color = White
+        elseif blt.age <= 16 then color = Blue
+        elseif blt.age <= 18 then color = Peach
+        else                      color = DarkBlue end
+        line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, color)
+        -- don't cover up center pixel
+        pset(twr.x, twr.y, Black)
     end
 end
 
