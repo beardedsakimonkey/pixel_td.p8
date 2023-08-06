@@ -48,11 +48,10 @@ local function handle_btn(btn)
         dst_x += cell_dx
         dst_y += cell_dy
         -- bail if we reached a boundary
-        local VEL = 670 -- rubber banding velocity
-        if dst_x <= 0 then sel.vx = -VEL; return end
-        if dst_x >= 10 then sel.vx = VEL; return end
-        if dst_y >= 10 then sel.vy = VEL; return end
-        if dst_y <= 0 then sel.vy = -VEL; return end
+        if dst_x <= 0 then sel.vx = -670; return end
+        if dst_x >= 10 then sel.vx = 670; return end
+        if dst_y >= 10 then sel.vy = 670; return end
+        if dst_y <= 0 then sel.vy = -670; return end
 
         -- break if it's a valid cell
         if grid_bitmap[dst_y+1][dst_x+1] == 0 then
@@ -75,10 +74,9 @@ function update_selection()
     if not buy_menu.is_open and
         not upg_menu.is_open and
         not bonus_menu.is_open then
-        if btnp(⬅️) then handle_btn(⬅️) end
-        if btnp(➡️) then handle_btn(➡️) end
-        if btnp(⬆️) then handle_btn(⬆️) end
-        if btnp(⬇️) then handle_btn(⬇️) end
+        for i=0,3 do -- up/down/left/right
+            if btnp(i) then handle_btn(i) end
+        end
     end
 
     local cfg = {
@@ -92,14 +90,7 @@ function update_selection()
 end
 
 function draw_selection()
-    local off = 0
-    if t <= ENTER_DURATION then
-        if     t <= 2  then off = 5
-        elseif t <= 4  then off = 4
-        elseif t <= 6  then off = 3
-        elseif t <= 8  then off = 2
-        elseif t <= 10 then off = 1 end
-    end
+    local off = t <= ENTER_DURATION and ceil((10-t)/2) or 0
     local top   = sel.y + 1 - off
     local left  = sel.x + 1 - off
     -- snap to upper pixel when moving right/down
