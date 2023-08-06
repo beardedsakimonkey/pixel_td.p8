@@ -40,41 +40,70 @@ channels
 2-3: sfx
 ]]
 
-local function parse_map(str)
+local function parse_tbl(str)
     local ret = {}
-    for cell in all(split(str, '|')) do
-        local vals = split(cell)
-        add(ret, {x=vals[1], y=vals[2], cnr=vals[3]})
+    for item in all(split(str, "\n")) do
+        if item ~= '' then
+            local t = {}
+            for pair in all(split(item)) do
+                local k, v = unpack(split(pair, '='))
+                t[k] = v
+            end
+            add(ret, t)
+        end
     end
     return ret
 end
 
 maps = {
-    parse_map'1,0,top|1,3,bl|3,3,br|3,1,tl|9,1,tr|9,5,br|1,5,tl|1,9,bl|7,9,br|7,7,tl|9,7,tr|9,10,bot',
-    parse_map'0,2,left|3,2,tr|3,5,bl|7,5,tr|7,8,bl|10,8,right',
-    parse_map'0,5,left|10,5,right',
+    parse_tbl[[
+x=1,y=0,cnr=top
+x=1,y=3,cnr=bl
+x=3,y=3,cnr=br
+x=3,y=1,cnr=tl
+x=9,y=1,cnr=tr
+x=9,y=5,cnr=br
+x=1,y=5,cnr=tl
+x=1,y=9,cnr=bl
+x=7,y=9,cnr=br
+x=7,y=7,cnr=tl
+x=9,y=7,cnr=tr
+x=9,y=10,cnr=bot
+]],
+    parse_tbl[[
+x=0,y=2,cnr=left
+x=3,y=2,cnr=tr
+x=3,y=5,cnr=bl
+x=7,y=5,cnr=tr
+x=7,y=8,cnr=bl
+x=10,y=8,cnr=right
+]],
+    parse_tbl[[
+x=0,y=5,cnr=left
+x=10,y=5,cnr=right
+]],
 }
 BOSS_FREQ = 5 -- boss on every 5th wave
 NUM_WAVES = 20
 -- Note: `sell` prices computed in _init()
-tower_cfg = {
-    -- level 1
-    {dmg=2.3,  range=32, cd=38,        buy=40, upg=50}, -- red
-    {dmg=0.25, range=28, cd=5,         buy=40, upg=50}, -- green
-    {dmg=2,    range=25, cd=60,        buy=35, upg=50}, -- blue
-    -- level 2
-    {dmg=2.9,  range=36, cd=38, max_bullets=2, upg=55}, -- red
-    {dmg=0.6,  range=32, cd=5,                 upg=55}, -- green
-    {dmg=2.3,  range=28, cd=55, max_bullets=2, upg=60}, -- blue
-    -- level 3
-    {dmg=3.0,  range=42, cd=38, max_bullets=3, upg=70}, -- red
-    {dmg=0.9,  range=38, cd=5,                 upg=70}, -- green
-    {dmg=2.4,  range=31, cd=50, max_bullets=3, upg=75}, -- blue
-    -- level 4
-    {dmg=3.1,  range=48, cd=38, max_bullets=5}, -- red
-    {dmg=1.3,  range=44, cd=5},                 -- green
-    {dmg=2.5,  range=35, cd=45, max_bullets=4}, -- blue
-}
+-- Note: order is red, green, blue
+tower_cfg = parse_tbl[[
+dmg=2.3,range=32,buy=40,upg=50
+dmg=2.4,range=28,buy=40,upg=50
+dmg=2.0,range=25,buy=35,upg=50
+
+dmg=2.9,range=36,upg=55
+dmg=4.0,range=32,upg=55
+dmg=2.3,range=28,upg=60
+
+dmg=3.0,range=42,upg=70
+dmg=5.0,range=38,upg=70
+dmg=2.4,range=31,upg=75
+
+dmg=3.1,range=48
+dmg=6.0,range=44
+dmg=2.5,range=35
+]]
 local MAX_INTEREST_T = 48
 
 local function end_game(state)
