@@ -73,21 +73,21 @@ NUM_WAVES = 20
 -- Note: `sell` prices computed in _init()
 -- Note: order is red, green, blue
 tower_cfg = parse_tbl[[
-dmg=2.3,range=32,buy=40,upg=50
+dmg=2.4,range=30,buy=40,upg=50
 dmg=2.4,range=28,buy=40,upg=50
-dmg=2.0,range=25,buy=35,upg=50
+dmg=2.0,range=25,buy=50,upg=55
 
-dmg=2.9,range=36,upg=55
+dmg=3.0,range=34,upg=55
 dmg=3.0,range=32,upg=55
 dmg=2.3,range=28,upg=60
 
-dmg=3.0,range=42,upg=70
-dmg=3.5,range=38,upg=70
-dmg=2.4,range=31,upg=75
+dmg=3.1,range=37,upg=70
+dmg=3.5,range=35,upg=70
+dmg=2.4,range=30,upg=75
 
-dmg=3.1,range=48
-dmg=4.0,range=44
-dmg=2.5,range=35
+dmg=3.2,range=39
+dmg=4.0,range=37
+dmg=2.5,range=31
 ]]
 local MAX_GOLD_INC_T = 48
 

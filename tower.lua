@@ -38,7 +38,7 @@ function make_tower(type, gx, gy)
         max_bullets=get_twr_level(type),
         cd=0, -- in frames
         start_cd=({
-            70, -- blue
+            90, -- blue
             38, -- red
             50, -- green
         })[type_idx],

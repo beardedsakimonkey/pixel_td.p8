@@ -29,9 +29,9 @@ local MAX_DEATH_AGE = 20
 function spawn_enemy()
     if sending > 0 then
         local type = ({'CIRCLE', 'SQUARE', 'DIAMOND', 'RECTANGLE', 'ARROW'})[wave%5+1]
-        local hp = flr(4+2*wave^(cur_map==3 and 1.58 or 1.5))
+        local hp = flr(4+1.6*wave^(cur_map==3 and 1.58 or 1.4))
         if type == 'ARROW'  then hp = flr(0.8*hp) end
-        if type == 'CIRCLE' then hp = flr(0.8*hp) end
+        if type == 'CIRCLE' then hp = flr(0.7*hp) end
         local gap = type == 'ARROW' and 12 or 10
         local speed = cur_map==2 and (type == 'ARROW' and 0.4 or 1/3)
                                   or (type == 'ARROW' and 1/3 or 0.25)
@@ -56,7 +56,7 @@ function spawn_enemy()
                 hp=hp, max_hp=hp,
                 slow=1, slow_dur=0,
                 -- gold=flr(4+2*sqrt(wave)),
-                gold=flr(3+2*sqrt(wave)),
+                gold=flr(3+1.2*sqrt(wave)),
                 death_age=nil,
                 death_particles=nil,
                 width=size, height=size, -- for collision detection

@@ -5,6 +5,7 @@ local function is_in_range(enmy, twr)
     return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < get_twr_range(twr)^2
 end
 
+-- TODO: can compute dmg
 local function register_damage(enmy, dmg)
     enmy.hp = max(0, enmy.hp - dmg)
     if enmy.dmg_age == nil then -- start flicker
@@ -125,19 +126,20 @@ function update_bullets_green(twr)
                 bounce_blt.age += 1
             end
             if bounce_blt.age == REGISTER_DMG then
-                register_damage(bounce_blt.enemy, get_twr_damage(twr)/2)
+                register_damage(bounce_blt.enemy, get_twr_damage(twr))
             end
         end
     end
 end
 
-local function find_neighbors(enemy)
+local function find_neighbors(enemy, level)
     local n1_dist, n2_dist  = 0x7fff.ffff, 0x7fff.ffff
     local n1_enmy, n2_enmy
     for enmy in all(enemies) do
         if enmy ~= enemy and enmy.hp > 0 then
             local dist = distance(enemy, enmy)
-            if dist < 13 then
+            local max_dist = ({13, 14, 15, 16})[level]
+            if dist < max_dist then
                 if dist < n1_dist then
                     n1_dist, n1_enmy = dist, enmy
                 elseif dist < n2_dist then
@@ -156,7 +158,7 @@ function fire_bullet_green(twr)
     local function fire_bullet(enmy)
         -- look for bounce target
         local bounce_blts = {}
-        local neighbors = find_neighbors(enmy)
+        local neighbors = find_neighbors(enmy, get_twr_level(twr.type))
         for i = 1, twr.max_bullets-1 do
             if neighbors[i] then
                 add(bounce_blts, {
@@ -240,8 +242,8 @@ function update_bullets_blue(twr)
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy
                 register_damage(enmy, get_twr_damage(twr))
-                -- enmy.slow = cur_map == 3 and 0.5 or 0.3
-                enmy.slow = ({0.5, 0.4, 0.3})[get_twr_level(twr.type)]
+                -- enmy.slow = ({0.4, 0.4, 0.4})[get_twr_level(twr.type)]
+                enmy.slow = 0.4
                 enmy.slow_dur = 50
             end
         end
