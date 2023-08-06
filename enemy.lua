@@ -78,12 +78,10 @@ function kill_enemy(enmy)
     sfx(37 + rand(0, 2))
     enmy.death_age = 0
     enmy.death_particles = split2'-1,-1|1,-1|1,1|-1,1|-1,-1|1,-1|1,1|-1,1'
-    -- increment gold
-    if not game_over then
+    if not game_over then -- increment gold
         gold += enmy.gold
         gold_inc_t = 1
         gold_inc = enmy.gold
-        -- sfx(43)
     end
 end
 

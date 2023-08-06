@@ -5,6 +5,16 @@ local function is_in_range(enmy, twr)
     return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < get_twr_range(twr)^2
 end
 
+local function register_damage(enmy, dmg)
+    enmy.hp = max(0, enmy.hp - dmg)
+    if enmy.dmg_age == nil then -- start flicker
+        enmy.dmg_age = 0
+    end
+    if enmy.hp == 0 then
+        kill_enemy(enmy)
+    end
+end
+
 -- Red -------------------------------------------------------------------------
 
 local function collide(blt, enmy)
@@ -48,11 +58,7 @@ function update_bullets_red(twr)
 
         -- handle collision
         if collide(blt, enmy) then
-            enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
-            if enmy.dmg_age == nil then enmy.dmg_age = 0 end
-            if enmy.hp == 0 then
-                kill_enemy(enmy)
-            end
+            register_damage(enmy, get_twr_damage(twr))
             del(twr.bullets, blt)
         else
             -- add particle
@@ -89,16 +95,6 @@ function draw_bullets_red(twr)
 end
 
 -- Green -----------------------------------------------------------------------
-
-local function register_damage(enmy, dmg)
-    enmy.hp = max(0, enmy.hp - dmg)
-    if enmy.dmg_age == nil then -- start flicker
-        enmy.dmg_age = 0
-    end
-    if enmy.hp == 0 then
-        kill_enemy(enmy)
-    end
-end
 
 function update_bullets_green(twr)
     local blt = twr.bullets[1]
@@ -243,11 +239,7 @@ function update_bullets_blue(twr)
             -- register damage & slow
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy
-                enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
-                if enmy.dmg_age == nil then enmy.dmg_age = 0 end
-                if enmy.hp == 0 then
-                    kill_enemy(enmy)
-                end
+                register_damage(enmy, get_twr_damage(twr))
                 -- enmy.slow = cur_map == 3 and 0.5 or 0.3
                 enmy.slow = ({0.5, 0.4, 0.3})[get_twr_level(twr.type)]
                 enmy.slow_dur = 50
