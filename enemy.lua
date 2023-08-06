@@ -54,7 +54,7 @@ function spawn_enemy()
                 y=path_points[1].y,
                 dx=dx, dy=dy,
                 hp=hp, max_hp=hp,
-                slow=1, slow_dur=0,
+                slows={},
                 -- gold=flr(4+2*sqrt(wave)),
                 gold=flr(3+1.2*sqrt(wave)),
                 death_age=nil,
@@ -88,6 +88,14 @@ local function line_contains_point(l1, l2, p)
             and p.x >= min(l1.x, l2.x)
             and p.x <= max(l1.x, l2.x)
     end
+end
+
+local function get_slow(enmy)
+    local ret = 1
+    for slow in all(enmy.slows) do
+        ret *= slow.amount
+    end
+    return ret
 end
 
 local function move_enemy(e)
@@ -124,7 +132,7 @@ local function move_enemy(e)
                 remove_life(e)
             end
         else
-            e.x += e.dx * e.slow
+            e.x += e.dx * get_slow(e)
         end
     elseif e.dy ~= 0 then -- moving vertically
         local down = e.dy > 0
@@ -146,7 +154,7 @@ local function move_enemy(e)
                 remove_life(e)
             end
         else
-            e.y += e.dy * e.slow
+            e.y += e.dy * get_slow(e)
         end
     end
 end
@@ -173,11 +181,12 @@ function update_enemies()
                 end
             end
         end
-        -- update slow
-        if enmy.slow_dur == 0 then
-            enmy.slow = 1
-        else
-            enmy.slow_dur -= 1
+        -- update slows
+        for slow in all(enmy.slows) do
+            slow.duration -= 1
+            if slow.duration <= 0 then
+                del(enmy.slows, slow)
+            end
         end
         -- update position
         if not enmy.death_age then
