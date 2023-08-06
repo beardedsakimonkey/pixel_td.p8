@@ -284,12 +284,15 @@ function _draw()
 
     -- Fade out of game over screen
     if fade_t > 0 then
-        local color = fade_t <= 6 and DarkGray or fade_t <= 10 and DarkBlue or Black
+        local shadow = cur_map==3 and 130 or DarkBlue
+        local color = fade_t <= 6 and DarkGray
+                   or fade_t <= 10 and shadow
+                   or Black
         pal({
-            DarkBlue, -- 1
-            DarkBlue, -- 2
-            DarkBlue, -- 3
-            color, -- 4
+            shadow, -- 1 (DarkBlue)
+            shadow, -- 2 (DarkPurple)
+            DarkBlue, -- 3 (DarkGreen)
+            cur_map==3 and 130 or color, -- 4 (Brown)
             color, -- 5
             color, -- 6
             color, -- 7
