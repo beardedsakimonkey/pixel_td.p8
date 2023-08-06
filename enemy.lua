@@ -66,6 +66,7 @@ end
 
 function kill_enemy(enmy)
     sfx(37 + rand(0, 2))
+    gold += enmy.gold
     enmy.death_age = 0
     enmy.death_particles = {
         {-1, -1},

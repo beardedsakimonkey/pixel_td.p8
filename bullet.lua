@@ -51,7 +51,6 @@ function update_bullets_red(twr)
             enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
             if enmy.dmg_age == nil then enmy.dmg_age = 0 end
             if enmy.hp == 0 then
-                gold += enmy.gold
                 kill_enemy(enmy)
             end
             del(twr.bullets, blt)
@@ -102,7 +101,6 @@ function update_bullets_green(twr)
                 enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
                 if enmy.dmg_age == nil then enmy.dmg_age = 0 end
                 if enmy.hp == 0 then
-                    gold += enmy.gold
                     kill_enemy(enmy)
                 end
             end
@@ -166,7 +164,6 @@ function update_bullets_blue(twr)
                 enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
                 if enmy.dmg_age == nil then enmy.dmg_age = 0 end
                 if enmy.hp == 0 then
-                    gold += enmy.gold
                     kill_enemy(enmy)
                 end
                 enmy.slow = cur_map == 3 and 0.5 or 0.3
