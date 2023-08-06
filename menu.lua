@@ -180,7 +180,7 @@ function init_menus()
     end
 
     -- Bonus menu --------------------------------------------------------------
-    bonus_menu = Menu.new{x=31, dst_y=89, w=70, h=36}
+    bonus_menu = Menu.new{x=20, dst_y=89, w=88, h=36}
     add(bonus_menu.items, {text='+3% damage',       y=12, cb=do_bonus_damage})
     add(bonus_menu.items, {text='+8% range',        y=20, cb=do_bonus_range})
     add(bonus_menu.items, {text='+6% attack speed', y=28, cb=do_bonus_atkspd})
@@ -201,12 +201,12 @@ function init_menus()
     bonus_menu.draw = function(m)
         if m.y == OFFSCREEN then return end
         Menu.draw(m)
-        sspr(0, 88, 19, 6, m.x+25, m.y+3) -- menu title
+        sspr(0, 88, 19, 6, 55, m.y+3) -- menu title
         if m.cur_idx ~= 1 then pal(Red, Indigo) end
         if m.cur_idx ~= 2 then pal(Green, Indigo) end
         if m.cur_idx ~= 3 then pal(Blue, Indigo) end
         for i = 0, 2 do
-            spr(32+i, 91, m.y+11+8*i)
+            spr(32+i, m.x+m.w-10, m.y+11+8*i)
         end
         pal(0)
     end
