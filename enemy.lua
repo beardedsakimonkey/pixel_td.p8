@@ -226,22 +226,20 @@ function draw_enemies()
         -- Draw enemy
         if enmy.death_age then
             for part in all(enmy.death_particles) do
-                local c, c2 = Pink, DarkPurple
-                if enmy.type == 'RECTANGLE' then
-                    c, c2 = Blue, DarkBlue
-                elseif enmy.type == 'ARROW' then
-                    c, c2 = Orange, Brown
-                elseif enmy.type == 'CIRCLE' then
-                    c, c2 = LightGray, DarkGray
-                elseif enmy.type == 'BOSS' then
-                    c, c2 = Yellow, Brown
-                end
+                local c1, c2 = unpack(({
+                    RECTANGLE={Blue, DarkBlue},
+                    ARROW={Orange, Brown},
+                    CIRCLE={LightGray, DarkGray},
+                    BOSS={Yellow, Brown},
+                    SQUARE={Pink, DarkPurple},
+                    DIAMOND={Pink, DarkPurple},
+                })[enmy.type])
                 if enmy.death_age < MAX_DEATH_AGE*0.5 then
                     circfill(enmy.x, enmy.y, enmy.death_age/2,
-                         enmy.death_age%2 == 0 and c2 or c)
+                         enmy.death_age%2 == 0 and c2 or c1)
                 end
                 pset(enmy.x+part[1], enmy.y+part[2],
-                    enmy.death_age > (MAX_DEATH_AGE*0.5) and c2 or c)
+                    enmy.death_age > (MAX_DEATH_AGE*0.5) and c2 or c1)
             end
             return
         end
