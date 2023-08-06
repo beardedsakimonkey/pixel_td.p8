@@ -58,7 +58,7 @@ function spawn_enemy()
                 death_age=nil,
                 death_particles=nil,
                 width=size, height=size, -- for collision detection
-                dmg_age=nil,
+                dmg_age=nil, -- for flicker
             })
         end
     end
@@ -249,31 +249,18 @@ function draw_enemies()
         local top  = enmy.y - enmy.height\2
         local left = enmy.x - enmy.width\2
         local flash = enmy.dmg_age and (enmy.dmg_age\3)%2 == 0
-        if enmy.type == 'CIRCLE' then
-            if flash then pal(LightGray, White) end
-            spr(112, left, top)
-        elseif enmy.type == 'SQUARE' then
-            -- if flash then pal(Pink, Peach) end
-            if flash then pal(Pink, White) end
-            spr(113, left, top)
-        elseif enmy.type == 'DIAMOND' then
-            if flash then pal(Red, Pink) end
-            spr(114, left, top)
-        elseif enmy.type == 'RECTANGLE' then
-            if flash then pal(Blue, White) end
-            spr(115, left, top)
-        elseif enmy.type == 'BOSS' then
-            if flash then pal(Yellow, Pink) end
-            spr(116, left, top)
-        elseif enmy.type == 'ARROW' then
+        if enmy.type == 'ARROW' then
             if flash then pal(Orange, White) end
             if enmy.dx ~= 0 then
                 -- left/right
-                sspr(40, 56, 5, 5, left, top, 5, 5, enmy.dx<0)
+                sspr(80, 56, 5, 5, left, top, 5, 5, enmy.dx<0)
             else
                 -- up/down
-                sspr(48, 56, 5, 5, left, top, 5, 5, false, enmy.dy<0)
+                sspr(88, 56, 5, 5, left, top, 5, 5, false, enmy.dy<0)
             end
+        else
+            local s = ({CIRCLE=112, SQUARE=114, DIAMOND=116, RECTANGLE=118, BOSS=120})[enmy.type]
+            spr(s+(flash and 1 or 0), left, top)
         end
         pal(0)
         -- Draw health bar
