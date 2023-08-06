@@ -46,10 +46,10 @@ x=1,y=0,cnr=top
 x=1,y=3,cnr=bl
 x=3,y=3,cnr=br
 x=3,y=1,cnr=tl
-x=9,y=1,cnr=tr
-x=9,y=5,cnr=br
-x=1,y=5,cnr=tl
-x=1,y=9,cnr=bl
+x=8,y=1,cnr=tr
+x=8,y=5,cnr=br
+x=2,y=5,cnr=tl
+x=2,y=9,cnr=bl
 x=7,y=9,cnr=br
 x=7,y=7,cnr=tl
 x=9,y=7,cnr=tr
