@@ -40,21 +40,6 @@ channels
 2-3: sfx
 ]]
 
-local function parse_tbl(str)
-    local ret = {}
-    for item in all(split(str, "\n")) do
-        if item ~= '' then
-            local t = {}
-            for pair in all(split(item)) do
-                local k, v = unpack(split(pair, '='))
-                t[k] = v
-            end
-            add(ret, t)
-        end
-    end
-    return ret
-end
-
 maps = {
     parse_tbl[[
 x=1,y=0,cnr=top

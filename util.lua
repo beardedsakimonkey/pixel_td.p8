@@ -87,3 +87,26 @@ function print_outlined(str, x, y, color, outline_color)
     end
     return print(str, x, y, color)
 end
+
+function parse_tbl(str)
+    local ret = {}
+    for item in all(split(str, "\n")) do
+        if item ~= '' then
+            local t = {}
+            for pair in all(split(item)) do
+                local k, v = unpack(split(pair, '='))
+                t[k] = v
+            end
+            add(ret, t)
+        end
+    end
+    return ret
+end
+
+function parse_arr(str)
+    local ret = {}
+    for a in all(split(str, '|')) do
+        add(ret, split(a))
+    end
+    return ret
+end

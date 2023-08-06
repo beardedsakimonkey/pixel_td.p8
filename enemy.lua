@@ -66,18 +66,10 @@ function spawn_enemy()
     end
 end
 
-function split2(str)
-    local ret = {}
-    for a in all(split(str, '|')) do
-        add(ret, split(a))
-    end
-    return ret
-end
-
 function kill_enemy(enmy)
     sfx(37 + rand(0, 2))
     enmy.death_age = 0
-    enmy.death_particles = split2'-1,-1|1,-1|1,1|-1,1|-1,-1|1,-1|1,1|-1,1'
+    enmy.death_particles = parse_arr'-1,-1|1,-1|1,1|-1,1|-1,-1|1,-1|1,1|-1,1'
     if not game_over then -- increment gold
         gold += enmy.gold
         gold_inc_t = 1
@@ -173,7 +165,7 @@ function update_enemies()
         if enmy.death_age then
             enmy.death_age += 1
             if enmy.death_age%2 == 0 then
-                local offsets = split2'-1,0|-1,0|0,1|-1,0|0,1|0,1|-1,0|0,1'
+                local offsets = parse_arr'-1,0|-1,0|0,1|-1,0|0,1|0,1|-1,0|0,1'
                 for i=1,7 do
                     for j=0,1 do
                         enmy.death_particles[i][1+j] += rand(unpack(offsets[i+j]))
