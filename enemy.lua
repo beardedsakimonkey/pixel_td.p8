@@ -37,7 +37,7 @@ function spawn_enemy()
         if type == 'ARROW'  then hp = flr(0.95*hp) end
         if type == 'CIRCLE' then hp = flr(0.95*hp) end
         local gap = type == 'ARROW' and 12 or 10
-        local speed = cur_map==3 and (type == 'ARROW' and 1/3 or 0.25)
+        local speed = cur_map==3 and (type == 'ARROW' and 1/3 or 0.3)
                                   or (type == 'ARROW' and 0.4 or 1/3)
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
@@ -59,8 +59,7 @@ function spawn_enemy()
                 dx=dx, dy=dy,
                 hp=hp, max_hp=hp,
                 slows={},
-                -- gold=flr(4+2*sqrt(wave)),
-                gold=flr(3+2*sqrt(wave)),
+                gold=flr(3+1.7*sqrt(wave)),
                 death_age=nil,
                 death_particles=nil,
                 width=size, height=size, -- for collision detection
@@ -85,10 +84,11 @@ end
 
 local function get_slow(enmy)
     local ret = 1
+    -- TODO: attenuate
     for slow in all(enmy.slows) do
         ret *= slow.amount
     end
-    return ret
+    return max(0.3, ret)
 end
 
 local function move_enemy(e)

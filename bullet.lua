@@ -244,7 +244,7 @@ function update_bullets_blue(twr)
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy
                 register_damage(enmy, get_twr_damage(twr))
-                add(enmy.slows, {duration=50, amount=0.75})
+                add(enmy.slows, {duration=50, amount=0.5})
             end
         end
     end
