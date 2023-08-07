@@ -205,10 +205,6 @@ function _update60()
                 sfx(32)
                 fade_t = 1
             end
-            if btnp(❎) then
-                sfx(32)
-                showing_stats = not showing_stats
-            end
         end
     else
         if buy_menu.is_open then
