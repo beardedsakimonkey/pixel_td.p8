@@ -240,12 +240,9 @@ function draw_enemies()
         local hp_y = top-2
         local hp_width = enmy.type == 'ARROW' and 5 or enmy.width
         local left = enmy.x - enmy.width\2
-        rect(left, hp_y, left+hp_width-1, hp_y, DarkGreen)
         local hp_rem = ceil(enmy.hp/enmy.max_hp * hp_width)
-        -- for some reason hp_rem is sometimes 0
-        if hp_rem > 0 then
-            rect(left, hp_y, left+hp_rem-1, hp_y, Green)
-        end
+        rect(left, hp_y, left+hp_width-1, hp_y, DarkGreen)
+        rect(left, hp_y, left+hp_rem-1, hp_y, Green)
     end)
 end
 

@@ -7,6 +7,10 @@ end
 
 local function register_damage(enmy, dmg)
     enmy.hp = max(0, enmy.hp - dmg)
+    -- fixed point workaround
+    if enmy.hp <= 0x0000.0007 then
+        enmy.hp = 0
+    end
     if enmy.dmg_age == nil then -- start flicker
         enmy.dmg_age = 0
     end
