@@ -12,7 +12,14 @@ local function register_damage(enmy, dmg)
         enmy.dmg_age = 0
     end
     if enmy.hp == 0 then
-        kill_enemy(enmy)
+        enmy.death_age = 0
+        sfx(37 + rand(0, 2))
+        enmy.death_particles = init_death_particles()
+        if not game_over then -- increment gold
+            gold += enmy.gold
+            gold_inc_t = 1
+            gold_inc = enmy.gold
+        end
     end
 end
 
@@ -30,7 +37,7 @@ function update_bullets_red(twr)
         if blt.enemy.hp == 0 then
             -- enemy died, try to find new target
             local new_target = tbl_find(enemies, function(enmy)
-                return enmy.hp > 0
+                return enmy.hp > 0 and not enmy.death_age
             end)
             if new_target then
                 blt.enemy = new_target
@@ -242,7 +249,7 @@ function update_bullets_blue(twr)
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy
                 register_damage(enmy, get_twr_damage(twr))
-                add(enmy.slows, {duration=50, amount=0.5})
+                add(enmy.slows, {duration=50, amount=0.6})
             end
         end
     end
@@ -271,7 +278,7 @@ function fire_bullet_blue(twr)
     end
     for i = #enemies, 1, -1 do
         local enmy = enemies[i]
-        if is_in_range(enmy, twr) then
+        if is_in_range(enmy, twr) and enmy.type ~= 'BOSS' then
             if enmy.slow_dur == 0 then
                 add(twr.bullets, {
                     age=0,

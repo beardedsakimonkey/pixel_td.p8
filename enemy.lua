@@ -1,3 +1,7 @@
+function init_death_particles()
+    return parse_arr'-1,-1|1,-1|1,1|-1,1|-1,-1|1,-1|1,1|-1,1'
+end
+
 -- Helps impl of enemy movement
 local path_points
 
@@ -29,12 +33,12 @@ local MAX_DEATH_AGE = 20
 function spawn_enemy()
     if sending > 0 then
         local type = ({'CIRCLE', 'SQUARE', 'DIAMOND', 'RECTANGLE', 'ARROW'})[wave%5+1]
-        local hp = flr(4+1.6*wave^(cur_map==3 and 1.58 or 1.4))
-        if type == 'ARROW'  then hp = flr(0.8*hp) end
-        if type == 'CIRCLE' then hp = flr(0.7*hp) end
+        local hp = flr(3+4*wave)
+        if type == 'ARROW'  then hp = flr(0.95*hp) end
+        if type == 'CIRCLE' then hp = flr(0.95*hp) end
         local gap = type == 'ARROW' and 12 or 10
-        local speed = cur_map==2 and (type == 'ARROW' and 0.4 or 1/3)
-                                  or (type == 'ARROW' and 1/3 or 0.25)
+        local speed = cur_map==3 and (type == 'ARROW' and 1/3 or 0.25)
+                                  or (type == 'ARROW' and 0.4 or 1/3)
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
         --  => X = gap / speed
@@ -56,24 +60,13 @@ function spawn_enemy()
                 hp=hp, max_hp=hp,
                 slows={},
                 -- gold=flr(4+2*sqrt(wave)),
-                gold=flr(3+1.2*sqrt(wave)),
+                gold=flr(3+2*sqrt(wave)),
                 death_age=nil,
                 death_particles=nil,
                 width=size, height=size, -- for collision detection
                 dmg_age=nil, -- for flicker
             })
         end
-    end
-end
-
-function kill_enemy(enmy)
-    sfx(37 + rand(0, 2))
-    enmy.death_age = 0
-    enmy.death_particles = parse_arr'-1,-1|1,-1|1,1|-1,1|-1,-1|1,-1|1,1|-1,1'
-    if not game_over then -- increment gold
-        gold += enmy.gold
-        gold_inc_t = 1
-        gold_inc = enmy.gold
     end
 end
 
@@ -203,7 +196,7 @@ function update_enemies()
     end)
     foreach(enemies, function(enmy)
         -- delete enemy
-        if enmy.hp == 0 and enmy.death_age == MAX_DEATH_AGE then
+        if enmy.hp <= 0 and enmy.death_age >= MAX_DEATH_AGE then
             del(enemies, enmy)
         end
     end)
@@ -255,7 +248,10 @@ function draw_enemies()
         local left = enmy.x - enmy.width\2
         rect(left, hp_y, left+hp_width-1, hp_y, DarkGreen)
         local hp_rem = ceil(enmy.hp/enmy.max_hp * hp_width)
-        rect(left, hp_y, left+hp_rem-1, hp_y, Green)
+        -- for some reason hp_rem is sometimes 0
+        if hp_rem > 0 then
+            rect(left, hp_y, left+hp_rem-1, hp_y, Green)
+        end
     end)
 end
 
