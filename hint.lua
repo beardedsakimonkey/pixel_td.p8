@@ -61,12 +61,9 @@ function update_hint()
         local flip = sel.dst_x < FLIP_Y
         local dest_x = sel.dst_x + (flip and 21 or -18)
         local dest_y = sel.dst_y + 3
-        if sel.vx > 0 then dest_x = ceil(dest_x) end
-        if sel.vy > 0 then dest_y = ceil(dest_y) end
         local cfg = {
-            stiffness = 100,
+            stiffness = 120,
             damping = 20,
-            mass = 2,
             precision = 0.1,
         }
         Z_x, Z_vx = spring(Z_x, dest_x, Z_vx, cfg)
@@ -111,7 +108,8 @@ local function draw_hint_Z()
 
     -- Draw arrow
     local flip = sel.dst_x < FLIP_Y
-    sspr(32, 8, 5, 8, Z_x+(flip and -6 or 10), Z_y, 5, 8, not flip)
+    local zx, zy = round(Z_x), round(Z_y)
+    sspr(32, 8, 5, 8, zx+(flip and -6 or 10), zy, 5, 8, not flip)
 
     if Z_t <= FADE_DURATION then
         pal(Indigo, Black)
@@ -119,8 +117,8 @@ local function draw_hint_Z()
 
     -- Draw button
     local s = max(0, (Z_t\2)%(SHINE_DELAY+11) - SHINE_DELAY)
-    sspr(s*9, 24, 9, 8, Z_x, Z_y)
-    rect(Z_x+3, Z_y+2, Z_x+5, Z_y+4, DarkBlue) -- draw 'o'
+    sspr(s*9, 24, 9, 8, zx, zy)
+    rect(zx+3, zy+2, zx+5, zy+4, DarkBlue) -- draw 'o'
 end
 
 function draw_hint()
