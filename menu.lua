@@ -29,8 +29,10 @@ function Menu.draw(m)
         print(
             item.text, m.x+9, m.y+item.y,
             (item.is_disabled and item.is_disabled(m)) and DarkGray
-                or i == m.cur_idx and White
-                or LightGray
+                or i ~= m.cur_idx and LightGray
+                or (item.text=='buy' or item.text=='upgrade') and Green
+                or item.text=='sell' and Red
+                or White
         )
     end
 
