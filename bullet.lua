@@ -5,7 +5,6 @@ local function is_in_range(enmy, twr)
     return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < get_twr_range(twr)^2
 end
 
--- TODO: can compute dmg
 local function register_damage(enmy, dmg)
     enmy.hp = max(0, enmy.hp - dmg)
     if enmy.dmg_age == nil then -- start flicker
@@ -133,7 +132,7 @@ function update_bullets_green(twr)
                 bounce_blt.age += 1
             end
             if bounce_blt.age == REGISTER_DMG then
-                register_damage(bounce_blt.enemy, get_twr_damage(twr))
+                register_damage(bounce_blt.enemy, get_twr_damage(twr)/2)
             end
         end
     end
@@ -249,7 +248,7 @@ function update_bullets_blue(twr)
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy
                 register_damage(enmy, get_twr_damage(twr))
-                add(enmy.slows, {duration=50, amount=0.6})
+                add(enmy.slows, {duration=50, amount=0.75})
             end
         end
     end
@@ -279,7 +278,7 @@ function fire_bullet_blue(twr)
     for i = #enemies, 1, -1 do
         local enmy = enemies[i]
         if is_in_range(enmy, twr) and enmy.type ~= 'BOSS' then
-            if enmy.slow_dur == 0 then
+            if #enmy.slows == 0 then
                 add(twr.bullets, {
                     age=0,
                     enemy=enmy,

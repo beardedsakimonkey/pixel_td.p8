@@ -75,18 +75,18 @@ NUM_WAVES = 20
 tower_cfg = parse_tbl[[
 dmg=2.4,range=30,buy=40,upg=50
 dmg=2.8,range=28,buy=40,upg=50
-dmg=2.0,range=25,buy=50,upg=55
+dmg=2.0,range=25,buy=50,upg=60
 
 dmg=3.0,range=32,upg=55
 dmg=3.4,range=30,upg=55
-dmg=2.3,range=27,upg=60
+dmg=2.3,range=27,upg=75
 
 dmg=3.1,range=34,upg=70
 dmg=3.8,range=32,upg=70
-dmg=2.4,range=29,upg=75
+dmg=2.4,range=29,upg=100
 
 dmg=3.2,range=35
-dmg=4.4,range=33
+dmg=4.2,range=33
 dmg=2.5,range=30
 ]]
 local MAX_GOLD_INC_T = 48
