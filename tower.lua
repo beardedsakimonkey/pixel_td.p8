@@ -103,27 +103,24 @@ end
 
 -- Range animation -------------------------------------------------------------
 
-local range, range_v, is_visible, dest_range, is_growing = nil, 0, false, nil, true
+local cur_range, dst_range
 
 function update_tower_ranges()
-    local was_visible = is_visible
-    is_visible = buy_menu.is_open or upg_menu.is_open
-    if is_visible then
-        local prev_dest_range = dest_range
-        dest_range = get_twr_range(find_sel_tower()
+    if buy_menu.is_open or upg_menu.is_open then
+        local prev_dst_range = dst_range
+        dst_range = get_twr_range(find_sel_tower()
                                 or {range = tower_cfg[buy_menu.sel_twr].range})
-        if dest_range ~= prev_dest_range then
-            is_growing = prev_dest_range == nil or dest_range > prev_dest_range
+        if not cur_range then
+            cur_range = dst_range - 4
+        else
+            if abs(cur_range - dst_range) < 0.1 then
+                cur_range = dst_range
+            else
+                cur_range += (dst_range - cur_range) * 0.3
+            end
         end
-        if was_visible then -- update
-            range, range_v = spring(range, dest_range, range_v, {
-                stiffness = 120,
-                precision = 0.1,
-            })
-        else -- initialize
-            range = dest_range-4
-            range_v = 0
-        end
+    else
+        cur_range, dst_range = nil, nil
     end
 end
 
@@ -139,8 +136,8 @@ end
 function draw_tower_ranges()
     if upg_menu.is_open then
         local twr = find_sel_tower()
-        draw_range(twr.x, twr.y, range)
+        draw_range(twr.x, twr.y, round(cur_range))
     elseif buy_menu.is_open then
-        draw_range(sel.x+6, sel.y+6, is_growing and flr(range) or ceil(range))
+        draw_range(sel.dst_x+6, sel.dst_y+6, round(cur_range))
     end
 end
