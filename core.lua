@@ -100,8 +100,11 @@ local function end_game(state)
     game_end_time = time()
 end
 
-function remove_life(enmy)
+function on_reached_end(enmy)
     sfx(34, 2)
+    enmy.hp = 0
+    enmy.death_age = MAX_DEATH_AGE
+    add_gold(enmy)
     lives = max(lives - (enmy.type == 'BOSS' and 5 or 1), 0)
     if lives == 0 and not game_over then
         end_game'lost'
@@ -115,6 +118,14 @@ end
 
 function add_bonus(spr)
     add(bonuses, {spr=spr, y=134, v=0})
+end
+
+function add_gold(enmy)
+    if not game_over then
+        gold += enmy.gold
+        gold_inc_t = 1
+        gold_inc = enmy.gold
+    end
 end
 
 --------------------------------------------------------------------------------

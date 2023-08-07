@@ -1,3 +1,5 @@
+MAX_DEATH_AGE = 20
+
 function init_death_particles()
     return parse_arr'-1,-1|1,-1|1,1|-1,1|-1,-1|1,-1|1,1|-1,1'
 end
@@ -27,8 +29,6 @@ function init_path_points()
         })
     end
 end
-
-local MAX_DEATH_AGE = 20
 
 function spawn_enemy()
     if sending > 0 then
@@ -118,11 +118,8 @@ local function move_enemy(e)
                 -- update direction
                 e.dy = going_down and abs(e.dx) or -abs(e.dx)
                 e.dx = 0
-            else
-                -- enemy got to the end
-                e.hp = 0
-                e.death_age = MAX_DEATH_AGE
-                remove_life(e)
+            else -- enemy reached the end
+                on_reached_end(e)
             end
         else
             e.x += e.dx * get_slow(e)
@@ -140,11 +137,8 @@ local function move_enemy(e)
                 -- update direction
                 e.dx = going_right and abs(e.dy) or -abs(e.dy)
                 e.dy = 0
-            else
-                -- enemy got to the end
-                e.hp = 0
-                e.death_age = MAX_DEATH_AGE
-                remove_life(e)
+            else -- enemy reached the end
+                on_reached_end(e)
             end
         else
             e.y += e.dy * get_slow(e)

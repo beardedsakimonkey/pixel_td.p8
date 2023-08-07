@@ -14,11 +14,7 @@ local function register_damage(enmy, dmg)
         enmy.death_age = 0
         sfx(37 + rand(0, 2))
         enmy.death_particles = init_death_particles()
-        if not game_over then -- increment gold
-            gold += enmy.gold
-            gold_inc_t = 1
-            gold_inc = enmy.gold
-        end
+        add_gold(enmy)
     end
 end
 
