@@ -184,8 +184,8 @@ function init_menus()
     -- Bonus menu --------------------------------------------------------------
     bonus_menu = Menu.new{x=20, dst_y=89, w=88, h=36}
     add(bonus_menu.items, {text='+3% damage',       y=12, cb=do_bonus_damage})
-    add(bonus_menu.items, {text='+12% range',       y=20, cb=do_bonus_range})
-    add(bonus_menu.items, {text='+4% attack speed', y=28, cb=do_bonus_atkspd})
+    add(bonus_menu.items, {text='+4% attack speed', y=20, cb=do_bonus_atkspd})
+    add(bonus_menu.items, {text='+12% range',       y=28, cb=do_bonus_range})
 
     bonus_menu.update = function(m)
         if wave > 0 and wave % BOSS_FREQ == 0 and not m.is_open and can_send_wave()
@@ -258,14 +258,14 @@ function do_bonus_damage()
     bonus_dmg += .03
 end
 
-function do_bonus_range()
-    sfx(33)
-    add_bonus(36)
-    bonus_rng += .12
-end
-
 function do_bonus_atkspd()
     sfx(33)
-    add_bonus(37)
+    add_bonus(36)
     bonus_atkspd += .04
+end
+
+function do_bonus_range()
+    sfx(33)
+    add_bonus(37)
+    bonus_rng += .12
 end
