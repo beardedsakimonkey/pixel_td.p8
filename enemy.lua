@@ -83,12 +83,11 @@ local function line_contains_point(l1, l2, p)
 end
 
 local function get_slow(enmy)
-    local ret = 1
-    -- TODO: attenuate
-    for slow in all(enmy.slows) do
-        ret *= slow.amount
+    if #enmy.slows == 0 then
+        return 1
     end
-    return max(0.3, ret)
+    -- the more slows applied, the less cumulative effect it has
+    return ({0.5, 0.39, 0.34, 0.29, 0.25})[#enmy.slows] or 0.25
 end
 
 local function move_enemy(e)
