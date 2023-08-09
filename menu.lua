@@ -205,8 +205,8 @@ function init_menus()
         Menu.draw(m)
         sspr(0, 88, 19, 6, 55, m.y+3) -- menu title
         if m.cur_idx ~= 1 then pal(Red, Indigo) end
-        if m.cur_idx ~= 2 then pal(Green, Indigo) end
-        if m.cur_idx ~= 3 then pal(Blue, Indigo) end
+        if m.cur_idx ~= 2 then pal(Blue, Indigo) end
+        if m.cur_idx ~= 3 then pal(Green, Indigo) end
         for i = 0, 2 do
             spr(32+i, m.x+m.w-10, m.y+11+8*i)
         end
