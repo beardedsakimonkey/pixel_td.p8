@@ -122,9 +122,10 @@ end
 
 function add_gold(enmy)
     if not game_over then
-        gold += enmy.gold
+        local income = enmy.gold + bonus_gld
+        gold += income
         gold_inc_t = 1
-        gold_inc = enmy.gold
+        gold_inc = income
     end
 end
 
@@ -144,6 +145,7 @@ function reinit()
     bonuses = {}
     bonus_dmg = 1
     bonus_rng = 1
+    bonus_gld = 0
     bonus_atkspd = 1
     t = 0
     start_t = 0 -- cant use `t` bc it overflows

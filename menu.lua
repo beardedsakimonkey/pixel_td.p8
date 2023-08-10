@@ -182,10 +182,11 @@ function init_menus()
     end
 
     -- Bonus menu --------------------------------------------------------------
-    bonus_menu = Menu.new{x=20, dst_y=89, w=88, h=36}
-    add(bonus_menu.items, {text='+3% damage',       y=12, cb=do_bonus_damage})
-    add(bonus_menu.items, {text='+4% attack speed', y=20, cb=do_bonus_atkspd})
-    add(bonus_menu.items, {text='+12% range',       y=28, cb=do_bonus_range})
+    bonus_menu = Menu.new{x=20, dst_y=81, w=88, h=44}
+    add(bonus_menu.items, {text='+4% damage',       y=12, cb=do_bonus_damage})
+    add(bonus_menu.items, {text='+5% attack speed', y=20, cb=do_bonus_atkspd})
+    add(bonus_menu.items, {text='+15% range',       y=28, cb=do_bonus_range})
+    add(bonus_menu.items, {text='+1 gold per kill',     y=36, cb=do_bonus_gold})
 
     bonus_menu.update = function(m)
         if wave > 0 and wave % BOSS_FREQ == 0 and not m.is_open and can_send_wave()
@@ -205,9 +206,10 @@ function init_menus()
         Menu.draw(m)
         sspr(0, 88, 19, 6, 55, m.y+3) -- menu title
         if m.cur_idx ~= 1 then pal(Red, Indigo) end
-        if m.cur_idx ~= 2 then pal(Blue, Indigo) end
+        if m.cur_idx ~= 2 then pal(Orange, Indigo) end
         if m.cur_idx ~= 3 then pal(Green, Indigo) end
-        for i = 0, 2 do
+        if m.cur_idx ~= 4 then pal(Yellow, Indigo) end
+        for i = 0,3 do
             spr(32+i, m.x+m.w-10, m.y+11+8*i)
         end
         pal(0)
@@ -254,18 +256,24 @@ end
 
 function do_bonus_damage()
     sfx(33)
-    add_bonus(35)
-    bonus_dmg += .03
+    add_bonus(36)
+    bonus_dmg += .04
 end
 
 function do_bonus_atkspd()
     sfx(33)
-    add_bonus(36)
-    bonus_atkspd += .04
+    add_bonus(37)
+    bonus_atkspd += .05
 end
 
 function do_bonus_range()
     sfx(33)
-    add_bonus(37)
-    bonus_rng += .12
+    add_bonus(38)
+    bonus_rng += .15
+end
+
+function do_bonus_gold()
+    sfx(33)
+    add_bonus(39)
+    bonus_gld += 1
 end
