@@ -50,7 +50,7 @@ end
 
 function Menu.handle_btn(m)
     local function move_selection(offset)
-        sfx(32)
+        sfx(42)
         m.cur_idx = wrap(1, m.cur_idx+offset, #m.items)
     end
     if btnp(⬆️) then move_selection(-1) end
@@ -61,11 +61,11 @@ function Menu.handle_btn(m)
             item.cb(m)
             m:close()
         else
-            sfx(31)
+            sfx(41)
         end
     end
     if btnp(❎) then
-        sfx(41)
+        sfx(51)
         m:close()
     end
 end
@@ -99,12 +99,12 @@ function init_menus()
         end
         local function nav_carousel(offset)
             if offset==-1 and m.sel_twr>1 or offset==1 and m.sel_twr<MAX_TWR then
-                sfx(30)
+                sfx(40)
                 m.sel_twr += offset
                 m.carousel_sx = m.carousel_x
                 m.carousel_st = time()
             else
-                sfx(31)
+                sfx(41)
             end
         end
         if btnp(⬅️) then nav_carousel(-1) end
@@ -193,7 +193,7 @@ function init_menus()
             -- need this condition to avoid immediately opening bonus menu after
             -- choosing a bonus.
             and #bonuses < wave \ BOSS_FREQ then
-            sfx(42)
+            sfx(52)
             upg_menu:close()
             buy_menu:close()
             Menu.open(m)
@@ -217,7 +217,7 @@ function init_menus()
 
     bonus_menu.handle_btn = function(m)
         if btnp(❎) then
-            sfx(31)
+            sfx(41)
             return
         end
         Menu.handle_btn(m)
@@ -225,19 +225,19 @@ function init_menus()
 end
 
 function do_close(menu)
-    sfx(41)
+    sfx(51)
     menu:close()
 end
 
 function do_buy(menu)
-    sfx(36)
+    sfx(46)
     local twr = make_tower(menu.sel_twr, sel.dst_gx, sel.dst_gy)
     gold -= twr.buy
     has_bought_tower = true
 end
 
 function do_sell()
-    sfx(33)
+    sfx(43)
     local twr = find_sel_tower()
     gold += twr.sell
     del(towers, twr)
@@ -245,7 +245,7 @@ end
 
 function do_upgrade()
     local twr = find_sel_tower()
-    sfx(46 + (twr.type-1)\3)
+    sfx(56 + (twr.type-1)\3)
     local new_twr = make_tower(twr.type+MAX_TWR, sel.dst_gx, sel.dst_gy)
     -- carry over existing bullets/cd
     new_twr.bullets = twr.bullets
@@ -255,25 +255,25 @@ function do_upgrade()
 end
 
 function do_bonus_damage()
-    sfx(33)
+    sfx(43)
     add_bonus(36)
     bonus_dmg += .02
 end
 
 function do_bonus_atkspd()
-    sfx(33)
+    sfx(43)
     add_bonus(37)
     bonus_atkspd += .03
 end
 
 function do_bonus_range()
-    sfx(33)
+    sfx(43)
     add_bonus(38)
     bonus_rng += .15
 end
 
 function do_bonus_gold()
-    sfx(33)
+    sfx(43)
     add_bonus(39)
     bonus_gld += 1
 end

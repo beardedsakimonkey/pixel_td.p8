@@ -37,7 +37,7 @@ function update_title()
     -- Handle button press
     if z_age == nil then
         if btnp(🅾️) then -- start game
-            sfx(35)
+            sfx(45)
             z_age = 0
             music(-1, 1000) -- fade title music out
             game_start_time = time()
@@ -51,18 +51,18 @@ function update_title()
         end
         if btnp(⬅️) then
             if cur_map > 1 then
-                sfx(30)
+                sfx(40)
                 cur_map -= 1
             else
-                sfx(31)
+                sfx(41)
             end
         end
         if btnp(➡️) then
             if cur_map < #maps then
-                sfx(30)
+                sfx(40)
                 cur_map += 1
             else
-                sfx(31)
+                sfx(41)
             end
         end
     end

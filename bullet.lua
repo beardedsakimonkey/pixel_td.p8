@@ -16,7 +16,7 @@ local function register_damage(enmy, twr)
     end
     if enmy.hp == 0 then
         enmy.death_age = 0
-        sfx(37 + rand(0, 2))
+        sfx(47 + rand(0, 2))
         enmy.death_particles = init_death_particles()
         add_gold(enmy)
     end

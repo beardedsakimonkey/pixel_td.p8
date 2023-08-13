@@ -10,23 +10,23 @@
  15-18: -
  19-26: music for hard mode
  27-29: music for title screen
- 30:    left/right
- 31:    invalid
- 32:    valid
- 33:    confirm (e.g. sell, bonus)
- 34:    enemy reaches end
- 35:    start game / send wave
- 36:    buy tower
- 37:    enemy death 1
- 38:    enemy death 2
- 39:    enemy death 3
- 40:    open menu
- 41:    close menu
- 42:    open bonus menu
- 43:    -
- 44:    game lost
- 45:    game won
- 46-48: upgrade tower
+ 40:    left/right
+ 41:    invalid
+ 42:    valid
+ 43:    confirm (e.g. sell, bonus)
+ 44:    enemy reaches end
+ 45:    start game / send wave
+ 46:    buy tower
+ 47:    enemy death 1
+ 48:    enemy death 2
+ 49:    enemy death 3
+ 50:    open menu
+ 51:    close menu
+ 52:    open bonus menu
+ 53:    -
+ 54:    game lost
+ 55:    game won
+ 56-58: upgrade tower
 
 patterns
 --------
@@ -96,12 +96,12 @@ local function end_game(state)
     buy_menu:close()
     upg_menu:close()
     music(-1)
-    sfx(state == 'lost' and 44 or 45)
+    sfx(state == 'lost' and 54 or 55)
     game_end_time = time()
 end
 
 function on_reached_end(enmy)
-    sfx(34, 2)
+    sfx(44, 2)
     enmy.hp = 0
     enmy.death_age = MAX_DEATH_AGE
     add_gold(enmy)
@@ -215,7 +215,7 @@ function _update60()
             end
         else
             if btnp(🅾️) then
-                sfx(32)
+                sfx(42)
                 fade_t = 1
             end
         end
@@ -229,7 +229,7 @@ function _update60()
             bonus_menu:handle_btn()
         else
             if btnp(🅾️) then
-                sfx(40)
+                sfx(50)
                 local twr = find_sel_tower()
                 if twr then
                     upg_menu:open()
@@ -238,7 +238,7 @@ function _update60()
                 end
             end
             if btnp(❎) and can_send_wave() then
-                sfx(35)
+                sfx(45)
                 send_wave()
             end
         end
