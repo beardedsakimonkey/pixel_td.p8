@@ -88,8 +88,7 @@ local function get_slow(enmy)
         return 1
     end
     -- the more slows applied, the less cumulative effect it has
-    -- TODO: increase?
-    return ({0.5, 0.4, 0.35, 0.32, 0.3})[#enmy.slows] or 0.3
+    return ({0.5, 0.44, 0.40, 0.37, 0.35})[#enmy.slows] or 0.35
 end
 
 local function move_enemy(e)
