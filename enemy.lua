@@ -33,7 +33,7 @@ end
 function spawn_enemy()
     if sending > 0 then
         local type = ({'CIRCLE', 'SQUARE', 'DIAMOND', 'RECTANGLE', 'ARROW'})[wave%5+1]
-        local hp = flr(3+3*(wave^(cur_map==3 and 1.34 or 1.3)))
+        local hp = flr(3+3*(wave^(cur_map==3 and 1.33 or 1.3)))
         hp *= 1 + (wave\BOSS_FREQ)*.02 -- adjust hp to account for bonus
         if type == 'ARROW'  then hp = flr(0.9*hp) end
         if type == 'CIRCLE' then hp = flr(0.9*hp) end

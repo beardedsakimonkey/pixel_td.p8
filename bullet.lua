@@ -5,8 +5,8 @@ local function is_in_range(enmy, twr)
     return (enmy.x - twr.x)^2 + (enmy.y - twr.y)^2 < get_twr_range(twr)^2
 end
 
-local function register_damage(enmy, dmg)
-    enmy.hp = max(0, enmy.hp - dmg)
+local function register_damage(enmy, twr)
+    enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
     -- fixed point workaround
     if enmy.hp <= 0x0000.0007 then
         enmy.hp = 0
@@ -65,7 +65,7 @@ function update_bullets_red(twr)
 
         -- handle collision
         if collide(blt, enmy) then
-            register_damage(enmy, get_twr_damage(twr))
+            register_damage(enmy, twr)
             del(twr.bullets, blt)
         else
             -- add particle
@@ -122,7 +122,7 @@ function update_bullets_green(twr)
         twr.bullets = {}
     else
         if blt.age == REGISTER_DMG then
-            register_damage(blt.enemy, get_twr_damage(twr))
+            register_damage(blt.enemy, twr)
         end
         -- Update bounce bullets
         for bounce_blt in all(blt.bounce_blts) do
@@ -132,7 +132,7 @@ function update_bullets_green(twr)
                 bounce_blt.age += 1
             end
             if bounce_blt.age == REGISTER_DMG then
-                register_damage(bounce_blt.enemy, get_twr_damage(twr))
+                register_damage(bounce_blt.enemy, twr)
             end
         end
     end
@@ -247,7 +247,7 @@ function update_bullets_blue(twr)
             -- register damage & slow
             for blt in all(twr.bullets) do
                 local enmy = blt.enemy
-                register_damage(enmy, get_twr_damage(twr))
+                register_damage(enmy, twr)
                 add(enmy.slows, {duration=50, amount=0.5})
             end
         end
