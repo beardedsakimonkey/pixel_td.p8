@@ -185,7 +185,7 @@ function init_menus()
     bonus_menu = Menu.new{x=20, dst_y=81, w=88, h=44}
     add(bonus_menu.items, {text='+2% damage',       y=12, cb=do_bonus_damage})
     add(bonus_menu.items, {text='+3% attack speed', y=20, cb=do_bonus_atkspd})
-    add(bonus_menu.items, {text='+15% range',       y=28, cb=do_bonus_range})
+    add(bonus_menu.items, {text='+16% range',       y=28, cb=do_bonus_range})
     add(bonus_menu.items, {text='+1 gold per kill', y=36, cb=do_bonus_gold})
 
     bonus_menu.update = function(m)
@@ -269,7 +269,7 @@ end
 function do_bonus_range()
     sfx(43)
     add_bonus(38)
-    bonus_rng += .15
+    bonus_rng += .16
 end
 
 function do_bonus_gold()
