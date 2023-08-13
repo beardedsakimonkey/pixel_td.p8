@@ -7,9 +7,9 @@
  6:     custom instrument for easy mode
  7:     -
  8-14:  music for easy mode
- 15-18: -
- 19-26: music for hard mode
- 27-29: music for title screen
+ 15-23: music for medium mode
+ 24-31: music for hard mode
+ 32-34: music for title screen
  40:    left/right
  41:    invalid
  42:    valid
