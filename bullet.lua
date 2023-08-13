@@ -181,7 +181,8 @@ function fire_bullet_green(twr)
     end
 
     -- Prefer second enemy so that we can reach two neighbors
-    if twr.max_bullets > 2 and enemies[2] and is_in_range(enemies[2], twr) then
+    if twr.max_bullets > 2 and enemies[2] and is_in_range(enemies[2], twr)
+        and distance(enemies[2], enemies[1]) < 16 then
         fire_bullet(enemies[2])
         return
     else
