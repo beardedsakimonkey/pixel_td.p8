@@ -124,15 +124,15 @@ function update_bullets_green(twr)
         if blt.age == REGISTER_DMG then
             register_damage(blt.enemy, twr)
         end
-        -- Update bounce bullets
-        for bounce_blt in all(blt.bounce_blts) do
-            if bounce_blt.enemy.hp == 0 then
-                del(blt.bounce_blts, bounce_blt)
+        -- Update chain bullets
+        for chain_blt in all(blt.chain_blts) do
+            if chain_blt.enemy.hp == 0 then
+                del(blt.chain_blts, chain_blt)
             else
-                bounce_blt.age += 1
+                chain_blt.age += 1
             end
-            if bounce_blt.age == REGISTER_DMG then
-                register_damage(bounce_blt.enemy, twr)
+            if chain_blt.age == REGISTER_DMG then
+                register_damage(chain_blt.enemy, twr)
             end
         end
     end
@@ -162,12 +162,12 @@ function fire_bullet_green(twr)
     if twr.cd > 0 or #twr.bullets > 0 then return end
 
     local function fire_bullet(enmy)
-        -- look for bounce target
-        local bounce_blts = {}
+        -- look for chain target
+        local chain_blts = {}
         local neighbors = find_neighbors(enmy, get_twr_level(twr.type))
         for i = 1, twr.max_bullets-1 do
             if neighbors[i] then
-                add(bounce_blts, {
+                add(chain_blts, {
                     age=0,
                     enemy=neighbors[i],
                 })
@@ -176,13 +176,12 @@ function fire_bullet_green(twr)
         add(twr.bullets, {
             age=0,
             enemy=enmy,
-            bounce_blts=bounce_blts,
+            chain_blts=chain_blts,
         })
         twr.cd = get_twr_start_cd(twr)
     end
 
     -- Prefer second enemy so that we can reach two neighbors
-    -- TODO: improve this
     if twr.max_bullets > 2 and enemies[2] and is_in_range(enemies[2], twr) then
         fire_bullet(enemies[2])
         return
@@ -211,10 +210,10 @@ function draw_bullets_green(twr)
     -- Draw primary bullet
     line(twr.x, twr.y, blt.enemy.x, blt.enemy.y, get_bullet_color(blt.age))
     pset(twr.x, twr.y, Black) -- don't cover up center pixel
-    -- Draw bounce bullet
-    for bounce_blt in all(blt.bounce_blts) do
-        line(blt.enemy.x, blt.enemy.y, bounce_blt.enemy.x, bounce_blt.enemy.y,
-             get_bullet_color(bounce_blt.age))
+    -- Draw chain bullet
+    for chain_blt in all(blt.chain_blts) do
+        line(blt.enemy.x, blt.enemy.y, chain_blt.enemy.x, chain_blt.enemy.y,
+             get_bullet_color(chain_blt.age))
     end
 end
 
