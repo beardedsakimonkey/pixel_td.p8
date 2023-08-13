@@ -88,6 +88,7 @@ local function get_slow(enmy)
         return 1
     end
     -- the more slows applied, the less cumulative effect it has
+    -- TODO: increase?
     return ({0.5, 0.4, 0.35, 0.32, 0.3})[#enmy.slows] or 0.3
 end
 
