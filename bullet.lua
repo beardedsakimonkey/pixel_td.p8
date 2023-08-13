@@ -138,14 +138,13 @@ function update_bullets_green(twr)
     end
 end
 
-local function find_neighbors(enemy, level)
+local function find_neighbors(enemy)
     local n1_dist, n2_dist  = 0x7fff.ffff, 0x7fff.ffff
     local n1_enmy, n2_enmy
     for enmy in all(enemies) do
         if enmy ~= enemy and enmy.hp > 0 then
             local dist = distance(enemy, enmy)
-            local max_dist = ({13, 14, 15, 16})[level]
-            if dist < max_dist then
+            if dist < 16 then
                 if dist < n1_dist then
                     n1_dist, n1_enmy = dist, enmy
                 elseif dist < n2_dist then
@@ -164,7 +163,7 @@ function fire_bullet_green(twr)
     local function fire_bullet(enmy)
         -- look for chain target
         local chain_blts = {}
-        local neighbors = find_neighbors(enmy, get_twr_level(twr.type))
+        local neighbors = find_neighbors(enmy)
         for i = 1, twr.max_bullets-1 do
             if neighbors[i] then
                 add(chain_blts, {
