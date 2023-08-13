@@ -33,11 +33,12 @@ end
 function spawn_enemy()
     if sending > 0 then
         local type = ({'CIRCLE', 'SQUARE', 'DIAMOND', 'RECTANGLE', 'ARROW'})[wave%5+1]
-        local hp = flr(3+3*(wave^1.15))
-        if type == 'ARROW'  then hp = flr(0.95*hp) end
-        if type == 'CIRCLE' then hp = flr(0.95*hp) end
-        local gap = type == 'ARROW' and 12 or 10
-        local speed = cur_map==3 and (type == 'ARROW' and 1/3 or 0.3)
+        local hp = flr(3+3*(wave^(cur_map==3 and 1.34 or 1.3)))
+        hp *= 1 + (wave\BOSS_FREQ)*.02 -- adjust hp to account for bonus
+        if type == 'ARROW'  then hp = flr(0.9*hp) end
+        if type == 'CIRCLE' then hp = flr(0.9*hp) end
+        local gap = 10
+        local speed = cur_map==3 and (type == 'ARROW' and 1/3 or 0.27)
                                   or (type == 'ARROW' and 0.4 or 1/3)
         -- Send out enemies every X frames
         -- speed (px/frame) * X = gap (px)
@@ -49,7 +50,7 @@ function spawn_enemy()
                            cnr=='top' and speed or cnr=='bot' and -speed or 0
             if wave % BOSS_FREQ == 0 and sending == 0 then
                 type = 'BOSS'
-                hp = 10*wave
+                hp = 12*wave
             end
             local size = type == 'CIRCLE' and 3 or type == 'SQUARE' and 4 or 5
             add(enemies, {
@@ -59,7 +60,7 @@ function spawn_enemy()
                 dx=dx, dy=dy,
                 hp=hp, max_hp=hp,
                 slows={},
-                gold=flr(3+1.7*sqrt(wave)),
+                gold=flr(3+1*sqrt(wave)),
                 death_age=nil,
                 death_particles=nil,
                 width=size, height=size, -- for collision detection
@@ -87,7 +88,7 @@ local function get_slow(enmy)
         return 1
     end
     -- the more slows applied, the less cumulative effect it has
-    return ({0.5, 0.39, 0.34, 0.29, 0.25})[#enmy.slows] or 0.25
+    return ({0.5, 0.4, 0.35, 0.32, 0.3})[#enmy.slows] or 0.3
 end
 
 local function move_enemy(e)

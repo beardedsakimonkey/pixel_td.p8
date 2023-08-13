@@ -39,8 +39,8 @@ function make_tower(type, gx, gy)
         cd=0, -- in frames
         start_cd=({
             80, -- blue
-            38, -- red
-            46, -- green
+            48, -- red
+            50, -- green
         })[type_idx],
         dmg=cfg.dmg,
         range=cfg.range,

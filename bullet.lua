@@ -132,7 +132,7 @@ function update_bullets_green(twr)
                 bounce_blt.age += 1
             end
             if bounce_blt.age == REGISTER_DMG then
-                register_damage(bounce_blt.enemy, get_twr_damage(twr)/2)
+                register_damage(bounce_blt.enemy, get_twr_damage(twr))
             end
         end
     end
