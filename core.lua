@@ -150,7 +150,7 @@ function _update60()
         init_path_points()
         init_selection()
         init_hint() -- should go after init_selection()
-        music(cur_map==3 and 40 or cur_map==2 and 16 or 0, nil, 0b11)
+        music(cur_map==3 and 40 or cur_map==2 and 0 or 16, nil, 0b11)
     end
 
     t = max(1, t+1)
