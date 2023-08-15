@@ -1,7 +1,9 @@
 local LETTER_HEIGHT = 19
 local OFFSCREEN_Y = -LETTER_HEIGHT
+local CAROUSEL_GAP = 40
 
 local z_age, t, title_t, letters, pressing_left, pressing_right
+local carousel_x, carousel_sx, carousel_st = 0, 0, 0
 
 function init_title()
     z_age = nil
@@ -53,6 +55,8 @@ function update_title()
             if cur_map > 1 then
                 sfx(40)
                 cur_map -= 1
+                carousel_sx = carousel_x
+                carousel_st = time()
             else
                 sfx(41)
             end
@@ -61,6 +65,8 @@ function update_title()
             if cur_map < #maps then
                 sfx(40)
                 cur_map += 1
+                carousel_sx = carousel_x
+                carousel_st = time()
             else
                 sfx(41)
             end
@@ -92,9 +98,16 @@ function update_title()
             end
         end
     end
+
+    -- Update difficulty carousel
+    carousel_x = lerp(
+        carousel_sx,
+        (cur_map-1)*-CAROUSEL_GAP,
+        easeout(min(1, (time()-carousel_st)*3))
+    )
 end
 
-local function draw_arrow_btn(is_left, y)
+local function draw_arrow_btn(is_left)
     local can_press, is_pressed
     if is_left then
         can_press = cur_map > 1 or pressing_left
@@ -152,7 +165,11 @@ function draw_title()
         sspr(96, pressing_z and 72 or 64, 9, 8, x-13, 74-1)
         pal(0)
 
-        local str2 = ({'easy', 'medium', 'hard'})[cur_map]
-        print_outlined(str2, hcenter(str2), 50, ({Green, Yellow, Red})[cur_map])
+        clip(49, 49, 31, 7)
+        -- Note: can maybe move this into a loop to save tokens
+        print_outlined('easy',   carousel_x+56, 50, Green)
+        print_outlined('medium', carousel_x+53+CAROUSEL_GAP, 50, Yellow)
+        print_outlined('hard',   carousel_x+56+2*CAROUSEL_GAP, 50, Red)
+        clip()
     end
 end
