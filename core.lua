@@ -99,7 +99,7 @@ end
 
 function reinit()
     wave = 0
-    gold = 100
+    gold = 110
     bonuses = {}
     bonus_dmg = 1
     bonus_rng = 1
