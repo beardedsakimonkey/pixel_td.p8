@@ -6,6 +6,7 @@ local function is_in_range(enmy, twr)
 end
 
 local function register_damage(enmy, twr)
+    if enmy.hp == 0 then return end
     enmy.hp = max(0, enmy.hp - get_twr_damage(twr))
     -- fixed point workaround
     if enmy.hp <= 0x0000.0007 then
